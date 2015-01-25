@@ -1,0 +1,2867 @@
+{
+    "calendar": [
+        {
+            "eatery": "Asiana",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 19,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 19,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 19,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 19,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 19,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 19,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Carnegie Mellon Cafe",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "El Gallo de Oro",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Entropy",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 3,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 10,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 3,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 3,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 3,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 3,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 1,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 1,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 10,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "The Exchange",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 9,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Gingers Express",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Heinz Cafe",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "La Prima Espresso",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Maggie Murph Cafe",
+            "periods": [
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 12,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 10,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "City Grill",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Pasta Villaggio",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Rice Bowl",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Evgefstos",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Spinning Salads",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Creperie",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Downtown Deli",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 16,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Mitchell's Mainstreet",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "The Pomegranate",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Nakama Express",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Soup & Salad",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Spice it Up Grill",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Stackers Fresh Subs",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "El Burrito Grande",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Stir Crazy",
+            "periods": [
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Take Comfort",
+            "periods": [
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Taste of India",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Breakfast Express",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Schatz Dining Room",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 10,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 10,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 10,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 10,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 10,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 14,
+                        "minute": 30
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 10,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "SEIber Cafe",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 15,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 7,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Skibo Cafe",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 9,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 9,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 9,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 9,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 9,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 9,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 2,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 9,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Stephanie's",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 14,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Tartans Pavilion",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Pasta Veloce",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 11,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 23,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Worlds of Flavor",
+            "periods": [
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 21,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "Tazza D'Oro",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 19,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 7,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 19,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 7,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 19,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 7,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 19,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 7,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 19,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 7,
+                        "minute": 0
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "The Underground",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 1,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 7,
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "hour": 0,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 7,
+                        "hour": 8,
+                        "minute": 30
+                    }
+                }
+            ]
+        },
+        {
+            "eatery": "The Zebra Lounge",
+            "periods": [
+                {
+                    "end": {
+                        "day": 2,
+                        "hour": 17,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 2,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 3,
+                        "hour": 17,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 3,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "hour": 17,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 4,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 5,
+                        "hour": 17,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 5,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                },
+                {
+                    "end": {
+                        "day": 6,
+                        "hour": 17,
+                        "minute": 0
+                    },
+                    "start": {
+                        "day": 6,
+                        "hour": 8,
+                        "minute": 0
+                    }
+                }
+            ]
+        }
+    ],
+    "endDate": null,
+    "startDate": null
+}
