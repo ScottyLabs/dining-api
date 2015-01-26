@@ -5,74 +5,62 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "19:30"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "10:30"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 19,
-                        "minute": 30
+                        "time": "19:30"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 19,
-                        "minute": 30
+                        "time": "19:30"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 19,
-                        "minute": 30
+                        "time": "19:30"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 19,
-                        "minute": 30
+                        "time": "19:30"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 19,
-                        "minute": 30
+                        "time": "19:30"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 10,
-                        "minute": 30
-                    }
-                },
-                {
-                    "end": {
-                        "day": 7,
-                        "hour": 19,
-                        "minute": 30
-                    },
-                    "start": {
-                        "day": 7,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 }
             ]
@@ -83,85 +71,71 @@
                 {
                     "end": {
                         "day": 2,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 1,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 }
             ]
@@ -172,85 +146,71 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 22,
-                        "minute": 0
+                        "time": "22:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 22,
-                        "minute": 0
+                        "time": "22:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 22,
-                        "minute": 0
+                        "time": "22:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 22,
-                        "minute": 0
+                        "time": "22:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 22,
-                        "minute": 0
+                        "time": "22:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 22,
-                        "minute": 0
+                        "time": "22:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 22,
-                        "minute": 0
+                        "time": "22:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 }
             ]
@@ -261,85 +221,71 @@
                 {
                     "end": {
                         "day": 2,
-                        "hour": 3,
-                        "minute": 0
+                        "time": "03:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 10,
-                        "minute": 0
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 3,
-                        "minute": 0
+                        "time": "03:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 3,
-                        "minute": 0
+                        "time": "03:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 3,
-                        "minute": 0
+                        "time": "03:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 3,
-                        "minute": 0
+                        "time": "01:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 1,
-                        "minute": 0
+                        "time": "01:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "10:00"
                     }
                 },
                 {
                     "end": {
                         "day": 1,
-                        "hour": 1,
-                        "minute": 0
+                        "time": "03:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 10,
-                        "minute": 0
+                        "time": "10:00"
                     }
                 }
             ]
@@ -349,74 +295,62 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "20:30"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "08:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 30
+                        "time": "20:30"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 30
+                        "time": "20:30"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 30
+                        "time": "20:30"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 20,
-                        "minute": 30
+                        "time": "18:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 8,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 7,
-                        "hour": 14,
-                        "minute": 30
-                    },
-                    "start": {
-                        "day": 7,
-                        "hour": 9,
-                        "minute": 30
+                        "time": "09:30"
                     }
                 }
             ]
@@ -426,62 +360,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "16:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "08:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 16,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 }
             ]
@@ -491,62 +415,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "18:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "08:30"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "18:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "18:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "18:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 30
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 14,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 }
             ]
@@ -556,62 +470,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "18:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "08:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "18:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "18:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "18:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 18,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 16,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 }
             ]
@@ -622,25 +526,21 @@
                 {
                     "end": {
                         "day": 6,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "17:00"
                     },
                     "start": {
-                        "day": 1,
-                        "hour": 12,
-                        "minute": 0
+                        "day": 6,
+                        "time": "10:00"
                     }
                 },
                 {
                     "end": {
-                        "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "day": 5,
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 10,
-                        "minute": 0
+                        "time": "12:00"
                     }
                 }
             ]
@@ -650,62 +550,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "20:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 20,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -715,62 +605,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "20:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 20,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -780,62 +660,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "20:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 20,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -845,62 +715,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "20:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 20,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -910,62 +770,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "20:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 20,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -975,62 +825,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "16:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 16,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -1040,62 +880,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "16:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 16,
-                        "minute": 0
+                        "time": "16:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 16,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -1105,62 +935,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "15:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "08:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 15,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 }
             ]
@@ -1170,62 +990,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "20:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 14,
-                        "minute": 30
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -1236,145 +1046,121 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "time": "21:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 21,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 }
             ]
@@ -1385,145 +1171,121 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "time": "21:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 21,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 }
             ]
@@ -1534,145 +1296,121 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "time": "21:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 21,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 }
             ]
@@ -1682,26 +1420,22 @@
             "periods": [
                 {
                     "end": {
-                        "day": 1,
-                        "hour": 21,
-                        "minute": 0
+                        "day": 6,
+                        "time": "21:00"
                     },
                     "start": {
-                        "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "day": 6,
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 }
             ]
@@ -1711,38 +1445,32 @@
             "periods": [
                 {
                     "end": {
-                        "day": 2,
-                        "hour": 14,
-                        "minute": 30
+                        "day": 1,
+                        "time": "14:30"
                     },
                     "start": {
-                        "day": 2,
-                        "hour": 11,
-                        "minute": 30
+                        "day": 1,
+                        "time": "11:30"
+                    }
+                },
+                {
+                    "end": {
+                        "day": 4,
+                        "time": "14:30"
+                    },
+                    "start": {
+                        "day": 4,
+                        "time": "11:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 30
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 14,
-                        "minute": 30
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 30
+                        "time": "11:30"
                     }
                 }
             ]
@@ -1752,26 +1480,22 @@
             "periods": [
                 {
                     "end": {
-                        "day": 3,
-                        "hour": 14,
-                        "minute": 30
+                        "day": 2,
+                        "time": "14:30"
                     },
                     "start": {
-                        "day": 3,
-                        "hour": 11,
-                        "minute": 30
+                        "day": 2,
+                        "time": "11:30"
                     }
                 },
                 {
                     "end": {
-                        "day": 4,
-                        "hour": 14,
-                        "minute": 30
+                        "day": 3,
+                        "time": "14:30"
                     },
                     "start": {
-                        "day": 4,
-                        "hour": 11,
-                        "minute": 30
+                        "day": 3,
+                        "time": "11:30"
                     }
                 }
             ]
@@ -1781,26 +1505,22 @@
             "periods": [
                 {
                     "end": {
-                        "day": 5,
-                        "hour": 21,
-                        "minute": 0
+                        "day": 4,
+                        "time": "21:00"
                     },
                     "start": {
-                        "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "day": 4,
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
-                        "day": 6,
-                        "hour": 21,
-                        "minute": 0
+                        "day": 5,
+                        "time": "21:00"
                     },
                     "start": {
-                        "day": 6,
-                        "hour": 17,
-                        "minute": 0
+                        "day": 5,
+                        "time": "17:00"
                     }
                 }
             ]
@@ -1811,145 +1531,121 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "11:00"
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "time": "21:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 11,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 21,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 }
             ]
@@ -1959,26 +1655,22 @@
             "periods": [
                 {
                     "end": {
-                        "day": 1,
-                        "hour": 14,
-                        "minute": 30
+                        "day": 6,
+                        "time": "14:30"
                     },
                     "start": {
-                        "day": 1,
-                        "hour": 11,
-                        "minute": 0
+                        "day": 6,
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 }
             ]
@@ -1989,193 +1681,161 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "10:30"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "07:30"
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "time": "14:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "11:30"
+                    }
+                },
+                {
+                    "end": {
+                        "day": 1,
+                        "time": "20:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 30
+                        "time": "11:30"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 30
+                        "time": "11:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 30
+                        "time": "11:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 20,
-                        "minute": 0
+                        "time": "20:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 30
-                    }
-                },
-                {
-                    "end": {
-                        "day": 5,
-                        "hour": 20,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "11:30"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 7,
-                        "minute": 30
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 14,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 11,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 14,
-                        "minute": 30
+                        "time": "14:30"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 10,
-                        "minute": 30
+                        "time": "10:30"
                     }
                 }
             ]
@@ -2185,62 +1845,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "15:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "07:30"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 15,
-                        "minute": 0
+                        "time": "15:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 7,
-                        "minute": 30
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 15,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 7,
-                        "minute": 30
+                        "time": "07:30"
                     }
                 }
             ]
@@ -2251,85 +1901,71 @@
                 {
                     "end": {
                         "day": 2,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 9,
-                        "minute": 0
+                        "time": "09:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 9,
-                        "minute": 0
+                        "time": "09:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 9,
-                        "minute": 0
+                        "time": "09:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 9,
-                        "minute": 0
+                        "time": "09:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 9,
-                        "minute": 0
+                        "time": "09:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 9,
-                        "minute": 0
+                        "time": "09:00"
                     }
                 },
                 {
                     "end": {
                         "day": 1,
-                        "hour": 2,
-                        "minute": 0
+                        "time": "02:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 9,
-                        "minute": 0
+                        "time": "09:00"
                     }
                 }
             ]
@@ -2339,62 +1975,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "14:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "08:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 14,
-                        "minute": 0
+                        "time": "14:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 14,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 }
             ]
@@ -2405,85 +2031,71 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 }
             ]
@@ -2494,85 +2106,71 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "11:00"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 11,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 23,
-                        "minute": 0
+                        "time": "23:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 }
             ]
@@ -2583,61 +2181,51 @@
                 {
                     "end": {
                         "day": 1,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 2,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 21,
-                        "minute": 0
+                        "time": "21:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     }
                 },
                 {
                     "end": {
-                        "day": 5,
-                        "hour": 21,
-                        "minute": 0
+                        "day": 7,
+                        "time": "21:00"
                     },
                     "start": {
-                        "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "day": 7,
+                        "time": "17:00"
                     }
                 }
             ]
@@ -2647,62 +2235,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "19:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "07:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 19,
-                        "minute": 0
+                        "time": "19:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 7,
-                        "minute": 0
+                        "time": "07:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 19,
-                        "minute": 0
+                        "time": "19:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 7,
-                        "minute": 0
+                        "time": "07:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 19,
-                        "minute": 0
+                        "time": "19:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 7,
-                        "minute": 0
+                        "time": "07:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 19,
-                        "minute": 0
+                        "time": "19:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 7,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 19,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 7,
-                        "minute": 0
+                        "time": "07:00"
                     }
                 }
             ]
@@ -2713,85 +2291,71 @@
                 {
                     "end": {
                         "day": 2,
-                        "hour": 0,
-                        "minute": 0
+                        "time": "00:00"
                     },
                     "start": {
                         "day": 1,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 0,
-                        "minute": 0
+                        "time": "00:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 0,
-                        "minute": 0
+                        "time": "00:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 0,
-                        "minute": 0
+                        "time": "00:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 6,
-                        "hour": 0,
-                        "minute": 0
+                        "time": "00:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 7,
-                        "hour": 0,
-                        "minute": 0
+                        "time": "00:00"
                     },
                     "start": {
                         "day": 6,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 },
                 {
                     "end": {
                         "day": 1,
-                        "hour": 0,
-                        "minute": 0
+                        "time": "00:00"
                     },
                     "start": {
                         "day": 7,
-                        "hour": 8,
-                        "minute": 30
+                        "time": "08:30"
                     }
                 }
             ]
@@ -2801,62 +2365,52 @@
             "periods": [
                 {
                     "end": {
+                        "day": 1,
+                        "time": "17:00"
+                    },
+                    "start": {
+                        "day": 1,
+                        "time": "08:00"
+                    }
+                },
+                {
+                    "end": {
                         "day": 2,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     },
                     "start": {
                         "day": 2,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 3,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     },
                     "start": {
                         "day": 3,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 4,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     },
                     "start": {
                         "day": 4,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 },
                 {
                     "end": {
                         "day": 5,
-                        "hour": 17,
-                        "minute": 0
+                        "time": "17:00"
                     },
                     "start": {
                         "day": 5,
-                        "hour": 8,
-                        "minute": 0
-                    }
-                },
-                {
-                    "end": {
-                        "day": 6,
-                        "hour": 17,
-                        "minute": 0
-                    },
-                    "start": {
-                        "day": 6,
-                        "hour": 8,
-                        "minute": 0
+                        "time": "08:00"
                     }
                 }
             ]
