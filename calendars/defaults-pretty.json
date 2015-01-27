@@ -1,0 +1,2310 @@
+{
+    "calendar": {
+        "Asiana": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "19:30"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "19:30"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "19:30"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "19:30"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "19:30"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "19:30"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "10:30"
+                }
+            }
+        ],
+        "Breakfast Express": [
+            {
+                "end": {
+                    "day": 6,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "Carnegie Mellon Cafe": [
+            {
+                "end": {
+                    "day": 2,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "08:00"
+                }
+            }
+        ],
+        "City Grill": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "Creperie": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "Downtown Deli": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "El Burrito Grande": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:30"
+                }
+            }
+        ],
+        "El Gallo de Oro": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "22:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "22:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "22:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "22:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "22:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "22:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "22:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "10:30"
+                }
+            }
+        ],
+        "Entropy": [
+            {
+                "end": {
+                    "day": 2,
+                    "time": "03:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "03:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "03:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "03:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "01:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "01:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "10:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "03:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "10:00"
+                }
+            }
+        ],
+        "Evgefstos": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "Gingers Express": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:00"
+                }
+            }
+        ],
+        "Heinz Cafe": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:30"
+                }
+            }
+        ],
+        "La Prima Espresso": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "16:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:00"
+                }
+            }
+        ],
+        "Maggie Murph Cafe": [
+            {
+                "end": {
+                    "day": 6,
+                    "time": "17:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "10:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "12:00"
+                }
+            }
+        ],
+        "Mitchell's Mainstreet": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:00"
+                }
+            }
+        ],
+        "Nakama Express": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Pasta Veloce": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Pasta Villaggio": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "Rice Bowl": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "SEIber Cafe": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "15:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "07:30"
+                }
+            }
+        ],
+        "Schatz Dining Room": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "10:30"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "10:30"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "10:30"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "10:30"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "10:30"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "07:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "10:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "10:30"
+                }
+            }
+        ],
+        "Skibo Cafe": [
+            {
+                "end": {
+                    "day": 2,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "09:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "09:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "09:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "09:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "09:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "09:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "02:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "09:00"
+                }
+            }
+        ],
+        "Soup & Salad": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Spice it Up Grill": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Spinning Salads": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "Stackers Fresh Subs": [
+            {
+                "end": {
+                    "day": 6,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Stephanie's": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:00"
+                }
+            }
+        ],
+        "Stir Crazy": [
+            {
+                "end": {
+                    "day": 2,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:30"
+                }
+            }
+        ],
+        "Take Comfort": [
+            {
+                "end": {
+                    "day": 4,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Tartans Pavilion": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "23:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Taste of India": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ],
+        "Tazza D'Oro": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "19:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "07:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "19:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "07:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "19:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "07:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "19:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "07:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "19:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "07:00"
+                }
+            }
+        ],
+        "The Exchange": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:30"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:30"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:30"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:30"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "18:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "09:30"
+                }
+            }
+        ],
+        "The Pomegranate": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "20:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "11:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "14:30"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "11:00"
+                }
+            }
+        ],
+        "The Underground": [
+            {
+                "end": {
+                    "day": 2,
+                    "time": "00:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "00:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "00:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "00:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 6,
+                    "time": "00:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "00:00"
+                },
+                "start": {
+                    "day": 6,
+                    "time": "08:30"
+                }
+            },
+            {
+                "end": {
+                    "day": 1,
+                    "time": "00:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "08:30"
+                }
+            }
+        ],
+        "The Zebra Lounge": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "17:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "17:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "17:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "17:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "08:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 5,
+                    "time": "17:00"
+                },
+                "start": {
+                    "day": 5,
+                    "time": "08:00"
+                }
+            }
+        ],
+        "Worlds of Flavor": [
+            {
+                "end": {
+                    "day": 1,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 1,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 2,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 2,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 3,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 3,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 4,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 4,
+                    "time": "17:00"
+                }
+            },
+            {
+                "end": {
+                    "day": 7,
+                    "time": "21:00"
+                },
+                "start": {
+                    "day": 7,
+                    "time": "17:00"
+                }
+            }
+        ]
+    },
+    "endDate": null,
+    "startDate": null
+}
