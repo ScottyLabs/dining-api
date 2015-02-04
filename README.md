@@ -2,6 +2,67 @@
 
 The Scottylabs Dining API provides information about CMU dining locations and hours.
 
+## Endpoints
+
+### HTTP GET /eateries/
+
+#### Parameters
+
+Parameter | Type | Required | Description
+----------|------|----------|------------
+time      | int  | No       | Time (represented as a Unix timestamp) to report open/close information in respect to. If not specified, current server time will be used.
+
+#### Sample Request
+
+``HTTP GET /eateries?time=1423080622``
+
+#### Output
+
+Produces a list of all eateries recorded in the API, with descriptive information and current open/close status.
+
+```
+{
+  "Asiana": {
+    "description": "Asiana offers Chinese and Pacific Rim entrées, soups and snacks...",
+    "location": "Newell-Simon Hall Atrium",
+    "longitude": -79.945681,
+    "latitude": 40.443519,
+    "isOpen": true,
+    "closeTime": 1423098000
+  },
+  "Breakfast Express": {
+    "description": "Breakfast sandwiches, create-your-own waffles and oatmeal, coffee, and fresh fruit...",
+    "location": "Resnik Servery",
+    "longitude": -79.939793,
+    "latitude": 40.442523,
+    "isOpen": false,
+    "openTime": 1423100000
+  },
+  ...
+}
+```
+
+Element                | Type    | Description
+-----------------------|---------|------------
+\<eatery\>             | key     | Name of the eatery that the associated object describes.
+\<eatery\>.description | string  | Long form description provided by the eatery.
+\<eatery\>.location  | string  | Human readable location string.
+\<eatery\>.longitude | float   | Longitude for location of eatery.
+\<eatery\>.latitude  | float   | Latitude for location of eatery.
+\<eatery\>.isOpen    | boolean | True if the eatery is open at the time requested, false otherwise.
+\<eatery\>.openTime  | int     | Unix timestamp for the eatery's next closing time. Only present if `"\<eatery\>".isOpen` is true.
+\<eatery\>.closeTime | int     | Unix timestamp for the eatery's next opening time. Only present if `"\<eatery\>".isOpen` is false.
+
+### GET /eatery/\<eatery\>/
+
+#### Parameters
+
+#### Sample Request
+
+#### Output
+
+#### Sample Output
+
 ## Adding Calendars
 
 ### Building the JSON calendar
