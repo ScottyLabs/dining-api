@@ -50,8 +50,8 @@ Element                | Type    | Description
 \<eatery\>.longitude   | float   | Longitude for location of eatery.
 \<eatery\>.latitude    | float   | Latitude for location of eatery.
 \<eatery\>.isOpen      | boolean | True if the eatery is open at the time requested, false otherwise.
-\<eatery\>.openTime    | int     | Unix timestamp for the eatery's next closing time. Only present if `<eatery>.isOpen` is true.
-\<eatery\>.closeTime   | int     | Unix timestamp for the eatery's next opening time. Only present if `<eatery>.isOpen` is false.
+\<eatery\>.openTime    | int     | Unix timestamp for the eatery's next closing time. Only present if `<eatery>.isOpen` is false.
+\<eatery\>.closeTime   | int     | Unix timestamp for the eatery's next opening time. Only present if `<eatery>.isOpen` is true.
 
 ### HTTP GET /eatery/\<eatery\>/
 
@@ -125,7 +125,7 @@ latitude                               | float      | Latitude for location of e
 isOpen                                 | boolean    | True if the eatery is open at the time requested, false otherwise.
 openTime                               | int        | Unix timestamp for the eatery's next closing time. Only present if `isOpen` is true.
 closeTime                              | int        | Unix timestamp for the eatery's next opening time. Only present if `isOpen` is false.
-calendars                              | calendar[] | Array containing calendar hours for the eatery. Calendars are stored so that the default comes first, and the rest are listened in time order, so that the earliest incoming calendar is 2nd.
+calendars                              | calendar[] | Array containing calendar hours for the eatery. There is a "default" calendar, containing hours for the restaurants which should be used unless overrided by a subsequent calendar. Calendars are stored so that the default comes first, and the rest are listed in time order, so that the earliest incoming calendar is 2nd.
 calendars[i].startDate                 | string     | Inclusive beginning date for this calendar in ISO YYYY-MM-DD format. Dates do not overlap with any other calendar. `null` if this is the default calendar. 
 calendars[i].endDate                   | string     | Inclusive ending date for this calendar in ISO YYYY-MM-DD format. Dates do not overlap with any other calendar. `null` if this is the default calendar. 
 calendars[i].periods                   | period[]   | An array of period objects, each of which specifies an opening and closing time for one week's worth of sessions. These periods do not overlap and are in order.
