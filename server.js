@@ -37,7 +37,7 @@ var reload = function(callback) {
 var web = express();
 
 /* Serves out the cached content to anyone who asks. */
-web.get('/', function (req, res) {
+web.get('/locations', function (req, res) {
   res.json(cached);
 })
 
