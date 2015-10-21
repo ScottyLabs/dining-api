@@ -14,24 +14,19 @@
       <h1 class="project-name">Scottylabs Dining API</h1>
       <h2 class="project-tagline">Delicious, delicious CMU data.</h2>
       <a href="https://github.com/ScottyLabs/dining-api" class="btn">View on GitHub</a>
-      <a href="https://github.com/ScottyLabs/dining-api/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/ScottyLabs/dining-api/tarball/master" class="btn">Download .tar.gz</a>
     </section>
-
     <section class="main-content">
-      <h1>
-<a id="developer-documentation" class="anchor" href="#developer-documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Developer Documentation</h1>
+      <h1><a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h1>
 
 <p>The Dining API is an endpoint that allows you to get information about a given
-eatery on Carnegie Mellon's campus.  In particular, we offer time information,
+eatery on Carnegie Mellon's campus.  In particular, we offer location, time information,
 keywords, and a short description you can use in your CMU Dining related
 applications.</p>
 
 <p>While more detailed documentation follows, go ahead and try it out by going to
-<code>apis.scottylabs.org/dining/v1/locations</code> in your favourite browser.</p>
+<a href="http://apis.scottylabs.org/dining/v1/locations">apis.scottylabs.org/dining/v1/locations</a> in your favourite browser.</p>
 
-<h2>
-<a id="version-1" class="anchor" href="#version-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version 1</h2>
+<h2><a id="version-1" class="anchor" href="#version-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version 1</h2>
 
 <p>In version 1, there is only one endpoint, at <code>/locations</code>.</p>
 
@@ -41,91 +36,39 @@ applications.</p>
 
 <p>Request:</p>
 
-<pre><code>GET apis.scottylabs.org/api/dining/v1/locations
+<pre><code>GET apis.scottylabs.org/dining/v1/locations
 </code></pre>
 
 <p>Response format:</p>
 
-<pre><code>{
-"locations":
-    [
-        {
-            "name": string,
-            "description": string,
-            "keywords": [string],
-            "location": string,
-            "times": {
-                "monday":
-                    [
-                        {
-                            "start": { "hour": number, "min": number }
-                            "end": { "hour": number, "min": number }
-                        },
-                        ...
-                    ],
-                "tuesday":
-                    [
-                        {
-                            "start": { "hour": number, "min": number }
-                            "end": { "hour": number, "min": number }
-                        },
-                        ...
-                    ],
-                "wednesday":
-                    [
-                        {
-                            "start": { "hour": number, "min": number }
-                            "end": { "hour": number, "min": number }
-                        },
-                        ...
-                    ],
-                "thursday":
-                    [
-                        {
-                            "start": { "hour": number, "min": number }
-                            "end": { "hour": number, "min": number }
-                        },
-                        ...
-                    ],
-                "friday":
-                    [
-                        {
-                            "start": { "hour": number, "min": number }
-                            "end": { "hour": number, "min": number }
-                        },
-                        ...
-                    ],
-                "saturday":
-                    [
-                        {
-                            "start": { "hour": number, "min": number }
-                            "end": { "hour": number, "min": number }
-                        },
-                        ...
-                    ],
-                "sunday":
-                    [
-                        {
-                            "start": { "hour": number, "min": number }
-                            "end": { "hour": number, "min": number }
-                        },
-                        ...
-                    ]
-              }
-        },
-        ...
-    ]
+<pre><code>
+{
+  "locations": [{
+    "name": string,
+    "description": string,
+    "keywords": [string],
+    "location": string,
+    "times": [{
+      "start": {
+       "day": number,
+       "hour": number,
+       "minute": number,
+      },
+      "end": {
+        "day": number,
+        "hour": number,
+        "minute": number,
+      }
+    },...]
+  }, ...]
 }
 </code></pre>
 
+Note: The `day` fields conform to JavaScript's `Date.getDay()` format, where day 0 is Sunday, while day 6 is Satuday.
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/ScottyLabs/dining-api">Scottylabs Dining API</a> is maintained by <a href="https://github.com/ScottyLabs">ScottyLabs</a>.</span>
-
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-
     </section>
-
-  
   </body>
 </html>
