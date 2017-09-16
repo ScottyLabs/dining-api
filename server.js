@@ -41,6 +41,27 @@ web.get('/locations', function (req, res) {
   res.json(cached);
 })
 
+/* Serves out locations if location is open at specified time */
+web.get('/location/time/:day/:hour/:min', function (req, res) {
+  var returnedObj = cached.locations.filter(function (el) {
+    var returning = false;
+
+    el.times.forEach(function(element) {
+      var startMins = element.start.day * 1440 + element.start.hour * 60 + element.start.min;
+      var endMins = element.end.day * 1440 + element.end.hour * 60 + element.end.min;
+      var currentMins = parseInt(req.params.day) * 1440 + parseInt(req.params.hour) * 60 + parseInt(req.params.min);
+
+      if(currentMins >= startMins && currentMins < endMins) {
+        returning = true;
+      }
+    })
+
+    return returning;
+  })
+  
+  res.json(returnedObj)
+})
+
 /* Reload the cache once every five minutes. */
 var interval = 1000 * 60 * 5; // 5 minutes in milliseconds.
 setInterval(reload, interval);
