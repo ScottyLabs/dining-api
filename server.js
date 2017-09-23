@@ -50,6 +50,15 @@ web.get('/locations', function (req, res) {
   res.json(cached);
 })
 
+/* Serves out location based on the name of the location */
+web.get('/location/:name', function (req, res) {
+  var filteredLoc = cached.locations.filter(function (location) {
+    return location.name.includes(req.params.name)
+  })
+
+  res.json(filteredLoc)
+})
+
 /* Serves out locations if location is open at specified time */
 web.get('/location/time/:day/:hour/:min', function (req, res) {
   var returnedObj = cached.locations.filter(function (el) {
@@ -71,6 +80,7 @@ web.get('/location/time/:day/:hour/:min', function (req, res) {
   res.json(returnedObj)
 })
 
+/* Servers out locations if keyword matches location */
 web.get('/location/keyword/:keyword', function (req, res) {
   var returnedObj = cached.locations.filter(function (location) {
     if (location.keywords.indexOf(req.params.keyword) > -1) {
