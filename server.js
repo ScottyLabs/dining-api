@@ -10,6 +10,7 @@
 /* Required modules. */
 var request = require('request');
 var express = require('express');
+var keywords = require('./keywords');
 
 /* The URL of our target data store. */
 var url = 'https://script.google.com/macros/s/AKfycbyc7ys6NN5fkIgL5xVloKg16lhrYfKjDvu4FmqzJDxnTAU40qo/exec';
@@ -25,6 +26,16 @@ var reload = function(callback) {
   request(url, function (err, response, body) {
     if (!err && response.statusCode == 200) {
       cached = JSON.parse(body);
+
+      console.log('keywords', keywords)
+
+      /* Manually Adding Keywords to Each Dining Location */ 
+      cached.locations.map( function (location) {
+        if (Object.keys(keywords).indexOf(location.name) > -1) {
+          location.keywords = keywords[location.name]
+        }
+      })
+      
       console.log("Dining API cache reloaded.");
       if (callback) {
         callback();
@@ -61,6 +72,8 @@ web.get('/location/time/:day/:hour/:min', function (req, res) {
   
   res.json(returnedObj)
 })
+
+web.get('/location/place/')
 
 /* Reload the cache once every five minutes. */
 var interval = 1000 * 60 * 5; // 5 minutes in milliseconds.
