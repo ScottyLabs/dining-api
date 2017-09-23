@@ -27,8 +27,6 @@ var reload = function(callback) {
     if (!err && response.statusCode == 200) {
       cached = JSON.parse(body);
 
-      console.log('keywords', keywords)
-
       /* Manually Adding Keywords to Each Dining Location */ 
       cached.locations.map( function (location) {
         if (Object.keys(keywords).indexOf(location.name) > -1) {
@@ -73,7 +71,16 @@ web.get('/location/time/:day/:hour/:min', function (req, res) {
   res.json(returnedObj)
 })
 
-web.get('/location/place/')
+web.get('/location/keyword/:keyword', function (req, res) {
+  var returnedObj = cached.locations.filter(function (location) {
+    if (location.keywords.indexOf(req.params.keyword) > -1) {
+      return true
+    }
+    return false
+  })
+
+  res.json(returnedObj)
+})
 
 /* Reload the cache once every five minutes. */
 var interval = 1000 * 60 * 5; // 5 minutes in milliseconds.
