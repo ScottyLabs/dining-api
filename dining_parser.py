@@ -13,7 +13,8 @@ url = "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=conceptDetai
 # ---------------------- Looping through all the places -----------------------------------------------
 
 for placeid in range(70, 140):
-	print(placeid)
+
+	print (placeid)
 
 	# ---------------------- Create the URL -----------------------------------------------------------
 	url2 = url + str(placeid)
@@ -33,9 +34,25 @@ for placeid in range(70, 140):
 	if place == "":
 		continue
 
-	# ---------------------- Obtaining loaction of the place ------------------------------------------
+	# ---------------------- Obtaining location of the place ------------------------------------------
 	loc = soup.find('div', {'class':'location'})
 	location = str(loc.a.text.encode('utf-8'))[2:-1].strip()
+
+	# ---------------------- Obtaining coordinates of the place ---------------------------------------
+	location_url = loc.a['href']
+
+	at_index = location_url.index('@')
+	location_url = location_url[at_index+1:]
+
+	comma_index = location_url.index(',')
+	x_coord = location_url[0: comma_index]
+	location_url = location_url[comma_index+1:]
+
+	comma_index = location_url.index(',')
+	y_coord = location_url[0: comma_index]
+
+	x_coord = float(x_coord);
+	y_coord = float(y_coord);
 
 	# ---------------------- Obtaining description of the place ---------------------------------------
 	desc = soup.find('div', {'class':'description'}).find(text=True, recursive=False)
@@ -48,6 +65,7 @@ for placeid in range(70, 140):
 	opener = [0,0,0,0,0,0,0]
 	timingstrings = []
 
+
 	# ---------------------- Obtaining the timing strings ---------------------------------------------
 	for child in tim.children:
 		tmp = 0
@@ -55,7 +73,7 @@ for placeid in range(70, 140):
 			if tmp == 2:
 				timingstrings.append(str(grandchild.encode('utf-8'))[3:-1])
 			tmp += 1
-		
+
 	# ---------------------- Parsing the timing strings into arrays -----------------------------------
 	for i in range(0, 7):
 
@@ -75,8 +93,8 @@ for placeid in range(70, 140):
 				elif s[j] == '2' and s[j+1] == '4':
 					opener[day] = 1
 					starttimings[day] = [day, 0, 0]
-					endtimings[day] = [day, 11, 59]
-				
+					endtimings[day] = [day, 23, 59]
+
 				# ---------- Parse the timings if open ------------------------------------------------
 				else:
 					opener[day] = 1
@@ -154,7 +172,7 @@ for placeid in range(70, 140):
 		}
 
 		# ------------------ Add to JSON only if place open on that day -------------------------------
-		if opener[i] == 1: 
+		if opener[i] == 1:
 			jsontime.append(tmpjson)
 
 	# ---------------------- Parsing one place into JSON ----------------------------------------------
@@ -163,9 +181,13 @@ for placeid in range(70, 140):
 		"description":description,
 		"keywords": [""],
 		"location":location,
+		"coordinates": {
+			"lat": x_coord,
+			"lng": y_coord
+		},
 		"times":jsontime
 	}
-	
+
 	# ---------------------- Add to locations JSON ----------------------------------------------------
 	jsonlocations.append(jsonplace)
 
@@ -175,9 +197,3 @@ jsondata = {
 }
 
 jsonfinal = json.dump(jsondata, f)
-
-
-
-
-
-
