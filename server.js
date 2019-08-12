@@ -13,7 +13,7 @@ var express = require('express');
 var keywords = require('./keywords');
 
 /* The URL of our target data store. */
-var url = 'https://script.google.com/macros/s/AKfycbyc7ys6NN5fkIgL5xVloKg16lhrYfKjDvu4FmqzJDxnTAU40qo/exec';
+var url = 'https://script.google.com/macros/s/AKfycbwLXaXSvBzQIJrCIMJWtKCVIBJwmUN0D8HBDMO96B4dbPtzhT0/exec';
 
 /* The port to listen on. */
 var port = 5010;
