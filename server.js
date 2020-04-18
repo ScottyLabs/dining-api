@@ -45,6 +45,10 @@ var reload = function(callback) {
 /* Initialize web server. */
 var web = express();
 
+web.get('/', function (req, res) {
+  res.send("ScottyLabs Dining API Homepage");
+});
+
 /* Serves out the cached content to anyone who asks. */
 web.get('/locations', function (req, res) {
   res.json(cached);
