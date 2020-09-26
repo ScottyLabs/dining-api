@@ -189,6 +189,6 @@ for placeid in range(70, 140):
 jsondata = {
     "locations": jsonlocations
 }
-print(jsondata)
+print(json.dumps(jsondata))
 jsonfinal = json.dump(jsondata, f)
 #print(jsonfinal)

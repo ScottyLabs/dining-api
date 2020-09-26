@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/ScottyLabs/dining-api#readme",
   "dependencies": {
-    "express": "^4.13.3",
-    "request": "^2.65.0"
+    "child_process": "^1.0.2",
+    "express": "^4.17.1",
+    "request": "^2.88.2"
   }
 }

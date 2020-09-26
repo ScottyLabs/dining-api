@@ -12,6 +12,8 @@ var request = require('request');
 var express = require('express');
 var keywords = require('./keywords');
 
+const { exec } = require('child_process');
+
 /* The URL of our target data store. */
 var url = 'https://script.google.com/macros/s/AKfycbwLXaXSvBzQIJrCIMJWtKCVIBJwmUN0D8HBDMO96B4dbPtzhT0/exec';
 
@@ -22,25 +24,31 @@ var port = 5010;
 var cached = {}
 
 /* Function that reloads the cached information. */
-var reload = function(callback) {
-  request(url, function (err, response, body) {
-    if (!err && response.statusCode == 200) {
-      cached = JSON.parse(body);
-
-      /* Manually Adding Keywords to Each Dining Location */ 
-      cached.locations.map( function (location) {
-        if (Object.keys(keywords).indexOf(location.name) > -1) {
-          location.keywords = keywords[location.name]
-        }
-      })
-      
-      console.log("Dining API cache reloaded.");
-      if (callback) {
-        callback();
+var reload = function (callback) {
+  console.log("Before Exec");
+  exec('python updated_dining_parser.py', (err, stdout, stderr) => {
+    var dataToReceive = stdout.toString();
+    console.log("Working")
+    cached = JSON.parse(dataToReceive);
+    /* Manually Adding Keywords to Each Dining Location */
+    cached.locations.map(function (location) {
+      if (Object.keys(keywords).indexOf(location.name) > -1) {
+        location.keywords = keywords[location.name]
       }
+     
+      
+    });
+    if (callback) {
+      callback();
     }
+    console.log("Dining API cache reloaded.");
   });
+
+
+
+
 }
+
 
 /* Initialize web server. */
 var web = express();
@@ -68,19 +76,19 @@ web.get('/location/time/:day/:hour/:min', function (req, res) {
   var returnedObj = cached.locations.filter(function (el) {
     var returning = false;
 
-    el.times.forEach(function(element) {
+    el.times.forEach(function (element) {
       var startMins = element.start.day * 1440 + element.start.hour * 60 + element.start.min;
       var endMins = element.end.day * 1440 + element.end.hour * 60 + element.end.min;
       var currentMins = parseInt(req.params.day) * 1440 + parseInt(req.params.hour) * 60 + parseInt(req.params.min);
 
-      if(currentMins >= startMins && currentMins < endMins) {
+      if (currentMins >= startMins && currentMins < endMins) {
         returning = true;
       }
     })
 
     return returning;
   })
-  
+
   res.json(returnedObj)
 })
 
@@ -102,7 +110,10 @@ setInterval(reload, interval);
 
 /* Load initial cache and start listening. */
 reload(function () {
+  console.log("spawn")
   web.listen(port, function () {
     console.log("Dining API cache loaded and listening on port " + port + ".");
   });
 });
+
+
