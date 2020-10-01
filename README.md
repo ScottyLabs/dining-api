@@ -1,8 +1,7 @@
 # Dining API
 
-## October 1, 2020
-
-Updated Dining API to automatically scrape from the CMU dining site.
+This Dining API scrapes location data from the CMU dining sites and distributes
+it as a RESTful API. Access the API here: https://apis.scottylabs.org/dining/
 
 To build and deploy the service, you'll need Node.js, and Python3
 which you should install however it is your operating system chooses to do so.
