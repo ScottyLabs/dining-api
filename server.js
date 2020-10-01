@@ -25,11 +25,13 @@ var cached = {}
 
 /* Function that reloads the cached information. */
 var reload = function (callback) {
-  console.log("Before Exec");
+
+  /* execute python program to obtain data instead of scraping from google sheet directly*/
   exec('python updated_dining_parser.py', (err, stdout, stderr) => {
+
     var dataToReceive = stdout.toString();
-    console.log("Working")
     cached = JSON.parse(dataToReceive);
+
     /* Manually Adding Keywords to Each Dining Location */
     cached.locations.map(function (location) {
       if (Object.keys(keywords).indexOf(location.name) > -1) {
