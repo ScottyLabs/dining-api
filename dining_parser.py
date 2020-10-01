@@ -2,28 +2,29 @@ from bs4 import BeautifulSoup
 import requests
 import warnings
 import json
+import re
 
 warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
 f = open("result.json", "w")
 jsonlocations = []
 
-url = ("https://apps.studentaffairs.cmu.edu"
-       "/dining/conceptinfo/?page=conceptDetails&conceptId=")
+url = ("https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=conceptDetails&conceptId=")
 
 # ---------------------- Looping through all the places -----------------------
-
+#70-140
 for placeid in range(70, 140):
 
-    print(placeid)
+    #print(placeid)
 
     # ---------------------- Create the URL -----------------------------------
 
     url2 = url + str(placeid)
     r = requests.get(url2)
-
+    #print(r.status_code)
     # ---------------------- Page not found -----------------------------------
     if r.status_code != 200:
+        print("SKIP")
         continue
 
     # ---------------------- Making the beautiful soup ------------------------
@@ -32,6 +33,9 @@ for placeid in range(70, 140):
 
     # ---------------------- Obtaining name of the place, skip if empty -------
     h1s = soup.find('h1')
+    if h1s == None:
+        continue
+
     place = str(h1s.text.encode('utf-8'))[2:-1]
     if place == "":
         continue
@@ -39,6 +43,7 @@ for placeid in range(70, 140):
     # ---------------------- Obtaining location of the place ------------------
     loc = soup.find('div', {'class': 'location'})
     location = str(loc.a.text.encode('utf-8'))[2:-1].strip()
+    #print(location)
 
     # ---------------------- Obtaining coordinates of the place ---------------
     location_url = loc.a['href']
@@ -63,122 +68,107 @@ for placeid in range(70, 140):
 
     # ---------------------- Initializing variable for timings ----------------
     tim = soup.find('ul', {'class': 'schedule'})
-    starttimings = [[0, 0, 0], [0, 0, 0], [0, 0, 0],
-                    [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
-    endtimings = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0],
-                  [0, 0, 0], [0, 0, 0], [0, 0, 0]]
-    opener = [0, 0, 0, 0, 0, 0, 0]
     timingstrings = []
 
     # ---------------------- Obtaining the timing strings ---------------------
+    #THE FOLLOWING SCRIPT SHOULD ONLY BE RUN ON SUNDAY
+
+    remove = ['\\xc2','\\xa0','\\r','\\n']
     for child in tim.children:
+        #print(child)
         tmp = 0
         for grandchild in child:
+            #print("___")
             if tmp == 2:
-                timingstrings.append(str(grandchild.encode('utf-8'))[3:-1])
-                tmp += 1
-
-    # ---------------------- Parsing the timing strings into arrays -----------
-    for i in range(0, 7):
-
-        day = (i+6) % 7
-
-        s = timingstrings[i]
-        for j in range(2, len(s)):
-
-            # -------------- Finding "CLOSED" or the timings ------------------
-            if (s[j] != ' ' and s[j] != '\\' and
-                    s[j-1] == ' ' and s[j-2] == ' '):
-
-                # ---------- Not open if the timing says "CLOSED" -------------
-                if s[j] == 'C':
-                    opener[day] = 0
-
-                # ---------- If open for 24 hours -----------------------------
-            elif s[j] == '2' and s[j+1] == '4':
-                opener[day] = 1
-                starttimings[day] = [day, 0, 0]
-                endtimings[day] = [day, 23, 59]
-
-                # ---------- Parse the timings if open ------------------------
-            else:
-                opener[day] = 1
-
-                next_index = 0
-                # ------ Parsing the start time ------------------------------
-                nums = [day, 0, 0]
-                cur = 1
-                for k in range(j, j+20):
-                    if s[k] == ':':
-                        cur = 2
-                        continue
-                    elif s[k] == ' ':
-                        continue
-                    elif s[k] == 'P':
-                        nums[1] += 12
-                        next_index = k + 5
-                        break
-                    elif s[k] == 'A':
-                        next_index = k + 5
-                        break
-                    nums[cur] *= 10
-                    nums[cur] += ord(s[k]) - 48
-
-                if starttimings[day][1] == 12 or starttimings[day][1] == 24:
-                    starttimings[day][1] -= 12
-
-                starttimings[day] = nums
-
-                # ------ Parsing the end time ---------------------------------
-                nums = [day, 0, 0]
-                cur = 1
-                for k in range(next_index, j+20):
-                    if s[k] == ':':
-                        cur = 2
-                        continue
-                    elif s[k] == ' ':
-                        continue
-                    elif s[k] == 'P':
-                        nums[1] += 12
-                        break
-                    elif s[k] == 'A':
-                        break
-                    nums[cur] *= 10
-                    nums[cur] += ord(s[k]) - 48
-                # ------ If start time is greater than the end time ---------
-                # ------- then ends at next day --------
-                if starttimings[day][1] >= nums[1]:
-                    nums[0] = (nums[0] + 1) % 7
-
-                if endtimings[day][1] == 12 or endtimings[day][1] == 24:
-                    endtimings[day][1] -= 12
-
-                endtimings[day] = nums
-
-                break
-
+                all_times = str(grandchild.encode('utf-8'))[3:-1]
+                for character in remove:
+                    all_times = all_times.replace(character,"")
+                days = all_times.split(",")
+                for i in range(len(days)):
+                    days[i] = days[i].replace(" ","")
+                
+                #print(days)
+                timingstrings.append(days[1::])
+            tmp += 1
+    #print(timingstrings)
     # ---------------------- Parsing timings into JSON ------------------------
     jsontime = []
-    for i in range(0, 7):
-        tmpjson = {
-            "start":
-            {
-                "day": starttimings[i][0],
-                "hour": starttimings[i][1],
-                "min": starttimings[i][2]
-            },
-            "end":
-            {
-                "day": endtimings[i][0],
-                "hour": endtimings[i][1],
-                "min": endtimings[i][2]
-            }
-        }
+    for i in range(len(timingstrings)):
+        for times in timingstrings[i]:
+            #print(times)
+            if times == "CLOSED":
+                continue
+            if times == "24hours":
+                tmpjson = {
+                    "start":
+                    {
+                        "day": (i)%7,
+                        "hour": 0,
+                        "min": 0
+                    },
+                    "end":
+                    {
+                        "day": (i)%7,
+                        "hour": 23,
+                        "min": 59
+                    }
+                }
+                jsontime.append(tmpjson)
+                continue
 
-        # ------------------ Add to JSON only if place open on that day -------
-        if opener[i] == 1:
+            time_split = times.split("-")
+            start_time = time_split[0]
+            end_time = time_split[1]
+
+            start_pm_flag = False
+            start_time_json = []
+            end_time_json = []
+
+            if start_time[-2::] == "AM":
+                hour_min = start_time.replace("AM","").split(":")
+                start_time_json.append((i)%7)
+                start_time_json.append(int(hour_min[0]))
+                start_time_json.append(int(hour_min[1]))
+            if start_time[-2::] == "PM":
+                start_pm_flag = True
+                hour_min = start_time.replace("PM","").split(":")
+                start_time_json.append((i)%7)
+                start_time_json.append(int(hour_min[0]) + 12)
+                start_time_json.append(int(hour_min[1]))
+            if end_time[-2::] == "AM":
+                hour_min = end_time.replace("AM","").split(":")
+                if start_pm_flag:
+                    end_time_json.append((i+1)%7)
+                else:
+                    end_time_json.append((i)%7)
+                end_time_json.append(int(hour_min[0]))
+                end_time_json.append(int(hour_min[1]))
+            if end_time[-2::] == "PM":
+                hour_min = end_time.replace("PM","").split(":")
+                end_time_json.append((i+2)%7)
+                end_time_json.append(int(hour_min[0]) + 12)
+                end_time_json.append(int(hour_min[1]))
+            
+            #print(start_time_json)
+            #print(end_time_json)
+            
+            tmpjson = {
+                "start":
+                {
+                    "day": start_time_json[0],
+                    "hour": start_time_json[1],
+                    "min": start_time_json[2]
+                },
+                "end":
+                {
+                    "day": end_time_json[0],
+                    "hour": end_time_json[1],
+                    "min": end_time_json[2]
+                }
+            }
             jsontime.append(tmpjson)
 
+    #print(jsontime)
     # ---------------------- Parsing one place into JSON ----------------------
     jsonplace = {
         "name": place,
@@ -199,5 +189,6 @@ for placeid in range(70, 140):
 jsondata = {
     "locations": jsonlocations
 }
-
+print(json.dumps(jsondata))
 jsonfinal = json.dump(jsondata, f)
+#print(jsonfinal)
