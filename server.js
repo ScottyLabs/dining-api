@@ -104,8 +104,8 @@ web.get("/location/keyword/:keyword", function (req, res) {
   res.json(returnedObj);
 });
 
-/* Reload the cache once every five minutes. */
-var interval = 1000 * 60 * 5; // 5 minutes in milliseconds.
+/* Reload the cache once a day */
+var interval = 1000 * 60 * 60 * 24; // 24 hours
 setInterval(reload, interval);
 
 /* Load initial cache and start listening. */

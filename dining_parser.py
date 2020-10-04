@@ -36,13 +36,13 @@ for placeid in range(70, 140):
     if h1s == None:
         continue
 
-    place = str(h1s.text.encode('utf-8'))[2:-1]
+    place = h1s.text.strip()
     if place == "":
         continue
 
     # ---------------------- Obtaining location of the place ------------------
     loc = soup.find('div', {'class': 'location'})
-    location = str(loc.a.text.encode('utf-8'))[2:-1].strip()
+    location = loc.a.text.strip()
     #print(location)
 
     # ---------------------- Obtaining coordinates of the place ---------------
@@ -64,7 +64,7 @@ for placeid in range(70, 140):
     # ---------------------- Obtaining description of the place ---------------
     desc = soup.find('div', {'class': 'description'}).find(text=True,
                                                            recursive=False)
-    description = str(desc.encode('utf-8'))[3:-1]
+    description = desc.strip()
 
     # ---------------------- Initializing variable for timings ----------------
     tim = soup.find('ul', {'class': 'schedule'})
