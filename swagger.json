@@ -1,0 +1,198 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an API that serves dining location info for Carnegie Mellon University.",
+    "version": "2.1.0",
+    "title": "ScottyLabs Dining API",
+    "contact": {
+      "email": "hello@scottylabs.org"
+    }
+  },
+  "host": "apis.scottylabs.org",
+  "basePath": "/dining",
+  "tags": [
+    {
+      "name": "dining",
+      "description": "Everything about food at CMU"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/locations": {
+      "get": {
+        "tags": [
+          "dining"
+        ],
+        "summary": "Returns all location information",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Locations"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/location/{name}": {
+      "get": {
+        "tags": [
+          "dining"
+        ],
+        "summary": "Returns location based on name",
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "type": "string",
+            "name": "name",
+            "required": true,
+            "description": "The name of the dining location"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Locations"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/location/time/{day}/{hour}/{min}": {
+      "get": {
+        "tags": [
+          "dining"
+        ],
+        "summary": "Returns locations that are open at the specified time",
+        "description": "",
+        "parameters": [
+          {
+            "in": "path",
+            "type": "integer",
+            "name": "day",
+            "required": true,
+            "description": "The day of the week with 0 - Sunday, 6 - Saturday"
+          },
+          {
+            "in": "path",
+            "type": "integer",
+            "name": "hour",
+            "required": true,
+            "description": "The hour in 24H format (e.g. 9 for 9:30 AM)"
+          },
+          {
+            "in": "path",
+            "type": "integer",
+            "name": "min",
+            "required": true,
+            "description": "The minute in the hour (e.g. 30 for 9:30 AM)"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Locations"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Locations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Location"
+      }
+    },
+    "Location": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "short_description": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "coordinates": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "number",
+              "format": "float"
+            },
+            "lng": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        },
+        "times": {
+          "$ref": "#/definitions/Times"
+        }
+      }
+    },
+    "Times": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "$ref": "#/definitions/TimeObject"
+          },
+          "end": {
+            "$ref": "#/definitions/TimeObject"
+          }
+        }
+      }
+    },
+    "TimeObject": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hour": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minute": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}
