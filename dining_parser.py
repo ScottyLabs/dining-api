@@ -1,55 +1,32 @@
 from bs4 import BeautifulSoup
+from typing import Tuple, Dict, Any
 import requests
 import warnings
 import json
 import re
 
-warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
+daysConversion = {
+    "Sunday": 0,
+    "Monday": 1,
+    "Tuesday": 2,
+    "Wednesday": 3,
+    "Thursday": 4,
+    "Friday": 5,
+    "Saturday": 6
+}
 
-f = open("result.json", "w")
-jsonlocations = []
 
-url = ("https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=conceptDetails&conceptId=")
+def createRequest(url: str) -> str:
+    """Create a GET request and return the HTML as a string"""
+    res = requests.get(url)
+    if res.status_code == 200:
+        return res.text
 
-# ---------------------- Looping through all the places -----------------------
-#70-140
-for placeid in range(70, 140):
 
-    #print(placeid)
-
-    # ---------------------- Create the URL -----------------------------------
-
-    url2 = url + str(placeid)
-    r = requests.get(url2)
-    #print(r.status_code)
-    # ---------------------- Page not found -----------------------------------
-    if r.status_code != 200:
-        print("SKIP")
-        continue
-
-    # ---------------------- Making the beautiful soup ------------------------
-    data = r.text
-    soup = BeautifulSoup(data)
-
-    # ---------------------- Obtaining name of the place, skip if empty -------
-    h1s = soup.find('h1')
-    if h1s == None:
-        continue
-
-    place = h1s.text.strip()
-    if place == "":
-        continue
-
-    # ---------------------- Obtaining location of the place ------------------
-    loc = soup.find('div', {'class': 'location'})
-    location = loc.a.text.strip()
-    #print(location)
-
-    # ---------------------- Obtaining coordinates of the place ---------------
-    location_url = loc.a['href']
-
-    at_index = location_url.index('@')
-    location_url = location_url[at_index+1:]
+def retrieveLocation(url: str) -> Tuple[float, float]:
+    """Retrieve the lat and lng coordinates from a Google Maps URL"""
+    at_index = url.index('@')
+    location_url = url[at_index+1:]
 
     comma_index = location_url.index(',')
     x_coord = location_url[0: comma_index]
@@ -61,134 +38,130 @@ for placeid in range(70, 140):
     x_coord = float(x_coord)
     y_coord = float(y_coord)
 
-    # ---------------------- Obtaining description of the place ---------------
-    desc = soup.find('div', {'class': 'description'}).find(text=True,
-                                                           recursive=False)
-    description = desc.strip()
+    return (x_coord, y_coord)
 
-    # ---------------------- Initializing variable for timings ----------------
-    tim = soup.find('ul', {'class': 'schedule'})
-    timingstrings = []
 
-    # ---------------------- Obtaining the timing strings ---------------------
-    #THE FOLLOWING SCRIPT SHOULD ONLY BE RUN ON SUNDAY
+def HourConvert(hours: int, minutes: int, period: str) -> Tuple[int, int]:
+    """Convert 12H clock format into 24H clock format"""
+    if period == "AM":
+        return (hours, minutes)
+    else:
+        return (hours + 12, minutes)
 
-    remove = ['\\xc2','\\xa0','\\r','\\n']
-    for child in tim.children:
-        #print(child)
-        tmp = 0
-        for grandchild in child:
-            #print("___")
-            if tmp == 2:
-                all_times = str(grandchild.encode('utf-8'))[3:-1]
-                for character in remove:
-                    all_times = all_times.replace(character,"")
-                days = all_times.split(",")
-                for i in range(len(days)):
-                    days[i] = days[i].replace(" ","")
-                
-                #print(days)
-                timingstrings.append(days[1::])
-            tmp += 1
-    #print(timingstrings)
-    # ---------------------- Parsing timings into JSON ------------------------
-    jsontime = []
-    for i in range(len(timingstrings)):
-        for times in timingstrings[i]:
-            #print(times)
-            if times == "CLOSED":
-                continue
-            if times == "24hours":
-                tmpjson = {
-                    "start":
-                    {
-                        "day": (i)%7,
-                        "hour": 0,
-                        "min": 0
-                    },
-                    "end":
-                    {
-                        "day": (i)%7,
-                        "hour": 23,
-                        "min": 59
-                    }
-                }
-                jsontime.append(tmpjson)
-                continue
 
-            time_split = times.split("-")
-            start_time = time_split[0]
-            end_time = time_split[1]
+def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
+    """Retrieve the location info from the URL of a location's info page"""
+    conceptHTML = createRequest(link)
+    conceptSoup = BeautifulSoup(conceptHTML, 'html.parser')
 
-            start_pm_flag = False
-            start_time_json = []
-            end_time_json = []
+    # Populate location info
+    locationDiv = conceptSoup.find('div', {'class': 'location'})
+    locationLink = locationDiv.find('a')
+    location = str(locationLink.contents[0]).strip()
+    lat, lng = retrieveLocation(locationLink["href"])
+    coordinates = {"lat": lat, "lng": lng}
 
-            if start_time[-2::] == "AM":
-                hour_min = start_time.replace("AM","").split(":")
-                start_time_json.append((i)%7)
-                start_time_json.append(int(hour_min[0]))
-                start_time_json.append(int(hour_min[1]))
-            if start_time[-2::] == "PM":
-                start_pm_flag = True
-                hour_min = start_time.replace("PM","").split(":")
-                start_time_json.append((i)%7)
-                start_time_json.append(int(hour_min[0]) + 12)
-                start_time_json.append(int(hour_min[1]))
-            if end_time[-2::] == "AM":
-                hour_min = end_time.replace("AM","").split(":")
-                if start_pm_flag:
-                    end_time_json.append((i+1)%7)
-                else:
-                    end_time_json.append((i)%7)
-                end_time_json.append(int(hour_min[0]))
-                end_time_json.append(int(hour_min[1]))
-            if end_time[-2::] == "PM":
-                hour_min = end_time.replace("PM","").split(":")
-                end_time_json.append((i+2)%7)
-                end_time_json.append(int(hour_min[0]) + 12)
-                end_time_json.append(int(hour_min[1]))
-            
-            #print(start_time_json)
-            #print(end_time_json)
-            
-            tmpjson = {
-                "start":
-                {
-                    "day": start_time_json[0],
-                    "hour": start_time_json[1],
-                    "min": start_time_json[2]
-                },
-                "end":
-                {
-                    "day": end_time_json[0],
-                    "hour": end_time_json[1],
-                    "min": end_time_json[2]
-                }
+    # Populate description info
+    descriptionDiv = conceptSoup.find('div', {'class': 'description'})
+    try:
+        descriptionPar = descriptionDiv.find('p')
+        description = str(max(descriptionPar.contents, key=len)).strip()
+    except:
+        description = str(max(descriptionDiv.contents, key=len)).strip()
+    descRegex = re.compile(r'(\r|\n)+')
+    shortDesc = descRegex.sub(' ', shortDesc)
+    description = descRegex.sub(' ', description)
+
+    # Populate hours info
+    times = []
+    scheduleList = conceptSoup.find('ul', {'class': 'schedule'})
+    timeList = scheduleList.find_all('li')
+    for time in timeList:
+        day = daysConversion[str(time.find('strong').contents[0]).strip()]
+
+        timeStr = str(time.contents[2]).strip().replace("\xa0\r\n", "")
+        timeregex = re.compile(r'\W+')
+        timeArray = timeregex.sub(' ', timeStr).split(" ")
+        splits = (len(timeArray) - 2) // 6
+        for i in range(splits):
+            startTime = HourConvert(
+                int(timeArray[2 + 2 * i * 3]),
+                int(timeArray[2 + 2 * i * 3 + 1]),
+                timeArray[2 + 2 * i * 3 + 2])
+            start = {
+                'day': day,
+                'hour': startTime[0],
+                'minute': startTime[1]
             }
-            jsontime.append(tmpjson)
-
-    #print(jsontime)
-    # ---------------------- Parsing one place into JSON ----------------------
-    jsonplace = {
-        "name": place,
-        "description": description,
-        "keywords": [""],
-        "location": location,
-        "coordinates": {
-            "lat": x_coord,
-            "lng": y_coord
-        },
-        "times": jsontime
+            endTime = HourConvert(
+                int(timeArray[2 + 2 * i * 3 + 3]),
+                int(timeArray[2 + 2 * i * 3 + 4]),
+                timeArray[2 + 2 * i * 3 + 5])
+            end = {
+                'day': day,
+                'hour': endTime[0],
+                'minute': endTime[1]
+            }
+            times.append({'start': start, 'end': end})
+    
+    return {
+        'name': name,
+        'short_description': shortDesc,
+        'description': description,
+        'location': location,
+        'coordinates': coordinates,
+        'times': times
     }
 
-    # ---------------------- Add to locations JSON ----------------------------
-    jsonlocations.append(jsonplace)
 
+def main():
+    warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
-jsondata = {
-    "locations": jsonlocations
-}
-print(json.dumps(jsondata))
-jsonfinal = json.dump(jsondata, f)
-#print(jsonfinal)
+    f = open("result.json", "w")
+    jsonlocations = []
+
+    baseurl = ("https://apps.studentaffairs.cmu.edu")
+
+    url = ("https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts")
+    listHTML = createRequest(url)
+
+    # Create the beautiful soup
+    soup = BeautifulSoup(listHTML, 'html.parser')
+
+    # Load the container
+    container = soup.find('div', {'class': 'conceptCards'})
+
+    if container:
+        # Retrieve all locations
+        conceptLinks = []
+        concept = container.find_next('h3', {'class': 'name detailsLink'})
+        while concept != None:
+            name = str(concept.contents[0]).strip()
+            link = str(concept["onclick"]).strip().replace(
+                "location.href=", "")
+            link = baseurl + link[1:-1]
+            shortDescDiv = concept.find_next('div', {'class': 'description'})
+            shortDesc = str(shortDescDiv.contents[0]).strip()
+            conceptLinks.append((name, link, shortDesc))
+            concept = concept.find_next('h3', {'class': 'name detailsLink'})
+
+        # Retrieve info for each location
+        locations = []
+        for concept in conceptLinks:
+            name, link, shortDesc = concept
+            location = retrieveInfo(name, link, shortDesc)
+            locations.append(location)
+    
+    # Convert to JSON format
+    jsondata = {
+        "locations": locations
+    }
+    jsonfinal = json.dumps(jsondata, ensure_ascii=False).encode('utf-8').decode('utf-8')
+    print(jsonfinal)
+    
+    result = open('result.json', 'w')
+    result.write(jsonfinal)
+    result.close()
+
+if __name__ == "__main__":
+    main()
