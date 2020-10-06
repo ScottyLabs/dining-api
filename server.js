@@ -31,12 +31,6 @@ var reload = function (callback) {
     var dataToReceive = stdout.toString();
     cached = JSON.parse(dataToReceive);
 
-    /* Manually Adding Keywords to Each Dining Location */
-    cached.locations.map(function (location) {
-      if (Object.keys(keywords).indexOf(location.name) > -1) {
-        location.keywords = keywords[location.name];
-      }
-    });
     if (callback) {
       callback();
     }
