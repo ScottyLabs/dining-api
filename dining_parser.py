@@ -103,6 +103,20 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
                 'minute': endTime[1]
             }
             times.append({'start': start, 'end': end})
+        
+        # 24 hours check
+        if splits == 0 and '24' in timeArray and 'hours' in timeArray:
+            start = {
+                'day': day,
+                'hour': 0,
+                'minute': 0
+            }
+            end = {
+                'day': day,
+                'hour': 23,
+                'minute': 59
+            }
+            times.append({'start': start, 'end': end})
     
     return {
         'name': name,
