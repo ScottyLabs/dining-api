@@ -5,7 +5,9 @@
     "version": "2.1.0",
     "title": "ScottyLabs Dining API",
     "contact": {
-      "email": "hello@scottylabs.org"
+      "name": "ScottyLabs",
+      "email": "hello@scottylabs.org",
+      "url": "https://scottylabs.org"
     }
   },
   "host": "apis.scottylabs.org",
@@ -35,10 +37,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "type": "object",
-              "items": {
-                "$ref": "#/definitions/Locations"
-              }
+              "$ref": "#/definitions/Locations"
             }
           }
         }
@@ -67,9 +66,9 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "type": "object",
+              "type": "array",
               "items": {
-                "$ref": "#/definitions/Locations"
+                "$ref": "#/definitions/Location"
               }
             }
           }
@@ -113,10 +112,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "type": "object",
-              "items": {
-                "$ref": "#/definitions/Locations"
-              }
+              "$ref": "#/definitions/Locations"
             }
           }
         }
@@ -127,7 +123,9 @@
     "Locations": {
       "type": "object",
       "properties": {
-        "$ref": "#/definitions/Location"
+        "locations": {
+          "$ref": "#/definitions/Location"
+        }
       }
     },
     "Location": {
