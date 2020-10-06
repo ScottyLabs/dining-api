@@ -11,7 +11,6 @@
 
 /* Required modules. */
 var express = require("express");
-var keywords = require("./keywords");
 
 const { exec } = require("child_process");
 
@@ -87,18 +86,6 @@ web.get("/location/time/:day/:hour/:min", function (req, res) {
     });
 
     return returning;
-  });
-
-  res.json(returnedObj);
-});
-
-/* Servers out locations if keyword matches location */
-web.get("/location/keyword/:keyword", function (req, res) {
-  var returnedObj = cached.locations.filter(function (location) {
-    if (location.keywords.indexOf(req.params.keyword) > -1) {
-      return true;
-    }
-    return false;
   });
 
   res.json(returnedObj);
