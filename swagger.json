@@ -35,7 +35,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "type": "array",
+              "type": "object",
               "items": {
                 "$ref": "#/definitions/Locations"
               }
@@ -67,7 +67,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "type": "array",
+              "type": "object",
               "items": {
                 "$ref": "#/definitions/Locations"
               }
@@ -113,7 +113,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "type": "array",
+              "type": "object",
               "items": {
                 "$ref": "#/definitions/Locations"
               }
@@ -125,8 +125,8 @@
   },
   "definitions": {
     "Locations": {
-      "type": "array",
-      "items": {
+      "type": "object",
+      "properties": {
         "$ref": "#/definitions/Location"
       }
     },
