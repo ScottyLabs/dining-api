@@ -66,14 +66,15 @@ web.get("/location/time/:day/:hour/:min", function (req, res) {
 
     el.times.forEach(function (element) {
       var startMins =
-        element.start.day * 1440 + element.start.hour * 60 + element.start.min;
+        element.start.day * 1440 + element.start.hour * 60 + element.start.minute;
       var endMins =
-        element.end.day * 1440 + element.end.hour * 60 + element.end.min;
+        element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
       var currentMins =
         parseInt(req.params.day) * 1440 +
         parseInt(req.params.hour) * 60 +
         parseInt(req.params.min);
 
+      console.log(element)
       if (currentMins >= startMins && currentMins < endMins) {
         returning = true;
       }
