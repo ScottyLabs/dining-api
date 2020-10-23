@@ -44,9 +44,13 @@ def retrieveLocation(url: str) -> Tuple[float, float]:
 def HourConvert(hours: int, minutes: int, period: str) -> Tuple[int, int]:
     """Convert 12H clock format into 24H clock format"""
     if period == "AM":
+        if hours == 12:
+            hours = 0
         return (hours, minutes)
     else:
-        return (hours + 12, minutes)
+        if hours != 12:
+            hours = hours + 12
+        return (hours, minutes)
 
 
 def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
