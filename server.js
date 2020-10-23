@@ -53,7 +53,7 @@ web.get("/locations", function (req, res) {
 /* Serves out location based on the name of the location */
 web.get("/location/:name", function (req, res) {
   var filteredLoc = cached.locations.filter(function (location) {
-    return location.name.includes(req.params.name);
+    return location.name.toLowerCase().includes(req.params.name.toLowerCase());
   });
 
   res.json(filteredLoc);
@@ -87,7 +87,7 @@ web.get("/location/time/:day/:hour/:min", function (req, res) {
 });
 
 /* Reload the cache once a day */
-var interval = 1000 * 60 * 60 * 24; // 24 hours
+var interval = 1000 * 60 * 60 * 2; // 24 hours
 setInterval(reload, interval);
 
 /* Load initial cache and start listening. */
