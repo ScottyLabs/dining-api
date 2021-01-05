@@ -17,7 +17,7 @@ by running:
 
 ```
 python3 -m venv env
-env/bin/pip3 install bs4 requests
+env/bin/pip3 install -r requirements.txt
 ```
 
 The above commands may vary per operating system but essentially, you need
