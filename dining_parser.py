@@ -53,7 +53,7 @@ def HourConvert(hours: int, minutes: int, period: str) -> Tuple[int, int]:
         return (hours, minutes)
 
 
-def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
+def retrieveInfo(name: str, link: str, shortDesc: str, status: bool) -> Dict[str, Any]:
     """Retrieve the location info from the URL of a location's info page"""
     conceptHTML = createRequest(link)
     conceptSoup = BeautifulSoup(conceptHTML, 'html.parser')
@@ -128,10 +128,11 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
         'description': description,
         'location': location,
         'coordinates': coordinates,
-        'times': times
+        'times': times,
+        'is_open': status
     }
 
-
+import sys
 def main():
     warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
@@ -160,14 +161,16 @@ def main():
             link = baseurl + link[1:-1]
             shortDescDiv = concept.find_next('div', {'class': 'description'})
             shortDesc = str(shortDescDiv.contents[0]).strip()
-            conceptLinks.append((name, link, shortDesc))
+            statusDiv = concept.find_next('div', {'class': 'status'})
+            status = str(statusDiv.contents[0]).strip() == "Open"
+            conceptLinks.append((name, link, shortDesc, status))
             concept = concept.find_next('h3', {'class': 'name detailsLink'})
 
         # Retrieve info for each location
         locations = []
         for concept in conceptLinks:
-            name, link, shortDesc = concept
-            location = retrieveInfo(name, link, shortDesc)
+            name, link, shortDesc, status = concept
+            location = retrieveInfo(name, link, shortDesc, status)
             locations.append(location)
     
     # Convert to JSON format

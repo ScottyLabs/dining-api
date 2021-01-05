@@ -158,6 +158,9 @@
         },
         "times": {
           "$ref": "#/definitions/Times"
+        },
+        "is_open": {
+          "type": "boolean"
         }
       }
     },
