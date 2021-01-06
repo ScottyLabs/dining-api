@@ -13,6 +13,7 @@
 const express = require("express")
 const { exec } = require("child_process")
 const { DateTime } = require("luxon")
+const cors = require("cors")
 
 /* The port to listen on. */
 var port = 5010
@@ -105,6 +106,8 @@ const updateStatus = () => {
 
 /* Initialize web server. */
 var web = express()
+
+web.use(cors())
 
 web.get("/", function (req, res) {
   res.send("ScottyLabs Dining API Homepage")
