@@ -10,8 +10,8 @@
       "url": "https://scottylabs.org"
     }
   },
-  "host": "apis.scottylabs.org",
-  "basePath": "/dining",
+  "host": "dining.apis.scottylabs.org",
+  "basePath": "/",
   "tags": [
     {
       "name": "dining",
