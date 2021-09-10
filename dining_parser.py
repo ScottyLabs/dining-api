@@ -95,6 +95,17 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
     shortDesc = descRegex.sub(' ', shortDesc)
     description = descRegex.sub(' ', description)
 
+    # Populate menu info
+    siteScripts = conceptSoup.find_all('script')
+    siteScript = None
+    for script in siteScripts:
+        if len(script.contents) > 0 and '#getMenu' in script.contents[0]:
+            siteScript = script.contents[0]
+    menuRelLink = re.findall(r"'(conceptAssets\/.*)'", str(siteScript))
+    menuLink = None
+    if menuRelLink and len(menuRelLink) > 0:
+        menuLink = 'https://apps.studentaffairs.cmu.edu/dining/conceptinfo/' + menuRelLink[0]
+
     # Populate hours info
     times = []
     scheduleList = conceptSoup.find('ul', {'class': 'schedule'})
@@ -142,7 +153,7 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
             }
             times.append({'start': start, 'end': end})
     
-    return {
+    locationDict = {
         'name': name,
         'short_description': shortDesc,
         'description': description,
@@ -150,6 +161,9 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
         'coordinates': coordinates,
         'times': times
     }
+    if menuLink and menuLink.endswith('.pdf'):
+        locationDict['menu'] = menuLink
+    return locationDict
 
 import sys
 def main():

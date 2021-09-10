@@ -161,6 +161,9 @@
         },
         "is_open": {
           "type": "boolean"
+        },
+        "menu": {
+          "type": "string"
         }
       }
     },
