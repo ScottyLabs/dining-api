@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This is an API that serves dining location info for Carnegie Mellon University.",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "title": "ScottyLabs Dining API",
     "contact": {
       "name": "ScottyLabs",
