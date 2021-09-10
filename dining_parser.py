@@ -53,6 +53,25 @@ def HourConvert(hours: int, minutes: int, period: str) -> Tuple[int, int]:
         return (hours, minutes)
 
 
+def timeCompare(hour1: int, min1: int, hour2: int, min2: int) -> int:
+    """
+    If time 1 > time 2, return 1.
+    If time 1 == time 2, return 0.
+    If time 1 < time 2, return -1.
+    """
+    if hour1 == hour2:
+        if min1 > min2:
+            return 1
+        elif min1 == min2:
+            return 0
+        else:
+            return -1
+    elif hour1 < hour2:
+        return -1
+    else:
+        return 1
+
+
 def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
     """Retrieve the location info from the URL of a location's info page"""
     conceptHTML = createRequest(link)
@@ -101,8 +120,9 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
                 int(timeArray[2 + 2 * i * 3 + 3]),
                 int(timeArray[2 + 2 * i * 3 + 4]),
                 timeArray[2 + 2 * i * 3 + 5])
+            offsetDay = timeCompare(endTime[0], endTime[1], startTime[0], startTime[1])
             end = {
-                'day': (day + 1) % 7 if endTime[0] == 0 and endTime[1] == 0 else day,
+                'day': (day + 1) % 7 if offsetDay <= 0 else day,
                 'hour': endTime[0],
                 'minute': endTime[1]
             }
