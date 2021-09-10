@@ -3,3 +3,4 @@ yarn.lock
 env
 .vscode
 result.json
+.venv
