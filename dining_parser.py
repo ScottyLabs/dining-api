@@ -102,7 +102,7 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
                 int(timeArray[2 + 2 * i * 3 + 4]),
                 timeArray[2 + 2 * i * 3 + 5])
             end = {
-                'day': day + 1 if endTime[0] == 0 and endTime[1] == 0 else day,
+                'day': (day + 1) % 7 if endTime[0] == 0 and endTime[1] == 0 else day,
                 'hour': endTime[0],
                 'minute': endTime[1]
             }
