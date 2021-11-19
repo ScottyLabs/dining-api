@@ -11,6 +11,7 @@
 var request = require('request');
 var express = require('express');
 var keywords = require('./keywords');
+var cors = require("cors");
 
 /* The URL of our target data store. */
 var url = 'https://script.google.com/macros/s/AKfycbzPAqsRyX5FMXA5BYuYycwSPE4rHX3yfY1z7cdUaNp9b3XJ_ouXrkUl2ysgvwwsep3q/exec';
@@ -44,7 +45,7 @@ var reload = function(callback) {
 
 /* Initialize web server. */
 var web = express();
-
+web.use(cors());
 web.get('/', function (req, res) {
   res.send("ScottyLabs Dining API Homepage");
 });
