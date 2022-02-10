@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from typing import Tuple, Dict, Any
+from datetime import datetime
 import requests
 import warnings
 import json
@@ -26,11 +27,11 @@ def createRequest(url: str) -> str:
 def retrieveLocation(url: str) -> Tuple[float, float]:
     """Retrieve the lat and lng coordinates from a Google Maps URL"""
     at_index = url.index('@')
-    location_url = url[at_index+1:]
+    location_url = url[at_index + 1:]
 
     comma_index = location_url.index(',')
     x_coord = location_url[0: comma_index]
-    location_url = location_url[comma_index+1:]
+    location_url = location_url[comma_index + 1:]
 
     comma_index = location_url.index(',')
     y_coord = location_url[0: comma_index]
@@ -89,7 +90,10 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
     try:
         descriptionPar = descriptionDiv.find('p')
         description = str(max(descriptionPar.contents, key=len)).strip()
-    except:
+    except Exception as e:
+        with open('error.log', 'a') as file:
+            file.write("[{timestamp}] {err}\n".format(timestamp=str(
+                datetime.now().strftime("%m/%d/%Y %H:%M:%S")), err=str(e)))
         description = str(max(descriptionDiv.contents, key=len)).strip()
     descRegex = re.compile(r'(\r|\n)+')
     shortDesc = descRegex.sub(' ', shortDesc)
@@ -104,7 +108,8 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
     menuRelLink = re.findall(r"'(conceptAssets\/.*)'", str(siteScript))
     menuLink = None
     if menuRelLink and len(menuRelLink) > 0:
-        menuLink = 'https://apps.studentaffairs.cmu.edu/dining/conceptinfo/' + menuRelLink[0]
+        menuLink = 'https://apps.studentaffairs.cmu.edu/dining/conceptinfo/' +\
+            menuRelLink[0]
 
     # Populate hours info
     times = []
@@ -131,14 +136,15 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
                 int(timeArray[2 + 2 * i * 3 + 3]),
                 int(timeArray[2 + 2 * i * 3 + 4]),
                 timeArray[2 + 2 * i * 3 + 5])
-            offsetDay = timeCompare(endTime[0], endTime[1], startTime[0], startTime[1])
+            offsetDay = timeCompare(
+                endTime[0], endTime[1], startTime[0], startTime[1])
             end = {
                 'day': (day + 1) % 7 if offsetDay <= 0 else day,
                 'hour': endTime[0],
                 'minute': endTime[1]
             }
             times.append({'start': start, 'end': end})
-        
+
         # 24 hours check
         if splits == 0 and '24' in timeArray and 'hours' in timeArray:
             start = {
@@ -152,29 +158,102 @@ def retrieveInfo(name: str, link: str, shortDesc: str) -> Dict[str, Any]:
                 'minute': 59
             }
             times.append({'start': start, 'end': end})
-    
+
+    # Check if Online Ordering is Available for this location
+    onlineDiv = conceptSoup.find('div', {'class': 'navItems orderOnline'})
+
     locationDict = {
         'name': name,
         'short_description': shortDesc,
         'description': description,
         'location': location,
         'coordinates': coordinates,
-        'times': times
+        'times': times,
+        'acceptsOnlineOrders': True if onlineDiv else False
     }
     if menuLink and menuLink.endswith('.pdf'):
         locationDict['menu'] = menuLink
     return locationDict
 
-import sys
+
+def retrieveSpecials():
+    url = "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" + \
+        "?page=specials"
+
+    listHTML = createRequest(url)
+
+    # Create the beautiful soup
+    soup = BeautifulSoup(listHTML, 'html.parser')
+
+    # Load the container
+    containers = soup.find_all('div', {'class': 'card'})
+
+    specials = dict()
+    for container in containers:
+        name = container.find_next('h3', {'class': 'name'}).contents[0].strip()
+        specials_list = container.find_all('div', {'class': 'specialDetails'})
+
+        location_specials = []
+        for special in specials_list:
+            header = special.find('strong').contents[0].strip()
+            special_item_list = special.find('li')
+            if len(special_item_list) > 2:
+                desc = special_item_list.contents[-1].strip()
+            current_special = {
+                "title": header
+            }
+            if desc is not None:
+                current_special["description"] = desc
+            location_specials.append(current_special)
+        specials[name] = location_specials
+
+    return specials
+
+
+def retrieveSoups():
+    url = "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" + \
+        "?page=soups"
+
+    listHTML = createRequest(url)
+
+    # Create the beautiful soup
+    bsoup = BeautifulSoup(listHTML, 'html.parser')
+
+    # Load the container
+    containers = bsoup.find_all('div', {'class': 'card'})
+
+    soups = dict()
+    for container in containers:
+        name = container.find_next('h3', {'class': 'name'}).contents[0].strip()
+        soups_list = container.find_all('div', {'class': 'specialDetails'})
+
+        location_soups = []
+        for soup in soups_list:
+            header = soup.find('strong').contents[0].strip()
+            soup_item_list = soup.find('li')
+            if len(soup_item_list) > 2:
+                desc = soup_item_list.contents[-1].strip()
+            current_soup = {
+                "title": header
+            }
+            if desc is not None and len(desc) > 0:
+                current_soup["description"] = desc
+            location_soups.append(current_soup)
+        soups[name] = location_soups
+
+    return soups
+
+
 def main():
     warnings.filterwarnings("ignore", category=UserWarning, module='bs4')
 
-    f = open("result.json", "w")
-    jsonlocations = []
+    # f = open("result.json", "w")
+    # jsonlocations = []
 
     baseurl = ("https://apps.studentaffairs.cmu.edu")
 
-    url = ("https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts")
+    url = "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/" + \
+        "?page=listConcepts"
     listHTML = createRequest(url)
 
     # Create the beautiful soup
@@ -183,11 +262,14 @@ def main():
     # Load the container
     container = soup.find('div', {'class': 'conceptCards'})
 
+    today_specials = retrieveSpecials()
+    today_soups = retrieveSoups()
+
     if container:
         # Retrieve all locations
         conceptLinks = []
         concept = container.find_next('h3', {'class': 'name detailsLink'})
-        while concept != None:
+        while concept is not None:
             name = str(concept.contents[0]).strip()
             link = str(concept["onclick"]).strip().replace(
                 "location.href=", "")
@@ -201,19 +283,31 @@ def main():
         locations = []
         for concept in conceptLinks:
             name, link, shortDesc = concept
+            location_specials = None
+            if name in today_specials:
+                location_specials = today_specials[name]
+            location_soups = None
+            if name in today_soups:
+                location_soups = today_soups[name]
             location = retrieveInfo(name, link, shortDesc)
+            if location_specials is not None:
+                location["todaysSpecials"] = location_specials
+            if location_soups is not None:
+                location["todaysSoups"] = location_soups
             locations.append(location)
-    
+
     # Convert to JSON format
     jsondata = {
         "locations": locations
     }
-    jsonfinal = json.dumps(jsondata, ensure_ascii=False).encode('utf-8').decode('utf-8')
+    jsonfinal = json.dumps(jsondata, ensure_ascii=False).encode(
+        'utf-8').decode('utf-8')
     print(jsonfinal)
-    
+
     result = open('result.json', 'w')
     result.write(jsonfinal)
     result.close()
+
 
 if __name__ == "__main__":
     main()

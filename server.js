@@ -159,8 +159,8 @@ web.get("/location/time/:day/:hour/:min", function (req, res) {
   res.json(returnedObj)
 })
 
-/* Reload the cache twice a day */
-var interval = 1000 * 60 * 60 * 12 // 12 hours
+/* Reload the cache four times a day */
+var interval = 1000 * 60 * 60 * 6 // 6 hours
 setInterval(reload, interval)
 
 /* Load initial cache and start listening. */

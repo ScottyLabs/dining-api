@@ -4,3 +4,4 @@ env
 .vscode
 result.json
 .venv
+*.log
