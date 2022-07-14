@@ -19,7 +19,7 @@ export default class ParsedTimeForDate extends ParsedTimeBase {
       throw new Error(`Invalid date: ${this.input}`);
     }
     const month = convertMonthStringToEnum(tokens[0]);
-    const date = parseInt(tokens[0]);
+    const date = parseInt(tokens[1]);
 
     if (date === NaN) {
       throw new Error(`Invalid date: ${this.input}`);
