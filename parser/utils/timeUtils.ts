@@ -51,6 +51,7 @@ export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
       return DayOfTheWeek.WEDNESDAY;
     case "thursday":
     case "thu":
+    case "thurs":
       return DayOfTheWeek.THURSDAY;
     case "friday":
     case "fri":
@@ -60,6 +61,15 @@ export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
       return DayOfTheWeek.SATURDAY;
     default:
       throw new Error(`Invalid Day: ${dayStr}`);
+  }
+}
+
+export function isDay(input: string): boolean {
+  try {
+    convertDayStringToEnum(input);
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -107,6 +117,15 @@ export function convertMonthStringToEnum(monthStr: string): MonthOfTheYear {
   }
 }
 
+export function isMonth(input: string): boolean {
+  try {
+    convertMonthStringToEnum(input);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function isValidDate(month: MonthOfTheYear, date: number): boolean {
   if (!Number.isInteger(date)) {
     return false;
@@ -148,22 +167,27 @@ export function assertMinuteIsValid(minute: number) {
   }
 }
 
-// export function determinePossibleTimeInfoTypes(input: string): ParsedTimeBase {
-//   const trimmedLowercase = input.trim().toLowerCase();
-//   const daysOfTheWeek = [
-//     "sunday",
-//     "monday",
-//     "tuesday",
-//     "wednesday",
-//     "thursday",
-//     "friday",
-//     "saturday",
-//   ];
-//   const shortDays = daysOfTheWeek.map((day) => day.slice(0, 3));
-//   const specialDays = ["tues", "thurs"];
-//   if (
-//     [...daysOfTheWeek, ...shortDays, ...specialDays].includes(trimmedLowercase)
-//   ) {
-//     return new ParsedTimeForDay(trimmedLowercase);
-//   }
-// }
+export function determineTimeInfoType(input: string): TimeInfoType {
+  input = input.trim().toLowerCase();
+  if (isDay(input)) {
+    return TimeInfoType.DAY;
+  }
+  const testMonth = input.split(/\s/)[0];
+  if (isMonth(testMonth)) {
+    return TimeInfoType.DATE;
+  }
+  if (input.trim().toLowerCase() === "24 hours") {
+    return TimeInfoType.TWENTYFOURHOURS;
+  }
+  if (input.trim().toLowerCase() === "closed") {
+    return TimeInfoType.CLOSED;
+  }
+  if (
+    Array.isArray(
+      input.match(/\d\d?:\d\d\s?(?:am|pm)\s?-\s?\d\d?:\d\d\s?(?:am|pm)/)
+    )
+  ) {
+    return TimeInfoType.TIME;
+  }
+  throw new Error("Could not determine time info type");
+}
