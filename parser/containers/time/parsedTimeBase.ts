@@ -2,7 +2,7 @@ import type { TimeInfoType } from "../../utils/timeUtils";
 
 export default abstract class ParsedTimeBase {
   protected input: string;
-  protected dataType: TimeInfoType;
+  protected dataType?: TimeInfoType;
   protected value: unknown;
 
   constructor(input: string) {

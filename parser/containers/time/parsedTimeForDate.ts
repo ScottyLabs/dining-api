@@ -11,7 +11,7 @@ export interface ParsedTimeDate {
 }
 
 export default class ParsedTimeForDate extends ParsedTimeBase {
-  value: ParsedTimeDate;
+  protected declare value: ParsedTimeDate;
 
   parse() {
     const tokens = this.input.trim().split(/\s/);
