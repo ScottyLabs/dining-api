@@ -2,6 +2,9 @@ import { getHTMLResponse } from "../utils/requestUtils";
 import { CheerioAPI, load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import Coordinate from "../utils/coordinate";
+import { determineTimeInfoType } from "../utils/timeUtils";
+import TimeBuilder from "../containers/timeBuilder";
+import util from "util";
 
 export default class DiningParser {
   static readonly DINING_BASE_URL = "https://apps.studentaffairs.cmu.edu";
@@ -86,14 +89,32 @@ export default class DiningParser {
       const [lat, lng] = this.convertMapsLinkToCoordinates(locationHref);
       builder.setCoordinates(new Coordinate(lat, lng));
     }
-    console.log(builder);
+
+    const timeBuilder = new TimeBuilder();
+    const nextSevenDays = $("ul.schedule").find("li").toArray();
+    for (const day of nextSevenDays) {
+      const dayStr = load(day)("strong").text();
+      const dataStr = load(day)
+        .text()
+        .replace(/\s\s+/g, " ")
+        .replace(dayStr, "")
+        .trim();
+      const dataArr = dataStr.split(",");
+
+      timeBuilder.addSchedule([dayStr, ...dataArr]);
+    }
+    builder.setTimes(timeBuilder.build());
+
+    const onlineDiv = $("div.navItems.orderOnline").toArray();
+    builder.setAcceptsOnlineOrders(onlineDiv.length > 0);
   }
 
   async process() {
     await this.preprocess();
     const locationInfo = await this.retrieveBasicLocationInfo();
     for (const builder of locationInfo) {
-      this.retrieveDetailedInfoForLocation(builder);
+      await this.retrieveDetailedInfoForLocation(builder);
+      console.log(builder.build());
     }
   }
 }

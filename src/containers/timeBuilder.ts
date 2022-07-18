@@ -1,27 +1,52 @@
 import {
   DayOfTheWeek,
   determineTimeInfoType,
+  getNextDay,
   TimeInfoType,
 } from "../utils/timeUtils";
+import { TimeSchema } from "./locationBuilder";
 import ParsedTime, { ParsedTimeRange } from "./time/parsedTime";
 import ParsedTimeForDate, { ParsedTimeDate } from "./time/parsedTimeForDate";
 import ParsedTimeForDay from "./time/parsedTimeForDay";
 
+interface TimeBuilderSchema {
+  day?: DayOfTheWeek;
+  date?: ParsedTimeDate;
+  times?: ParsedTimeRange[];
+  closed?: boolean;
+  twentyFour?: boolean;
+}
+
 export default class TimeBuilder {
-  private times;
+  private times: TimeBuilderSchema[];
 
   constructor() {
-    this.times = {};
+    this.times = [];
+  }
+
+  private resolveConflicts(input: TimeBuilderSchema): TimeBuilderSchema {
+    if (input.closed) {
+      return {
+        day: input.day,
+        date: input.date,
+        closed: input.closed,
+      };
+    } else if (input.times && input.times.length > 0) {
+      return {
+        day: input.day,
+        date: input.date,
+        times: input.times,
+      };
+    }
+    return {
+      day: input.day,
+      date: input.date,
+      times: input.times,
+    };
   }
 
   addSchedule(timeArray: Array<string>): TimeBuilder {
-    const timeFields: {
-      day?: DayOfTheWeek;
-      date?: ParsedTimeDate;
-      time?: ParsedTimeRange;
-      closed?: boolean;
-      twentyFour?: boolean;
-    } = {};
+    const timeFields: TimeBuilderSchema = {};
     for (const token of timeArray) {
       const timeInfoType = determineTimeInfoType(token);
       try {
@@ -33,7 +58,12 @@ export default class TimeBuilder {
             timeFields.date = new ParsedTimeForDate(token).parse().getValue();
             break;
           case TimeInfoType.TIME:
-            timeFields.time = new ParsedTime(token).parse().getValue();
+            const timeRange = new ParsedTime(token).parse().getValue();
+            if (Array.isArray(timeFields.times)) {
+              timeFields.times.push(timeRange);
+            } else {
+              timeFields.times = [timeRange];
+            }
             break;
           case TimeInfoType.CLOSED:
             timeFields.closed = true;
@@ -47,7 +77,53 @@ export default class TimeBuilder {
         continue;
       }
     }
-    console.log(timeFields);
+    const normalizedSchedule = this.resolveConflicts(timeFields);
+    this.times.push(normalizedSchedule);
+
     return this;
+  }
+
+  private convertTimeRangeToTimeSchema(
+    time: TimeBuilderSchema,
+    range: ParsedTimeRange
+  ) {
+    if (time.day === undefined) {
+      throw new Error("Cannot convert when day is not set");
+    }
+    let spillToNextDay: boolean = false;
+    if (range.start.hour > range.end.hour) {
+      spillToNextDay = true;
+    } else if (
+      range.start.hour === range.end.hour &&
+      range.start.minute > range.start.minute
+    ) {
+      spillToNextDay = true;
+    }
+    return {
+      start: {
+        day: time.day,
+        hour: range.start.hour,
+        minute: range.start.minute,
+      },
+      end: {
+        day: spillToNextDay ? getNextDay(time.day) : time.day,
+        hour: range.end.hour,
+        minute: range.end.minute,
+      },
+    };
+  }
+
+  build() {
+    const result: TimeSchema[] = [];
+    for (const time of this.times) {
+      if (Array.isArray(time.times)) {
+        result.push(
+          ...time.times.map((current) => {
+            return this.convertTimeRangeToTimeSchema(time, current);
+          })
+        );
+      }
+    }
+    return result;
   }
 }

@@ -34,6 +34,25 @@ export enum TimeInfoType {
   TWENTYFOURHOURS = "TWENTYFOURHOURS",
 }
 
+export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
+  switch (day) {
+    case DayOfTheWeek.SUNDAY:
+      return DayOfTheWeek.MONDAY;
+    case DayOfTheWeek.MONDAY:
+      return DayOfTheWeek.TUESDAY;
+    case DayOfTheWeek.TUESDAY:
+      return DayOfTheWeek.WEDNESDAY;
+    case DayOfTheWeek.WEDNESDAY:
+      return DayOfTheWeek.THURSDAY;
+    case DayOfTheWeek.THURSDAY:
+      return DayOfTheWeek.FRIDAY;
+    case DayOfTheWeek.FRIDAY:
+      return DayOfTheWeek.SATURDAY;
+    case DayOfTheWeek.SATURDAY:
+      return DayOfTheWeek.SUNDAY;
+  }
+}
+
 export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
   const normalizedDay = dayStr.trim().toLowerCase();
   switch (normalizedDay) {

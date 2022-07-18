@@ -1,3 +1,4 @@
+import { DayOfTheWeek } from "../utils/timeUtils";
 import Coordinate from "../utils/coordinate";
 
 interface ILocation {
@@ -9,6 +10,18 @@ interface ILocation {
   location?: string;
   coordinates?: Coordinate;
   acceptsOnlineOrders?: boolean;
+  times?: TimeSchema[];
+}
+
+interface MomentTimeSchema {
+  day: DayOfTheWeek;
+  hour: number;
+  minute: number;
+}
+
+export interface TimeSchema {
+  start: MomentTimeSchema;
+  end: MomentTimeSchema;
 }
 
 export default class LocationBuilder {
@@ -23,6 +36,7 @@ export default class LocationBuilder {
   private menu?: string;
   private coordinates?: Coordinate;
   private acceptsOnlineOrders?: boolean;
+  private times?: TimeSchema[];
 
   constructor(conceptId: number) {
     this.conceptId = conceptId;
@@ -63,6 +77,11 @@ export default class LocationBuilder {
     return this;
   }
 
+  setTimes(times: TimeSchema[]) {
+    this.times = times;
+    return this;
+  }
+
   getConceptLink(): string {
     return LocationBuilder.CONCEPT_BASE_LINK + this.conceptId;
   }
@@ -77,6 +96,7 @@ export default class LocationBuilder {
       menu: this.menu,
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
+      times: this.times,
     };
   }
 }
