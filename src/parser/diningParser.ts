@@ -1,10 +1,8 @@
 import { getHTMLResponse } from "../utils/requestUtils";
 import { CheerioAPI, load } from "cheerio";
-import LocationBuilder from "../containers/locationBuilder";
+import LocationBuilder, { ILocation } from "../containers/locationBuilder";
 import Coordinate from "../utils/coordinate";
-import { determineTimeInfoType } from "../utils/timeUtils";
 import TimeBuilder from "../containers/timeBuilder";
-import util from "util";
 
 export default class DiningParser {
   static readonly DINING_BASE_URL = "https://apps.studentaffairs.cmu.edu";
@@ -109,12 +107,14 @@ export default class DiningParser {
     builder.setAcceptsOnlineOrders(onlineDiv.length > 0);
   }
 
-  async process() {
+  async process(): Promise<ILocation[]> {
     await this.preprocess();
     const locationInfo = await this.retrieveBasicLocationInfo();
-    for (const builder of locationInfo) {
-      await this.retrieveDetailedInfoForLocation(builder);
-      console.log(builder.build());
-    }
+    await Promise.all(
+      locationInfo.map((builder) =>
+        this.retrieveDetailedInfoForLocation(builder)
+      )
+    );
+    return locationInfo.map((builder) => builder.build());
   }
 }

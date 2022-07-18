@@ -1,7 +1,7 @@
 import { DayOfTheWeek } from "../utils/timeUtils";
 import Coordinate from "../utils/coordinate";
 
-interface ILocation {
+export interface ILocation {
   conceptId: number;
   name?: string;
   shortDescription?: string;
