@@ -1,6 +1,6 @@
 // This file is for testing. Please remove before merge
 
-import DiningParser from "./logic/diningParser";
+import DiningParser from "./parser/diningParser";
 
 // import ParsedTime from "./containers/time/parsedTime";
 // import ParsedTimeForDate from "./containers/time/parsedTimeForDate";

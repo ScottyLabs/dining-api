@@ -1,7 +1,7 @@
 import { getHTMLResponse } from "../utils/requestUtils";
 import { CheerioAPI, load } from "cheerio";
-import LocationBuilder from "../../parser/containers/locationBuilder";
-import Coordinate from "../../parser/utils/coordinate";
+import LocationBuilder from "../containers/locationBuilder";
+import Coordinate from "../utils/coordinate";
 
 export default class DiningParser {
   static readonly DINING_BASE_URL = "https://apps.studentaffairs.cmu.edu";
