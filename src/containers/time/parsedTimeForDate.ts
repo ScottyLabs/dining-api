@@ -11,7 +11,7 @@ export interface ParsedTimeDate {
 }
 
 export default class ParsedTimeForDate extends ParsedTimeBase {
-  protected declare value: ParsedTimeDate;
+  declare value: ParsedTimeDate;
 
   parse() {
     const tokens = this.input.trim().split(/\s/);
@@ -34,9 +34,5 @@ export default class ParsedTimeForDate extends ParsedTimeBase {
       throw new Error(`Invalid date: ${this.input}`);
     }
     return this;
-  }
-
-  getValue() {
-    return this.value;
   }
 }

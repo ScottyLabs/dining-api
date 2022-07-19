@@ -52,13 +52,13 @@ export default class TimeBuilder {
       try {
         switch (timeInfoType) {
           case TimeInfoType.DAY:
-            timeFields.day = new ParsedTimeForDay(token).parse().getValue();
+            timeFields.day = new ParsedTimeForDay(token).parse().value;
             break;
           case TimeInfoType.DATE:
-            timeFields.date = new ParsedTimeForDate(token).parse().getValue();
+            timeFields.date = new ParsedTimeForDate(token).parse().value;
             break;
           case TimeInfoType.TIME:
-            const timeRange = new ParsedTime(token).parse().getValue();
+            const timeRange = new ParsedTime(token).parse().value;
             if (Array.isArray(timeFields.times)) {
               timeFields.times.push(timeRange);
             } else {

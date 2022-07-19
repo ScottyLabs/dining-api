@@ -11,7 +11,7 @@ export interface ParsedTimeRange {
 }
 
 export default class ParsedTime extends ParsedTimeBase {
-  protected declare value: ParsedTimeRange;
+  declare value: ParsedTimeRange;
 
   private parseTime(timeStr: string): Time {
     const normalizedStr = timeStr.trim().toLowerCase();
@@ -55,9 +55,5 @@ export default class ParsedTime extends ParsedTimeBase {
       end,
     };
     return this;
-  }
-
-  getValue() {
-    return this.value;
   }
 }
