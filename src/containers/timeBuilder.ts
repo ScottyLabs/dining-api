@@ -44,7 +44,7 @@ export default class TimeBuilder {
     return {
       day: input.day,
       date: input.date,
-      times: input.times,
+      times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
     };
   }
 
