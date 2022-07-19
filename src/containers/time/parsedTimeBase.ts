@@ -12,11 +12,4 @@ export default abstract class ParsedTimeBase {
   }
 
   abstract parse(): ParsedTimeBase;
-
-  get dataType(): TimeInfoType {
-    if (this.dataType !== undefined) {
-      return this.dataType;
-    }
-    throw new Error("Cannot retrieve data type when not yet parsed");
-  }
 }
