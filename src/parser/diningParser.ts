@@ -3,6 +3,9 @@ import { CheerioAPI, load } from "cheerio";
 import LocationBuilder, { ILocation } from "../containers/locationBuilder";
 import Coordinate from "../utils/coordinate";
 import TimeBuilder from "../containers/timeBuilder";
+import SpecialsBuilder, {
+  SpecialSchema,
+} from "../containers/specials/specialsBuilder";
 
 export default class DiningParser {
   static readonly DINING_BASE_URL = "https://apps.studentaffairs.cmu.edu";
@@ -107,13 +110,55 @@ export default class DiningParser {
     builder.setAcceptsOnlineOrders(onlineDiv.length > 0);
   }
 
+  private async retrieveSpecials(
+    url: URL
+  ): Promise<Map<string, SpecialSchema[]>> {
+    const specialHTML = await getHTMLResponse(url);
+    const $ = load(specialHTML);
+    const cards = $("div.card").toArray();
+
+    const locationSpecialMap = new Map<string, SpecialSchema[]>();
+
+    for (const card of cards) {
+      const name = load(card)("h3.name").text().trim();
+      const specialsList = load(card)("div.specialDetails").toArray();
+      const specialsBuilder = new SpecialsBuilder();
+      for (const special of specialsList) {
+        const header = load(special)("strong").text().trim();
+        const specialItemList = load(special)("li")
+          .text()
+          .replace(header, "")
+          .trim();
+        specialsBuilder.addSpecial(
+          header,
+          specialItemList.length > 0 ? specialItemList : undefined
+        );
+      }
+      locationSpecialMap.set(name, specialsBuilder.build());
+    }
+    return locationSpecialMap;
+  }
+
   async process(): Promise<ILocation[]> {
     await this.preprocess();
     const locationInfo = await this.retrieveBasicLocationInfo();
+
+    const [specials, soups] = await Promise.all([
+      this.retrieveSpecials(new URL(DiningParser.DINING_SPECIALS_URL)),
+      this.retrieveSpecials(new URL(DiningParser.DINING_SOUPS_URL)),
+    ]);
     await Promise.all(
-      locationInfo.map((builder) =>
-        this.retrieveDetailedInfoForLocation(builder)
-      )
+      locationInfo.map((builder) => {
+        const specialList = specials.get(builder.build().name as string);
+        const soupList = soups.get(builder.build().name as string);
+        if (Array.isArray(specialList)) {
+          builder.setSpecials(specialList);
+        }
+        if (Array.isArray(soupList)) {
+          builder.setSoups(soupList);
+        }
+        return this.retrieveDetailedInfoForLocation(builder);
+      })
     );
     return locationInfo.map((builder) => builder.build());
   }

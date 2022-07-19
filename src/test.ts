@@ -1,6 +1,7 @@
 // This file is for testing. Please remove before merge
 
 import DiningParser from "./parser/diningParser";
+import util from "util";
 
 // import ParsedTime from "./containers/time/parsedTime";
 // import ParsedTimeForDate from "./containers/time/parsedTimeForDate";
@@ -29,5 +30,5 @@ import DiningParser from "./parser/diningParser";
   // const google = new URL("https://www.google.com");
   // console.log(await getHTMLResponse(google));
   const parser = new DiningParser();
-  await parser.process();
+  console.log(util.inspect(await parser.process(), { depth: null }));
 })();
