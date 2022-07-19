@@ -5,3 +5,5 @@ env
 result.json
 .venv
 *.log
+__pycache__
+dist/

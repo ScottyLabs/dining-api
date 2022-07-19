@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This is an API that serves dining location info for Carnegie Mellon University.",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "title": "ScottyLabs Dining API",
     "contact": {
       "name": "ScottyLabs",
@@ -18,21 +18,14 @@
       "description": "Everything about food at CMU"
     }
   ],
-  "schemes": [
-    "https",
-    "http"
-  ],
+  "schemes": ["https", "http"],
   "paths": {
     "/locations": {
       "get": {
-        "tags": [
-          "dining"
-        ],
+        "tags": ["dining"],
         "summary": "Returns all location information",
         "description": "",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -45,9 +38,7 @@
     },
     "/location/{name}": {
       "get": {
-        "tags": [
-          "dining"
-        ],
+        "tags": ["dining"],
         "summary": "Returns location based on name",
         "description": "",
         "parameters": [
@@ -59,9 +50,7 @@
             "description": "The name of the dining location"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -77,9 +66,7 @@
     },
     "/location/time/{day}/{hour}/{min}": {
       "get": {
-        "tags": [
-          "dining"
-        ],
+        "tags": ["dining"],
         "summary": "Returns locations that are open at the specified time",
         "description": "",
         "parameters": [
@@ -105,9 +92,7 @@
             "description": "The minute in the hour (e.g. 30 for 9:30 AM)"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -131,6 +116,10 @@
     "Location": {
       "type": "object",
       "properties": {
+        "conceptId": {
+          "type": "integer",
+          "format": "int32"
+        },
         "name": {
           "type": "string"
         },
@@ -158,9 +147,6 @@
         },
         "times": {
           "$ref": "#/definitions/Times"
-        },
-        "is_open": {
-          "type": "boolean"
         },
         "menu": {
           "type": "string"
