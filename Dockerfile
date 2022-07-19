@@ -1,13 +1,9 @@
-FROM nikolaik/python-nodejs:latest
+FROM node:16
 
 WORKDIR /runtime
 COPY . /runtime
 
-RUN npm install
-
-RUN python3 -m venv env
-RUN env/bin/pip3 install -r requirements.txt
+RUN npm install && npm run build
 
 EXPOSE 5010
-
 CMD npm start
