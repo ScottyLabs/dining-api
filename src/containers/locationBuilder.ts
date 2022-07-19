@@ -12,8 +12,8 @@ export interface ILocation {
   coordinates?: Coordinate;
   acceptsOnlineOrders?: boolean;
   times?: TimeSchema[];
-  specials?: SpecialSchema[];
-  soups?: SpecialSchema[];
+  todaysSpecials?: SpecialSchema[];
+  todaysSoups?: SpecialSchema[];
 }
 
 interface MomentTimeSchema {
@@ -112,8 +112,8 @@ export default class LocationBuilder {
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
       times: this.times,
-      specials: this.specials,
-      soups: this.soups,
+      todaysSpecials: this.specials,
+      todaysSoups: this.soups,
     };
   }
 }
