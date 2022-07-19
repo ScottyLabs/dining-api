@@ -1,8 +1,7 @@
 import type { TimeInfoType } from "../../utils/timeUtils";
 
 export default abstract class ParsedTimeBase {
-  protected input: string;
-  protected dataType?: TimeInfoType;
+  input: string;
   value: unknown;
 
   constructor(input: string) {
@@ -11,11 +10,7 @@ export default abstract class ParsedTimeBase {
 
   abstract parse(): ParsedTimeBase;
 
-  getInput(): string {
-    return this.input;
-  }
-
-  getDataType(): TimeInfoType {
+  get dataType(): TimeInfoType {
     if (this.dataType !== undefined) {
       return this.dataType;
     }
