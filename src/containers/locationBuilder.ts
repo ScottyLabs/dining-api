@@ -27,6 +27,9 @@ export interface TimeSchema {
   end: MomentTimeSchema;
 }
 
+/**
+ * For building the location data structure
+ */
 export default class LocationBuilder {
   static readonly CONCEPT_BASE_LINK =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=conceptDetails&conceptId=";

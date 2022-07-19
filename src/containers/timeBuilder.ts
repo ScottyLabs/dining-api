@@ -17,6 +17,9 @@ interface TimeBuilderSchema {
   twentyFour?: boolean;
 }
 
+/**
+ * For building the location schedules/times data structure
+ */
 export default class TimeBuilder {
   private times: TimeBuilderSchema[];
 

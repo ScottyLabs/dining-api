@@ -10,6 +10,9 @@ export interface ParsedTimeDate {
   date: number;
 }
 
+/**
+ * For parsing a string representing a date to a date data structure
+ */
 export default class ParsedTimeForDate extends ParsedTimeBase {
   declare value: ParsedTimeDate;
 

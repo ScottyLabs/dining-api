@@ -7,6 +7,10 @@ import SpecialsBuilder, {
   SpecialSchema,
 } from "../containers/specials/specialsBuilder";
 
+/**
+ * Retrieves the HTML from the CMU Dining website and parses the information
+ * found in it.
+ */
 export default class DiningParser {
   static readonly DINING_BASE_URL = "https://apps.studentaffairs.cmu.edu";
   static readonly DINING_URL =

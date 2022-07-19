@@ -3,6 +3,9 @@ export interface SpecialSchema {
   description?: string;
 }
 
+/**
+ * For building the specials/soups data structure
+ */
 export default class SpecialsBuilder {
   private specials: SpecialSchema[];
   constructor() {

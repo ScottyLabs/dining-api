@@ -10,6 +10,10 @@ export interface ParsedTimeRange {
   end: Time;
 }
 
+/**
+ * For parsing a string representing a time range to a time range data
+ * structure
+ */
 export default class ParsedTime extends ParsedTimeBase {
   declare value: ParsedTimeRange;
 
