@@ -104,6 +104,10 @@ export default class LocationBuilder {
     return LocationBuilder.CONCEPT_BASE_LINK + this.conceptId;
   }
 
+  getName(): string | undefined {
+    return this.name;
+  }
+
   build(): ILocation {
     return {
       conceptId: this.conceptId,

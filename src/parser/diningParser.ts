@@ -6,6 +6,7 @@ import TimeBuilder from "../containers/timeBuilder";
 import SpecialsBuilder, {
   SpecialSchema,
 } from "../containers/specials/specialsBuilder";
+import locationOverwrites from "../overwrites/locationOverwrites";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -90,7 +91,9 @@ export default class DiningParser {
 
     builder.setLocation($("div.location a").text().trim());
     const locationHref = $("div.location a").attr("href");
-    if (locationHref) {
+    if (builder.getName() && locationOverwrites.hasOwnProperty(builder.getName()!)) {
+      builder.setCoordinates(locationOverwrites[builder.getName()!]);
+    } else if (locationHref) {
       const [lat, lng] = this.convertMapsLinkToCoordinates(locationHref);
       builder.setCoordinates(new Coordinate(lat, lng));
     }
