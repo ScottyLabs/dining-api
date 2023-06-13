@@ -32,7 +32,7 @@ export interface TimeSchema {
  */
 export default class LocationBuilder {
   static readonly CONCEPT_BASE_LINK =
-    "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=conceptDetails&conceptId=";
+    "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/";
 
   private conceptId: number;
   private name?: string;

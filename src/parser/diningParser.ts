@@ -46,7 +46,7 @@ export default class DiningParser {
     const info = Array.from(linkHeaders).map((card) => {
       const link = load(card)("h3.name.detailsLink");
       const onClickAttr = link.attr("onclick");
-      const conceptId = onClickAttr?.match(/conceptId=(\d+)/)?.[1];
+      const conceptId = onClickAttr?.match(/Concept\/(\d+)/)?.[1];
       if (conceptId === undefined) {
         return undefined;
       }
