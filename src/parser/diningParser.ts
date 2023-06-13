@@ -13,7 +13,6 @@ import locationOverwrites from "../overwrites/locationOverwrites";
  * found in it.
  */
 export default class DiningParser {
-  static readonly DINING_BASE_URL = "https://apps.studentaffairs.cmu.edu";
   static readonly DINING_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts";
   static readonly DINING_SPECIALS_URL =
