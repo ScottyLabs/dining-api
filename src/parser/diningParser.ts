@@ -80,12 +80,9 @@ export default class DiningParser {
     const description = $("div.description").text().trim();
     builder.setDesc(description);
 
-    const script = $("script").contents().text();
-    if (script.includes("#getMenu")) {
-      const matches = script.match(/'(conceptAssets\/menus\/.+)'/);
-      if (matches?.[1]) {
-        builder.setMenu(DiningParser.DINING_MENUS_BASE_URL + matches?.[1]);
-      }
+    const menuHref = $("div.navItems > a#getMenu").attr("href");
+    if (menuHref) {
+      builder.setMenu(menuHref);
     }
 
     builder.setLocation($("div.location a").text().trim());
