@@ -69,7 +69,8 @@ export default class DiningParser {
     const locationUrl = link.slice(atIndex + 1, link.length);
     const commaIndex = locationUrl.indexOf(",");
     const latitude = locationUrl.slice(0, commaIndex);
-    const longitude = locationUrl.slice(commaIndex + 1, locationUrl.length);
+    const endLongitudeIndex = locationUrl.indexOf(",", commaIndex + 1);
+    const longitude = locationUrl.slice(commaIndex + 1, endLongitudeIndex === -1 ? locationUrl.length : endLongitudeIndex);
     return [parseFloat(latitude), parseFloat(longitude)];
   }
 
