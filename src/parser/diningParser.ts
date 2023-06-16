@@ -16,9 +16,9 @@ export default class DiningParser {
   static readonly DINING_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts";
   static readonly DINING_SPECIALS_URL =
-    "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=specials";
+    "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials";
   static readonly DINING_SOUPS_URL =
-    "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=soups";
+    "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
   static readonly DINING_MENUS_BASE_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/";
 
@@ -80,12 +80,9 @@ export default class DiningParser {
     const description = $("div.description").text().trim();
     builder.setDesc(description);
 
-    const script = $("script").contents().text();
-    if (script.includes("#getMenu")) {
-      const matches = script.match(/'(conceptAssets\/menus\/.+)'/);
-      if (matches?.[1]) {
-        builder.setMenu(DiningParser.DINING_MENUS_BASE_URL + matches?.[1]);
-      }
+    const menuHref = $("div.navItems > a#getMenu").attr("href");
+    if (menuHref) {
+      builder.setMenu(menuHref);
     }
 
     builder.setLocation($("div.location a").text().trim());
