@@ -78,7 +78,7 @@ export default class DiningParser {
     const conceptLink = builder.getConceptLink();
     const conceptHTML = await getHTMLResponse(new URL(conceptLink));
     const $ = load(conceptHTML);
-    const description = $("div.description").text().trim();
+    const description = $("div.description p").text().trim();
     builder.setDesc(description);
 
     const menuHref = $("div.navItems > a#getMenu").attr("href");
