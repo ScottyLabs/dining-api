@@ -77,7 +77,7 @@ export default class DiningParser {
     const conceptLink = builder.getConceptLink();
     const conceptHTML = await getHTMLResponse(new URL(conceptLink));
     const $ = load(conceptHTML);
-    const description = $("div.description").text().trim();
+    const description = $("div.description p").text().trim();
     builder.setDesc(description);
 
     const menuHref = $("div.navItems > a#getMenu").attr("href");
@@ -150,19 +150,27 @@ export default class DiningParser {
       this.retrieveSpecials(new URL(DiningParser.DINING_SPECIALS_URL)),
       this.retrieveSpecials(new URL(DiningParser.DINING_SOUPS_URL)),
     ]);
-    await Promise.all(
-      locationInfo.map((builder) => {
-        const specialList = specials.get(builder.build().name as string);
-        const soupList = soups.get(builder.build().name as string);
-        if (Array.isArray(specialList)) {
-          builder.setSpecials(specialList);
-        }
-        if (Array.isArray(soupList)) {
-          builder.setSoups(soupList);
-        }
-        return this.retrieveDetailedInfoForLocation(builder);
-      })
-    );
+
+    for (const builder of locationInfo) {
+      const name = builder.build().name as string;
+      const specialList = specials.get(name);
+      const soupList = soups.get(name);
+  
+      if (Array.isArray(specialList)) {
+        builder.setSpecials(specialList);
+      }
+  
+      if (Array.isArray(soupList)) {
+        builder.setSoups(soupList);
+      }
+  
+      try {
+        await this.retrieveDetailedInfoForLocation(builder);
+      } catch (error) {
+        console.error(`Failed to retrieve detailed info for ${name}:`, error);
+      }
+    }
+
     return locationInfo.map((builder) => builder.build());
   }
 }
