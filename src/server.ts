@@ -82,7 +82,8 @@ app.get("/location/time/:day/:hour/:min", (req, res) => {
   res.json({ locations: result });
 });
 
-const interval = 1000 * 60 * 60 * 6;
+// Cache TTL: 3 hours
+const interval = 1000 * 60 * 60 * 3;
 setInterval(reload, interval);
 
 reload(() => {
