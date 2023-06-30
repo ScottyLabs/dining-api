@@ -7,6 +7,7 @@ export interface ILocation {
   name?: string;
   shortDescription?: string;
   description?: string;
+  url?: string;
   menu?: string;
   location?: string;
   coordinates?: Coordinate;
@@ -38,6 +39,7 @@ export default class LocationBuilder {
   private name?: string;
   private shortDescription?: string;
   private description?: string;
+  private url?: string;
   private location?: string;
   private menu?: string;
   private coordinates?: Coordinate;
@@ -80,6 +82,11 @@ export default class LocationBuilder {
     return this;
   }
 
+  setURL(url: string) {
+    this.url = url;
+    return this;
+  }
+
   setMenu(menuLink: string) {
     this.menu = menuLink;
     return this;
@@ -114,6 +121,7 @@ export default class LocationBuilder {
       name: this.name,
       shortDescription: this.shortDescription,
       description: this.description,
+      url: this.url,
       location: this.location,
       menu: this.menu,
       coordinates: this.coordinates,
