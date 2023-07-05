@@ -6,7 +6,6 @@ it as a RESTful API. Access the API here: https://apis.scottylabs.org/dining/
 To build and deploy the service, you'll need [Node.js](https://nodejs.org/en),
 which you should install beforehand.
 
-
 Then, clone this repository to your computer by running
 ```
 git clone https://github.com/ScottyLabs/dining-api.git
@@ -21,11 +20,6 @@ Now install the API's dependencies by 'cd'-ing into the root of the repository a
 ```
 npm install
 ```
-
-After installing the npm dependencies, make sure to update the port number in 
-`server.js` to match what is required by your server infrastructure (for 
-ScottyLabs, contact whomever is running Operations to find where that's 
-currently documented).
 
 Now, run ```npm run build``` to compile the TypeScript code into JavaScript code, which
 is now located in the 'dist' folder. 
