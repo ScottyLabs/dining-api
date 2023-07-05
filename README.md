@@ -27,7 +27,7 @@ After installing the npm dependencies, make sure to update the port number in
 ScottyLabs, contact whomever is running Operations to find where that's 
 currently documented).
 
-Now, run ```npm run build``` to compile the Typescript code into Jvascript code, which
+Now, run ```npm run build``` to compile the TypeScript code into JavaScript code, which
 is now located in the 'dist' folder. 
 
 Then, you can run the server with ```npm start``` and it should work! You can also use 
