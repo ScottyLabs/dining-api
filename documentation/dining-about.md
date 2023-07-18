@@ -7,7 +7,7 @@ The ScottyLabs Dining API scrapes location data from the [CMU dining website](ht
 
 Our API is currently being used by [CMU Eats](https://cmueats.com/), a web app developed by ScottyLabs. The web app, which is constantly updated, allows users to see information about CMU dining locations, including their hours, food offerings, and location. Current dining location availability is denoted by four colors for dining locations that are open, closing soon, opening soon, and closed.
 
-Checkout the [website](https://cmueats.com/)!
+Checkout the [web app](https://cmueats.com/)!
 
 ## What does this API support?
 - Obtaining all location information for all eateries
