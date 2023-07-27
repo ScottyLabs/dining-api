@@ -195,7 +195,7 @@ export function determineTimeInfoType(input: string): TimeInfoType {
   if (isMonth(testMonth)) {
     return TimeInfoType.DATE;
   }
-  if (input.trim().toLowerCase() === "24 hours" || input.trim().toLowerCase() === 'open 24 hrs') {
+  if (input.trim().toLowerCase() === "24 hours" || input.trim().toLowerCase() === "open 24 hrs") {
     return TimeInfoType.TWENTYFOURHOURS;
   }
   if (input.trim().toLowerCase() === "closed") {
