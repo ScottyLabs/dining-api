@@ -3,7 +3,7 @@ import cors from "cors";
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "./containers/locationBuilder";
 
-const PORT = 5010;
+const PORT = process.env.PORT ?? 5010;
 let cached: ILocation[];
 
 async function reload(callback?: () => void): Promise<void> {
