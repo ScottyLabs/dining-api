@@ -3,8 +3,8 @@ type TapingoOverwrites = {
 };
 
 /**
- * Dining locations Grubhub Links that we manually overwrite to provide
- * ordering on CMUEats.
+ * Dining locations Tapingo Links that we manually overwrite to provide
+ * Grubhub menu previews on CMUEats.
  */
 const tapingoOverwrites: TapingoOverwrites = {
   'AU BON PAIN AT SKIBO CAFÉ': 'https://kioskweb.tapingo.com/#5954818',
