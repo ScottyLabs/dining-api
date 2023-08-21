@@ -3,7 +3,7 @@ type TapingoOverwrites = {
 };
 
 /**
- * Dining locations Tapingo Links that we manually overwrite to provide
+ * Dining location Tapingo links that we manually overwrite to provide
  * Grubhub menu previews on CMUEats.
  */
 const tapingoOverwrites: TapingoOverwrites = {

@@ -5,7 +5,7 @@ type LocationOverwrites = {
 };
 
 /**
- * Dining locations coordinates that we manually overwrite because they are
+ * Dining location coordinates that we manually overwrite because they are
  * wrong on the dining API.
  */
 const overwrites: LocationOverwrites = {
