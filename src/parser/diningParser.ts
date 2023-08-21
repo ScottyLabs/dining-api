@@ -7,6 +7,7 @@ import SpecialsBuilder, {
   SpecialSchema,
 } from "../containers/specials/specialsBuilder";
 import locationOverwrites from "../overwrites/locationOverwrites";
+import tapingoOverwrites from "../overwrites/tapingoOverwrites";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -78,6 +79,7 @@ export default class DiningParser {
     const conceptHTML = await getHTMLResponse(new URL(conceptLink));
     const $ = load(conceptHTML);
     builder.setURL(conceptLink);
+    builder.setTapingoLink(tapingoOverwrites[builder.getName()!]);
     const description = $("div.description p").text().trim();
     builder.setDesc(description);
 

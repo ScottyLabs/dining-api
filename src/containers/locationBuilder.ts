@@ -8,6 +8,7 @@ export interface ILocation {
   shortDescription?: string;
   description?: string;
   url?: string;
+  tapingoLink?: string;
   menu?: string;
   location?: string;
   coordinates?: Coordinate;
@@ -40,6 +41,7 @@ export default class LocationBuilder {
   private shortDescription?: string;
   private description?: string;
   private url?: string;
+  private tapingoLink?: string;
   private location?: string;
   private menu?: string;
   private coordinates?: Coordinate;
@@ -92,6 +94,11 @@ export default class LocationBuilder {
     return this;
   }
 
+  setTapingoLink(tapingoLink: string) {
+    this.tapingoLink = tapingoLink;
+    return this;
+  }
+
   setTimes(times: TimeSchema[]) {
     this.times = times;
     return this;
@@ -122,6 +129,7 @@ export default class LocationBuilder {
       shortDescription: this.shortDescription,
       description: this.description,
       url: this.url,
+      tapingoLink: this.tapingoLink,
       location: this.location,
       menu: this.menu,
       coordinates: this.coordinates,
