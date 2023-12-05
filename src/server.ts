@@ -11,20 +11,13 @@ async function reload(callback?: () => void): Promise<void> {
     const parser = new DiningParser();
     cached = await parser.process();
     cached.forEach((location) => {
-      location.times?.sort((timeA, timeB) => {
+      location.times.sort((timeA, timeB) => {
         const startA = timeA.start;
         const startB = timeB.start;
-        if (startA.day < startB.day) return -1;
-        else if (startA.day > startB.day) return 1;
-        else {
-          if (startA.hour < startB.hour) return -1;
-          else if (startA.hour > startB.hour) return 1;
-          else {
-            if (startA.minute < startB.minute) return -1;
-            else if (startA.minute > startB.minute) return 1;
-            else return 0;
-          }
-        }
+
+        if (startA.day !== startB.day) return startA.day - startB.day;
+        if (startA.hour !== startB.hour) return startA.hour - startB.hour;
+        return startA.minute - startB.minute;
       });
     });
 

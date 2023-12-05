@@ -6,13 +6,13 @@ export interface ILocation {
   conceptId: number;
   name?: string;
   shortDescription?: string;
-  description?: string;
-  url?: string;
+  description: string;
+  url: string;
   menu?: string;
-  location?: string;
+  location: string;
   coordinates?: Coordinate;
-  acceptsOnlineOrders?: boolean;
-  times?: TimeSchema[];
+  acceptsOnlineOrders: boolean;
+  times: TimeSchema[];
   todaysSpecials?: SpecialSchema[];
   todaysSoups?: SpecialSchema[];
 }
@@ -116,6 +116,9 @@ export default class LocationBuilder {
   }
 
   build(): ILocation {
+    if (this.times === undefined || this.acceptsOnlineOrders === undefined || this.description === undefined
+      || this.url === undefined || this.location === undefined) throw Error("Didn't finish configuring restaurant before building metadata!");
+
     return {
       conceptId: this.conceptId,
       name: this.name,

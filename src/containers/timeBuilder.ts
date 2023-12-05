@@ -12,6 +12,7 @@ import ParsedTimeForDay from "./time/parsedTimeForDay";
 interface TimeBuilderSchema {
   day?: DayOfTheWeek;
   date?: ParsedTimeDate;
+  /** Multiple times in the same day (ex. https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/180) */
   times?: ParsedTimeRange[];
   closed?: boolean;
   twentyFour?: boolean;
@@ -34,7 +35,8 @@ export default class TimeBuilder {
         date: input.date,
         closed: input.closed,
       };
-    } else if (input.times && input.times.length > 0) {
+    }
+    if (input.times && input.times.length > 0) {
       return {
         day: input.day,
         date: input.date,
@@ -71,7 +73,7 @@ export default class TimeBuilder {
           case TimeInfoType.CLOSED:
             timeFields.closed = true;
             break;
-          case TimeInfoType.TWENTYFOURHOURS:
+          case TimeInfoType.TWENTYFOUR_HOURS:
             timeFields.twentyFour = true;
             break;
         }
@@ -93,15 +95,8 @@ export default class TimeBuilder {
     if (time.day === undefined) {
       throw new Error("Cannot convert when day is not set");
     }
-    let spillToNextDay: boolean = false;
-    if (range.start.hour > range.end.hour) {
-      spillToNextDay = true;
-    } else if (
-      range.start.hour === range.end.hour &&
-      range.start.minute > range.start.minute
-    ) {
-      spillToNextDay = true;
-    }
+    let spillToNextDay = range.start.hour * 60 + range.start.minute >= range.end.hour * 60 + range.end.minute;
+
     return {
       start: {
         day: time.day,

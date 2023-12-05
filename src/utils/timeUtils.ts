@@ -31,26 +31,11 @@ export enum TimeInfoType {
   DATE = "DATE",
   TIME = "TIME",
   CLOSED = "CLOSED",
-  TWENTYFOURHOURS = "TWENTYFOURHOURS",
+  TWENTYFOUR_HOURS = "TWENTYFOURHOURS",
 }
 
 export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
-  switch (day) {
-    case DayOfTheWeek.SUNDAY:
-      return DayOfTheWeek.MONDAY;
-    case DayOfTheWeek.MONDAY:
-      return DayOfTheWeek.TUESDAY;
-    case DayOfTheWeek.TUESDAY:
-      return DayOfTheWeek.WEDNESDAY;
-    case DayOfTheWeek.WEDNESDAY:
-      return DayOfTheWeek.THURSDAY;
-    case DayOfTheWeek.THURSDAY:
-      return DayOfTheWeek.FRIDAY;
-    case DayOfTheWeek.FRIDAY:
-      return DayOfTheWeek.SATURDAY;
-    case DayOfTheWeek.SATURDAY:
-      return DayOfTheWeek.SUNDAY;
-  }
+  return (day + 1) % 7; //Is this sacrilegious 
 }
 
 export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
@@ -195,10 +180,10 @@ export function determineTimeInfoType(input: string): TimeInfoType {
   if (isMonth(testMonth)) {
     return TimeInfoType.DATE;
   }
-  if (input.trim().toLowerCase() === "24 hours" || input.trim().toLowerCase() === "open 24 hrs") {
-    return TimeInfoType.TWENTYFOURHOURS;
+  if (input === "24 hours" || input === "open 24 hrs") {
+    return TimeInfoType.TWENTYFOUR_HOURS;
   }
-  if (input.trim().toLowerCase() === "closed") {
+  if (input === "closed") {
     return TimeInfoType.CLOSED;
   }
   if (
