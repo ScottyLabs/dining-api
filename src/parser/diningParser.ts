@@ -173,9 +173,10 @@ export default class DiningParser {
         await this.retrieveDetailedInfoForLocation(builder);
       } catch (error) {
         console.error(`Failed to retrieve detailed info for ${name}:`, error);
+        builder.invalidate();
       }
     }
 
-    return locationInfo.map((builder) => builder.build());
+    return locationInfo.filter(builder => builder.isValid()).map((builder) => builder.build());
   }
 }
