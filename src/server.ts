@@ -6,29 +6,23 @@ import { ILocation } from "./containers/locationBuilder";
 const PORT = process.env.PORT ?? 5010;
 let cached: ILocation[];
 
-async function reload(callback?: () => void): Promise<void> {
-  try {
-    const parser = new DiningParser();
-    cached = await parser.process();
-    cached.forEach((location) => {
-      location.times.sort((timeA, timeB) => {
-        const startA = timeA.start;
-        const startB = timeB.start;
+async function reload(): Promise<void> {
+  console.log("Loading Dining API...");
+  const parser = new DiningParser();
+  cached = await parser.process();
+  cached.forEach((location) => {
+    location.times.sort((timeA, timeB) => {
+      const startA = timeA.start;
+      const startB = timeB.start;
 
-        if (startA.day !== startB.day) return startA.day - startB.day;
-        if (startA.hour !== startB.hour) return startA.hour - startB.hour;
-        return startA.minute - startB.minute;
-      });
+      if (startA.day !== startB.day) return startA.day - startB.day;
+      if (startA.hour !== startB.hour) return startA.hour - startB.hour;
+      return startA.minute - startB.minute;
     });
+  });
 
-    if (callback) {
-      callback();
-    }
+  console.log("Dining API cache reloaded");
 
-    console.log("Dining API cache reloaded");
-  } catch (err) {
-    console.error(err);
-  }
 }
 
 const app = express();
@@ -77,9 +71,9 @@ app.get("/location/time/:day/:hour/:min", (req, res) => {
 
 // Cache TTL: 3 hours
 const interval = 1000 * 60 * 60 * 3;
-setInterval(reload, interval);
+setInterval(() => { reload().catch(console.error) }, interval);
 
-reload(() => {
+reload().then(() => {
   app.listen(PORT, () => {
     console.log("Dining API cache loaded and listening on port " + PORT);
   });
