@@ -26,8 +26,6 @@ async function reload(callback?: () => void): Promise<void> {
           }
         }
       });
-      console.log(location.name);
-      console.log(location.times);
     });
 
     if (callback) {
