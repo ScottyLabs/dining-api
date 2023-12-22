@@ -18,14 +18,16 @@ async function reload(callback?: () => void): Promise<void> {
         else if (startA.day > startB.day) return 1;
         else {
           if (startA.hour < startB.hour) return -1;
-          else if (startA.hour > startB.hour) return -1;
+          else if (startA.hour > startB.hour) return 1;
           else {
             if (startA.minute < startB.minute) return -1;
-            else if (startA.minute > startB.minute) return -1;
+            else if (startA.minute > startB.minute) return 1;
             else return 0;
           }
         }
       });
+      console.log(location.name);
+      console.log(location.times);
     });
 
     if (callback) {
