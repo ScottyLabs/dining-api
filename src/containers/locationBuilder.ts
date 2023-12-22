@@ -123,9 +123,16 @@ export default class LocationBuilder {
   }
   build(): ILocation {
     if (!this.valid) throw Error("Location has been invalidated!");
-    if (this.times === undefined || this.acceptsOnlineOrders === undefined || this.description === undefined
-      || this.url === undefined || this.location === undefined) {
-      throw Error("Didn't finish configuring restaurant before building metadata!");
+    if (
+      this.times === undefined ||
+      this.acceptsOnlineOrders === undefined ||
+      this.description === undefined ||
+      this.url === undefined ||
+      this.location === undefined
+    ) {
+      throw Error(
+        "Didn't finish configuring restaurant before building metadata!"
+      );
       //all fetches were good - yet we have missing data. This is a problem
     }
 

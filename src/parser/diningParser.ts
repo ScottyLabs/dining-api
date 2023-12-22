@@ -24,7 +24,7 @@ export default class DiningParser {
 
   private $?: CheerioAPI;
 
-  constructor() { }
+  constructor() {}
 
   private async preprocess() {
     const mainPageHTML = await getHTMLResponse(
@@ -90,7 +90,11 @@ export default class DiningParser {
     const locationHref = $("div.location a").attr("href");
     const name = builder.getName();
 
-    if (builder.getName() && name !== undefined && locationOverwrites[name] !== undefined) {
+    if (
+      builder.getName() &&
+      name !== undefined &&
+      locationOverwrites[name] !== undefined
+    ) {
       builder.setCoordinates(locationOverwrites[name]);
     } else if (locationHref !== undefined) {
       const [lat, lng] = this.convertMapsLinkToCoordinates(locationHref);
@@ -156,7 +160,8 @@ export default class DiningParser {
 
     for (const builder of locationInfo) {
       const name = builder.getName();
-      if (name !== undefined) { //Not sure when name would be undefined, but just in case...
+      if (name !== undefined) {
+        //Not sure when name would be undefined, but just in case...
         const specialList = specials.get(name);
         const soupList = soups.get(name);
 
@@ -177,6 +182,8 @@ export default class DiningParser {
       }
     }
 
-    return locationInfo.filter(builder => builder.isValid()).map((builder) => builder.build());
+    return locationInfo
+      .filter((builder) => builder.isValid())
+      .map((builder) => builder.build());
   }
 }

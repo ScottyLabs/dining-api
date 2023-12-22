@@ -95,7 +95,9 @@ export default class TimeBuilder {
     if (time.day === undefined) {
       throw new Error("Cannot convert when day is not set");
     }
-    let spillToNextDay = range.start.hour * 60 + range.start.minute >= range.end.hour * 60 + range.end.minute;
+    let spillToNextDay =
+      range.start.hour * 60 + range.start.minute >=
+      range.end.hour * 60 + range.end.minute;
 
     return {
       start: {
@@ -122,6 +124,15 @@ export default class TimeBuilder {
         );
       }
     }
+    result.sort((timeA, timeB) => {
+      const startA = timeA.start;
+      const startB = timeB.start;
+
+      if (startA.day !== startB.day) return startA.day - startB.day;
+      if (startA.hour !== startB.hour) return startA.hour - startB.hour;
+      return startA.minute - startB.minute;
+    });
+
     return result;
   }
 }

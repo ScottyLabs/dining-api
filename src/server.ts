@@ -10,19 +10,8 @@ async function reload(): Promise<void> {
   console.log("Loading Dining API...");
   const parser = new DiningParser();
   cached = await parser.process();
-  cached.forEach((location) => {
-    location.times.sort((timeA, timeB) => {
-      const startA = timeA.start;
-      const startB = timeB.start;
-
-      if (startA.day !== startB.day) return startA.day - startB.day;
-      if (startA.hour !== startB.hour) return startA.hour - startB.hour;
-      return startA.minute - startB.minute;
-    });
-  });
 
   console.log("Dining API cache reloaded");
-
 }
 
 const app = express();
@@ -71,7 +60,9 @@ app.get("/location/time/:day/:hour/:min", (req, res) => {
 
 // Cache TTL: 3 hours
 const interval = 1000 * 60 * 60 * 3;
-setInterval(() => { reload().catch(console.error) }, interval);
+setInterval(() => {
+  reload().catch(console.error);
+}, interval);
 
 reload().then(() => {
   app.listen(PORT, () => {
