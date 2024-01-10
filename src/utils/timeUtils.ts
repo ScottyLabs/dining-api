@@ -188,7 +188,7 @@ export function determineTimeInfoType(input: string): TimeInfoType {
   }
   if (
     Array.isArray(
-      input.match(/\d\d?:\d\d\s?(?:am|pm)\s?-\s?\d\d?:\d\d\s?(?:am|pm)/),
+      input.match(/\d\d?:\d\d\s?(?:am|pm)\s?-\s?\d\d?:\d\d\s?(?:am|pm)/)
     )
   ) {
     return TimeInfoType.TIME;
