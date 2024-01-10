@@ -2,13 +2,13 @@ import ParsedTimeBase from "../containers/time/parsedTimeBase";
 import ParsedTimeForDay from "../containers/time/parsedTimeForDay";
 
 export enum DayOfTheWeek {
-  SUNDAY = 0,
-  MONDAY = 1,
-  TUESDAY = 2,
-  WEDNESDAY = 3,
-  THURSDAY = 4,
-  FRIDAY = 5,
-  SATURDAY = 6,
+  SUNDAY,
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
 }
 
 export enum MonthOfTheYear {
@@ -35,7 +35,16 @@ export enum TimeInfoType {
 }
 
 export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
-  return (day + 1) % 7; //Is this sacrilegious
+  const weekDays: DayOfTheWeek[] = [
+    DayOfTheWeek.SUNDAY,
+    DayOfTheWeek.MONDAY,
+    DayOfTheWeek.TUESDAY,
+    DayOfTheWeek.WEDNESDAY,
+    DayOfTheWeek.THURSDAY,
+    DayOfTheWeek.FRIDAY,
+    DayOfTheWeek.SATURDAY,
+  ]; //ordered by time
+  return weekDays[(weekDays.indexOf(day) + 1) % 7];
 }
 
 export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
