@@ -25,7 +25,7 @@ const overwrites: LocationOverwrites = {
   "ROHR CAFÉ  - LA PRIMA": new Coordinate(40.443551, -79.944798),
   "MILLIE'S COFFEE 'N' CREAMERY - ROHR COMMONS": new Coordinate(
     40.44487,
-    -79.945319,
+    -79.945319
   ),
   NOURISH: new Coordinate(40.4438318, -79.9422587),
   "LA PRIMA ESPRESSO": new Coordinate(40.442611, -79.945857),
@@ -43,25 +43,25 @@ const overwrites: LocationOverwrites = {
   "ZEBRA LOUNGE": new Coordinate(40.441633, -79.943015),
   "CAPITAL GRAINS - ROHR COMMONS": new Coordinate(
     40.4449525806329,
-    -79.94546729610397,
+    -79.94546729610397
   ),
   "E.A.T. (EVENINGS AT TEPPER) - ROHR COMMONS": new Coordinate(
     40.444902436996365,
-    -79.94550403887685,
+    -79.94550403887685
   ),
   "THE EDGE CAFE & MARKET": new Coordinate(
     40.4426740207827,
-    -79.94023230189542,
+    -79.94023230189542
   ),
   "FORBES AVENUE SUBS - ROHR COMMONS": new Coordinate(
     40.44496374074576,
-    -79.9454977063049,
+    -79.9454977063049
   ),
   "CARNEGIE MELLON CAFÉ": new Coordinate(40.442429, -79.9397),
   "HEINZ CAFÉ": new Coordinate(40.444328, -79.94506),
   "THE MAGGIE MURPH CAFÉ - ROTHBERG'S ROASTERS": new Coordinate(
     40.441137,
-    -79.943472,
+    -79.943472
   ),
 };
 
