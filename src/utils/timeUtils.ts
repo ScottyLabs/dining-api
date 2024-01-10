@@ -35,7 +35,7 @@ export enum TimeInfoType {
 }
 
 export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
-  const weekDays: DayOfTheWeek[] = [
+  const weekdays: DayOfTheWeek[] = [
     DayOfTheWeek.SUNDAY,
     DayOfTheWeek.MONDAY,
     DayOfTheWeek.TUESDAY,
@@ -44,7 +44,7 @@ export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
     DayOfTheWeek.FRIDAY,
     DayOfTheWeek.SATURDAY,
   ]; //ordered by time
-  return weekDays[(weekDays.indexOf(day) + 1) % 7];
+  return weekdays[(weekdays.indexOf(day) + 1) % 7];
 }
 
 export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
