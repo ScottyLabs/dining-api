@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const wait = (ms: number) => {
-  return new Promise(re => setTimeout(re, ms));
-}
+  return new Promise((re) => setTimeout(re, ms));
+};
 
 export async function getHTMLResponse(url: URL, retriesLeft = 4): Promise<any> {
   try {
@@ -13,7 +13,6 @@ export async function getHTMLResponse(url: URL, retriesLeft = 4): Promise<any> {
     if (retriesLeft > 0) {
       await wait(1000);
       return await getHTMLResponse(url, retriesLeft - 1);
-    }
-    else throw err;
+    } else throw err;
   }
 }

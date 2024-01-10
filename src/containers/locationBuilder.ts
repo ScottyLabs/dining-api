@@ -131,7 +131,7 @@ export default class LocationBuilder {
       this.location === undefined
     ) {
       throw Error(
-        "Didn't finish configuring restaurant before building metadata!"
+        "Didn't finish configuring restaurant before building metadata!",
       );
       //all fetches were good - yet we have missing data. This is a problem
     }

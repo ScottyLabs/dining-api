@@ -28,7 +28,7 @@ export default class DiningParser {
 
   private async preprocess() {
     const mainPageHTML = await getHTMLResponse(
-      new URL(DiningParser.DINING_URL)
+      new URL(DiningParser.DINING_URL),
     );
     this.$ = load(mainPageHTML);
   }
@@ -121,7 +121,7 @@ export default class DiningParser {
   }
 
   private async retrieveSpecials(
-    url: URL
+    url: URL,
   ): Promise<Map<string, SpecialSchema[]>> {
     const specialsHTML = await getHTMLResponse(url);
     const $ = load(specialsHTML);
@@ -141,7 +141,7 @@ export default class DiningParser {
           .trim();
         specialsBuilder.addSpecial(
           header,
-          specialItemList.length > 0 ? specialItemList : undefined
+          specialItemList.length > 0 ? specialItemList : undefined,
         );
       }
       locationSpecialMap.set(name, specialsBuilder.build());
