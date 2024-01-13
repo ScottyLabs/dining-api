@@ -88,9 +88,11 @@ export default class DiningParser {
 
     builder.setLocation($("div.location a").text().trim());
     const locationHref = $("div.location a").attr("href");
-    if (builder.getName() && locationOverwrites.hasOwnProperty(builder.getName()!)) {
-      builder.setCoordinates(locationOverwrites[builder.getName()!]);
-    } else if (locationHref) {
+    const name = builder.getName();
+
+    if (name !== undefined && locationOverwrites[name] !== undefined) {
+      builder.setCoordinates(locationOverwrites[name]);
+    } else if (locationHref !== undefined) {
       const [lat, lng] = this.convertMapsLinkToCoordinates(locationHref);
       builder.setCoordinates(new Coordinate(lat, lng));
     }
@@ -117,8 +119,8 @@ export default class DiningParser {
   private async retrieveSpecials(
     url: URL
   ): Promise<Map<string, SpecialSchema[]>> {
-    const specialHTML = await getHTMLResponse(url);
-    const $ = load(specialHTML);
+    const specialsHTML = await getHTMLResponse(url);
+    const $ = load(specialsHTML);
     const cards = $("div.card").toArray();
 
     const locationSpecialMap = new Map<string, SpecialSchema[]>();
@@ -145,7 +147,7 @@ export default class DiningParser {
 
   async process(): Promise<ILocation[]> {
     await this.preprocess();
-    const locationInfo = await this.retrieveBasicLocationInfo();
+    const locationInfo = this.retrieveBasicLocationInfo();
 
     const [specials, soups] = await Promise.all([
       this.retrieveSpecials(new URL(DiningParser.DINING_SPECIALS_URL)),
@@ -153,25 +155,30 @@ export default class DiningParser {
     ]);
 
     for (const builder of locationInfo) {
-      const name = builder.build().name as string;
-      const specialList = specials.get(name);
-      const soupList = soups.get(name);
-  
-      if (Array.isArray(specialList)) {
-        builder.setSpecials(specialList);
+      const name = builder.getName();
+      if (name !== undefined) {
+        const specialList = specials.get(name);
+        const soupList = soups.get(name);
+
+        if (Array.isArray(specialList)) {
+          builder.setSpecials(specialList);
+        }
+
+        if (Array.isArray(soupList)) {
+          builder.setSoups(soupList);
+        }
       }
-  
-      if (Array.isArray(soupList)) {
-        builder.setSoups(soupList);
-      }
-  
+
       try {
         await this.retrieveDetailedInfoForLocation(builder);
       } catch (error) {
         console.error(`Failed to retrieve detailed info for ${name}:`, error);
+        builder.invalidate();
       }
     }
 
-    return locationInfo.map((builder) => builder.build());
+    return locationInfo
+      .filter((builder) => builder.isValid())
+      .map((builder) => builder.build());
   }
 }

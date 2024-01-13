@@ -2,13 +2,13 @@ import ParsedTimeBase from "../containers/time/parsedTimeBase";
 import ParsedTimeForDay from "../containers/time/parsedTimeForDay";
 
 export enum DayOfTheWeek {
-  SUNDAY = 0,
-  MONDAY = 1,
-  TUESDAY = 2,
-  WEDNESDAY = 3,
-  THURSDAY = 4,
-  FRIDAY = 5,
-  SATURDAY = 6,
+  SUNDAY,
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
 }
 
 export enum MonthOfTheYear {
@@ -35,22 +35,16 @@ export enum TimeInfoType {
 }
 
 export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
-  switch (day) {
-    case DayOfTheWeek.SUNDAY:
-      return DayOfTheWeek.MONDAY;
-    case DayOfTheWeek.MONDAY:
-      return DayOfTheWeek.TUESDAY;
-    case DayOfTheWeek.TUESDAY:
-      return DayOfTheWeek.WEDNESDAY;
-    case DayOfTheWeek.WEDNESDAY:
-      return DayOfTheWeek.THURSDAY;
-    case DayOfTheWeek.THURSDAY:
-      return DayOfTheWeek.FRIDAY;
-    case DayOfTheWeek.FRIDAY:
-      return DayOfTheWeek.SATURDAY;
-    case DayOfTheWeek.SATURDAY:
-      return DayOfTheWeek.SUNDAY;
-  }
+  const weekdays: DayOfTheWeek[] = [
+    DayOfTheWeek.SUNDAY,
+    DayOfTheWeek.MONDAY,
+    DayOfTheWeek.TUESDAY,
+    DayOfTheWeek.WEDNESDAY,
+    DayOfTheWeek.THURSDAY,
+    DayOfTheWeek.FRIDAY,
+    DayOfTheWeek.SATURDAY,
+  ]; // ordered by time
+  return weekdays[(weekdays.indexOf(day) + 1) % 7];
 }
 
 export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
@@ -195,10 +189,10 @@ export function determineTimeInfoType(input: string): TimeInfoType {
   if (isMonth(testMonth)) {
     return TimeInfoType.DATE;
   }
-  if (input.trim().toLowerCase() === "24 hours" || input.trim().toLowerCase() === "open 24 hrs") {
+  if (input === "24 hours" || input === "open 24 hrs") {
     return TimeInfoType.TWENTYFOURHOURS;
   }
-  if (input.trim().toLowerCase() === "closed") {
+  if (input === "closed") {
     return TimeInfoType.CLOSED;
   }
   if (
