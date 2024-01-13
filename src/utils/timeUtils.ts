@@ -43,7 +43,7 @@ export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
     DayOfTheWeek.THURSDAY,
     DayOfTheWeek.FRIDAY,
     DayOfTheWeek.SATURDAY,
-  ]; //ordered by time
+  ]; // ordered by time
   return weekdays[(weekdays.indexOf(day) + 1) % 7];
 }
 
