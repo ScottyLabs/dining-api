@@ -90,13 +90,13 @@ export default class TimeBuilder {
 
   private convertTimeRangeToTimeSchema(
     time: TimeBuilderSchema,
-    range: ParsedTimeRange,
+    range: ParsedTimeRange
   ) {
     if (time.day === undefined) {
       throw new Error("Cannot convert when day is not set");
     }
-    let spillToNextDay =
-      range.start.hour * 60 + range.start.minute >=
+    const spillToNextDay =
+      range.start.hour * 60 + range.start.minute >
       range.end.hour * 60 + range.end.minute;
 
     return {
@@ -120,7 +120,7 @@ export default class TimeBuilder {
         result.push(
           ...time.times.map((current) => {
             return this.convertTimeRangeToTimeSchema(time, current);
-          }),
+          })
         );
       }
     }
