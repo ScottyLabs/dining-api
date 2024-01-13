@@ -23,6 +23,7 @@
     "child_process": "^1.0.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "npm-check-updates": "^16.14.12",
     "postman-request": "^2.88.1-postman.33"
   },
   "devDependencies": {
