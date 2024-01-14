@@ -6,13 +6,13 @@ export interface ILocation {
   conceptId: number;
   name?: string;
   shortDescription?: string;
-  description?: string;
-  url?: string;
+  description: string;
+  url: string;
   menu?: string;
-  location?: string;
+  location: string;
   coordinates?: Coordinate;
-  acceptsOnlineOrders?: boolean;
-  times?: TimeSchema[];
+  acceptsOnlineOrders: boolean;
+  times: TimeSchema[];
   todaysSpecials?: SpecialSchema[];
   todaysSoups?: SpecialSchema[];
 }
@@ -47,6 +47,7 @@ export default class LocationBuilder {
   private times?: TimeSchema[];
   private specials?: SpecialSchema[];
   private soups?: SpecialSchema[];
+  private valid: boolean = true;
 
   constructor(conceptId: number) {
     this.conceptId = conceptId;
@@ -114,8 +115,27 @@ export default class LocationBuilder {
   getName(): string | undefined {
     return this.name;
   }
-
+  invalidate() {
+    this.valid = false;
+  }
+  isValid() {
+    return this.valid;
+  }
   build(): ILocation {
+    if (!this.valid) throw Error("Location has been invalidated!");
+    if (
+      this.times === undefined ||
+      this.acceptsOnlineOrders === undefined ||
+      this.description === undefined ||
+      this.url === undefined ||
+      this.location === undefined
+    ) {
+      throw Error(
+        "Didn't finish configuring restaurant before building metadata!",
+      );
+      //all fetches were good - yet we have missing data. This is a problem
+    }
+
     return {
       conceptId: this.conceptId,
       name: this.name,
