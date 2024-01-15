@@ -35,7 +35,7 @@ app.get("/location/:name", (c) => {
   });
 });
 
-app.get("/location/time/:day/:hour/:min", (c) => {
+app.get("/locations/time/:day/:hour/:min", (c) => {
   const result = cached.filter((el) => {
     let returning = false;
     el.times?.forEach((element) => {

@@ -20,10 +20,8 @@
     "axios": "^1.6.5",
     "bun-types": "^1.0.22",
     "cheerio": "^1.0.0-rc.12",
-    "child_process": "^1.0.2",
     "hono": "^3.12.3",
-    "npm-check-updates": "^16.14.12",
-    "postman-request": "^2.88.1-postman.33"
+    "npm-check-updates": "^16.14.12"
   },
   "devDependencies": {
     "@types/bun": "^1.0.1"

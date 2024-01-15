@@ -1,7 +1,6 @@
 # Dining API
 
-This Dining API scrapes location data from the CMU dining sites and distributes
-it as a RESTful API. Access the API [here](https://apis.scottylabs.org/dining/).
+This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://apis.scottylabs.org/dining/).
 
 To build and deploy the service, you'll need [Bun](https://bun.sh),
 which you should install beforehand.
@@ -15,6 +14,8 @@ after making sure you have [git](https://git-scm.com/downloads) downloaded or ru
 gh repo clone ScottyLabs/dining-api
 ```
 if you have the [Github CLI](https://cli.github.com/).
+
+If you already have the node_modules folder or package-lock.json from previous versions of the Dining API, please remove them before continuing.
 
 Now install the API's dependencies by 'cd'-ing into the root of the repository and running:
 ```
