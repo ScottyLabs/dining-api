@@ -1,9 +1,16 @@
-FROM node:latest
+FROM oven/bun:latest
 
-WORKDIR /runtime
-COPY . /runtime
+# Copy the package file
+COPY ./package.json .
 
-RUN npm install && npm run build
+# Install dependencies
+RUN bun install
+
+# Copy environment variables
+COPY .env .
+
+# Copy source code
+COPY src ./src
 
 EXPOSE 5010
-CMD npm start
+CMD bun start
