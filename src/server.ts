@@ -1,5 +1,5 @@
-import express from "express";
-import cors from "cors";
+import { Hono }  from 'hono';
+import { cors } from 'hono/cors';
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "./containers/locationBuilder";
 
@@ -14,28 +14,28 @@ async function reload(): Promise<void> {
   console.log("Dining API cache reloaded");
 }
 
-const app = express();
+const app = new Hono();
 
 app.use(cors());
 
-app.get("/", (_req, res) => {
-  res.send("ScottyLabs Dining API");
+app.get("/", (c) => {
+  return c.text("ScottyLabs Dining API");
 });
 
-app.get("/locations", (_req, res) => {
-  res.json({ locations: cached });
+app.get("/locations", (c) => {
+  return c.json({ locations: cached });
 });
 
-app.get("/location/:name", (req, res) => {
+app.get("/location/:name", (c) => { // Not working correctly
   const filteredLocation = cached.filter((location) => {
-    return location.name?.toLowerCase().includes(req.params.name.toLowerCase());
+    return location.name?.toLowerCase().includes(c.req.param.name.toLowerCase());
   });
-  res.json({
+  return c.json({
     locations: filteredLocation,
   });
 });
 
-app.get("/location/time/:day/:hour/:min", (req, res) => {
+app.get("/location/time/:day/:hour/:min", (c) => { // Not working correctly
   const result = cached.filter((el) => {
     let returning = false;
     el.times?.forEach((element) => {
@@ -45,17 +45,17 @@ app.get("/location/time/:day/:hour/:min", (req, res) => {
         element.start.minute;
       const endMins =
         element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
-      const currentMins =
-        parseInt(req.params.day) * 1440 +
-        parseInt(req.params.hour) * 60 +
-        parseInt(req.params.min);
+        const currentMins = // gave TypeScript error when using c.req.param.(day, hour, and minute), so need to fix
+        parseInt((c.req.param as any).day) * 1440 +
+        parseInt((c.req.param as any).hour) * 60 +
+        parseInt((c.req.param as any).min);
       if (currentMins >= startMins && currentMins < endMins) {
         returning = true;
       }
     });
     return returning;
   });
-  res.json({ locations: result });
+  return c.json({ locations: result });
 });
 
 // Cache TTL: 3 hours
@@ -65,7 +65,9 @@ setInterval(() => {
 }, interval);
 
 reload().then(() => {
-  app.listen(PORT, () => {
-    console.log("Dining API cache loaded and listening on port " + PORT);
+  Bun.serve ({
+    fetch: app.fetch,
+    port: PORT
   });
+  console.log("Dining API cache loaded and listening on port " + PORT);
 });
