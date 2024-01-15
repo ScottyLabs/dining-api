@@ -1,5 +1,5 @@
-import { Hono }  from 'hono';
-import { cors } from 'hono/cors';
+import { Elysia }  from 'elysia';
+import { cors } from '@elysiajs/cors';
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "./containers/locationBuilder";
 
@@ -14,28 +14,26 @@ async function reload(): Promise<void> {
   console.log("Dining API cache reloaded");
 }
 
-const app = new Hono();
+const app = new Elysia();
 
 app.use(cors());
 
-app.get("/", (c) => {
-  return c.text("ScottyLabs Dining API");
+app.get("/", () => {
+  return "ScottyLabs Dining API";
 });
 
-app.get("/locations", (c) => {
-  return c.json({ locations: cached });
-});
+app.get("/locations", () => ({ locations: cached }));
 
-app.get("/location/:name", (c) => {
+app.get("/location/:name", ({ params: { name } }) => {
   const filteredLocation = cached.filter((location) => {
-    return location.name?.toLowerCase().includes(c.req.param('name').toLowerCase());
+    return location.name?.toLowerCase().includes(name.toLowerCase());
   });
-  return c.json({
+  return ({
     locations: filteredLocation,
   });
 });
 
-app.get("/locations/time/:day/:hour/:min", (c) => {
+app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   const result = cached.filter((el) => {
     let returning = false;
     el.times?.forEach((element) => {
@@ -46,16 +44,16 @@ app.get("/locations/time/:day/:hour/:min", (c) => {
       const endMins =
         element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
         const currentMins =
-        parseInt(c.req.param('day')) * 1440 +
-        parseInt(c.req.param('hour')) * 60 +
-        parseInt(c.req.param('min'));
+        parseInt(day) * 1440 +
+        parseInt(hour) * 60 +
+        parseInt(min);
       if (currentMins >= startMins && currentMins < endMins) {
         returning = true;
       }
     });
     return returning;
   });
-  return c.json({ locations: result });
+  return ({ locations: result });
 });
 
 // Cache TTL: 3 hours
@@ -65,9 +63,9 @@ setInterval(() => {
 }, interval);
 
 reload().then(() => {
-  Bun.serve ({
-    fetch: app.fetch,
-    port: PORT
-  });
-  console.log("Dining API cache loaded and listening on port " + PORT);
+  app.listen(PORT);
+
+  console.log(
+    `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
+  );
 });
