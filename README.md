@@ -27,3 +27,5 @@ Then, you can run the server with ```bun start``` and it should work! You can al
 if you're in ScottyLabs, make sure to talk to whomever is running Operations to
 tell you the way to properly background this server so it matches everything
 else.
+
+Note: To add new dependencies, use ```bun add dependency-name```. To remove dependencies, use ```bun remove dependency-name```.
