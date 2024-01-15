@@ -1,12 +1,11 @@
 {
   "name": "dining-api",
   "version": "2.4.0",
-  "description": "Carnegie Mellon University dining information server.",
-  "main": "server.js",
+  "description": "Carnegie Mellon University Dining API",
+  "main": "server.ts",
   "scripts": {
-    "test": "npm test",
-    "start": "node dist/server.js",
-    "build": "tsc"
+    "test": "bun test",
+    "start": "bun --hot run src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -18,19 +17,14 @@
   },
   "homepage": "https://github.com/ScottyLabs/dining-api#readme",
   "dependencies": {
+    "@elysiajs/cors": "^0.8.0",
     "axios": "^1.6.5",
     "cheerio": "^1.0.0-rc.12",
-    "child_process": "^1.0.2",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "npm-check-updates": "^16.14.12",
-    "postman-request": "^2.88.1-postman.33"
+    "elysia": "^0.8.9",
+    "npm-check-updates": "^16.14.12"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.11.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "bun-types": "^1.0.22",
+    "@types/bun": "^1.0.1"
   }
 }

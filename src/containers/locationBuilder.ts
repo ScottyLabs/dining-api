@@ -133,7 +133,7 @@ export default class LocationBuilder {
       throw Error(
         "Didn't finish configuring restaurant before building metadata!",
       );
-      //all fetches were good - yet we have missing data. This is a problem
+      // All fetches were good - yet we have missing data. This is a problem.
     }
 
     return {

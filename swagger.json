@@ -64,7 +64,7 @@
         }
       }
     },
-    "/location/time/{day}/{hour}/{min}": {
+    "/locations/time/{day}/{hour}/{min}": {
       "get": {
         "tags": ["dining"],
         "summary": "Returns locations that are open at the specified time",
