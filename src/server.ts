@@ -26,16 +26,16 @@ app.get("/locations", (c) => {
   return c.json({ locations: cached });
 });
 
-app.get("/location/:name", (c) => { // Not working correctly
+app.get("/location/:name", (c) => {
   const filteredLocation = cached.filter((location) => {
-    return location.name?.toLowerCase().includes(c.req.param.name.toLowerCase());
+    return location.name?.toLowerCase().includes(c.req.param('name').toLowerCase());
   });
   return c.json({
     locations: filteredLocation,
   });
 });
 
-app.get("/location/time/:day/:hour/:min", (c) => { // Not working correctly
+app.get("/location/time/:day/:hour/:min", (c) => {
   const result = cached.filter((el) => {
     let returning = false;
     el.times?.forEach((element) => {
@@ -45,10 +45,10 @@ app.get("/location/time/:day/:hour/:min", (c) => { // Not working correctly
         element.start.minute;
       const endMins =
         element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
-        const currentMins = // gave TypeScript error when using c.req.param.(day, hour, and minute), so need to fix
-        parseInt((c.req.param as any).day) * 1440 +
-        parseInt((c.req.param as any).hour) * 60 +
-        parseInt((c.req.param as any).min);
+        const currentMins =
+        parseInt(c.req.param('day')) * 1440 +
+        parseInt(c.req.param('hour')) * 60 +
+        parseInt(c.req.param('min'));
       if (currentMins >= startMins && currentMins < endMins) {
         returning = true;
       }
