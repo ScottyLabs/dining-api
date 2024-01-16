@@ -116,7 +116,6 @@ export default class DiningParser {
         
         // Check if the schedule string already exists
         if (!addedSchedules.has(scheduleString)) {
-          console.log([dayStr.trim(), dateStr.trim(), timeSlot.trim()]);
           addedSchedules.add(scheduleString); // Add to the set to track
           timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), timeSlot.trim()]);
         }
