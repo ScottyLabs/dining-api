@@ -99,6 +99,7 @@ export default class DiningParser {
 
     const timeBuilder = new TimeBuilder();
     const nextSevenDays = $("ul.schedule").find("li").toArray();
+    const addedSchedules = new Set(); 
     for (const day of nextSevenDays) {
       const dayStr = load(day)("strong").text();
       const dataStr = load(day)
@@ -106,9 +107,19 @@ export default class DiningParser {
         .replace(/\s\s+/g, " ")
         .replace(dayStr, "")
         .trim();
-      const dataArr = dataStr.split(",");
 
-      timeBuilder.addSchedule([dayStr, ...dataArr]);
+      const [dateStr, timeStr] = dataStr.split(/,(.+)/); // Split by the first comma
+      const timeSlots = timeStr.split(","); // Split the time for cases like 8:00 AM - 4:00 PM, 8:00 AM - 4:00 PM
+
+      timeSlots.forEach(timeSlot => {
+        const scheduleString = dayStr.trim() + ", " + timeSlot.trim();
+        
+        // Check if the schedule string already exists
+        if (!addedSchedules.has(scheduleString)) {
+          addedSchedules.add(scheduleString); // Add to the set to track
+          timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), timeSlot.trim()]);
+        }
+      });
     }
     builder.setTimes(timeBuilder.build());
 
