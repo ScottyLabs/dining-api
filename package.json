@@ -24,7 +24,7 @@
     "npm-check-updates": "^16.14.15"
   },
   "devDependencies": {
-    "bun-types": "^1.0.26",
-    "@types/bun": "^1.0.5"
+    "bun-types": "^1.0.29",
+    "@types/bun": "^1.0.8"
   }
 }
