@@ -133,26 +133,25 @@ export default class DiningParser {
     const specialsHTML = await getHTMLResponse(url);
     const $ = load(specialsHTML);
     const cards = $("div.card").toArray();
-
+  
     const locationSpecialMap = new Map<string, SpecialSchema[]>();
-
+  
     for (const card of cards) {
       const name = load(card)("h3.name").text().trim();
-      const specialsList = load(card)("div.specialDetails").toArray();
       const specialsBuilder = new SpecialsBuilder();
-      for (const special of specialsList) {
-        const header = load(special)("strong").text().trim();
-        const specialItemList = load(special)("li")
-          .text()
-          .replace(header, "")
-          .trim();
-        specialsBuilder.addSpecial(
-          header,
-          specialItemList.length > 0 ? specialItemList : undefined
-        );
+  
+      const specialsText = load(card)("div.specialDetails").text().trim();
+      const specialsArray = specialsText.split(/(?<=\n)\s*(?=\S)/);
+  
+      for (let i = 0; i < specialsArray.length; i += 2) {
+        const title = specialsArray[i].trim();
+        const description = specialsArray[i + 1]?.trim() || "";
+        specialsBuilder.addSpecial(title, description);
       }
+  
       locationSpecialMap.set(name, specialsBuilder.build());
     }
+  
     return locationSpecialMap;
   }
 
