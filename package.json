@@ -20,11 +20,11 @@
     "@elysiajs/cors": "^1.0.2",
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
-    "elysia": "^1.0.7",
-    "npm-check-updates": "^16.14.17"
+    "elysia": "^1.0.16",
+    "npm-check-updates": "^16.14.20"
   },
   "devDependencies": {
-    "bun-types": "^1.0.35",
-    "@types/bun": "^1.0.10"
+    "bun-types": "^1.1.7",
+    "@types/bun": "^1.1.1"
   }
 }

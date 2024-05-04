@@ -112,7 +112,17 @@ export default class DiningParser {
       const timeSlots = timeStr.split(","); // Split the time for cases like 8:00 AM - 4:00 PM, 8:00 AM - 4:00 PM
 
       timeSlots.forEach(timeSlot => {
-        const scheduleString = dayStr.trim() + ", " + timeSlot.trim();
+
+        let modifiedTimeSlot = timeSlot.trim();
+
+        // Check if the time slot ends with "12:00 AM"
+        if (/12:00 AM$/i.test(modifiedTimeSlot)) {
+          // Replace "12:00 AM" with "11:59 PM"
+          modifiedTimeSlot = modifiedTimeSlot.replace(/12:00 AM$/i, "11:59 PM");
+        }
+
+        const scheduleString = dayStr.trim() + ", " + modifiedTimeSlot.trim();
+        console.log(scheduleString)
         
         // Check if the schedule string already exists
         if (!addedSchedules.has(scheduleString)) {
