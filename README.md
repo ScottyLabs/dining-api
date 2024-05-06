@@ -23,9 +23,6 @@ bun install
 ```
 
 Then, you can run the server with ```bun start``` and it should work! You can also use 
-```bun run start``` since ```bun start``` is its shorthand version. However,
-if you're in ScottyLabs, make sure to talk to whomever is running Operations to
-tell you the way to properly background this server so it matches everything
-else.
+```bun run start``` since ```bun start``` is its shorthand version.
 
 Note: To add new dependencies, use ```bun add dependency-name```. To remove dependencies, use ```bun remove dependency-name```.
