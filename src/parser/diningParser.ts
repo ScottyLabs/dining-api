@@ -101,30 +101,30 @@ export default class DiningParser {
     const timeBuilder = new TimeBuilder();
     const nextSevenDays = $("ul.schedule").find("li").toArray();
     const addedSchedules = new Set();
-    
+
     for (const day of nextSevenDays) {
       let dayStr = load(day)("strong").text();
       dayStr = dayStr.charAt(0).toUpperCase() + dayStr.slice(1).toLowerCase();
-    
+
       const dataStr = load(day)
         .text()
         .replace(/\s\s+/g, " ")
         .replace(dayStr, "")
         .trim();
-    
+
       let [dateStr, timeStr] = dataStr.split(/,(.+)/);
       dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1).toLowerCase();
       timeStr = timeStr.toUpperCase().trim();
-    
+
       const timeInfoType = determineTimeInfoType(timeStr);
-    
+
       if (timeInfoType === TimeInfoType.CLOSED || timeInfoType === TimeInfoType.TWENTYFOURHOURS) {
         const scheduleString = `${dayStr.trim()}, ${timeStr}`;
         addedSchedules.add(scheduleString);
         timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), timeStr]);
       } else if (timeInfoType === TimeInfoType.TIME) {
         const timeSlots = timeStr.split(",").map(slot => slot.trim());
-    
+
         // Sort time slots based on opening time
         timeSlots.sort((a, b) => {
           const [aStart, aEnd] = a.split("-").map(time => time.trim());
@@ -135,13 +135,13 @@ export default class DiningParser {
           }
           return bEnd.localeCompare(aEnd); // Reverse order for end times
         });
-    
+
         // Merge overlapping, contained, and duplicate time slots
         const mergedTimeSlots = [];
         let prevSlot = null;
         for (const timeSlot of timeSlots) {
           const [start, end] = timeSlot.split("-").map(time => time.trim());
-    
+
           if (prevSlot && start === prevSlot.start) {
             // If the current time slot has the same opening time as the previous one
             // Update the previous slot with the later closing time
@@ -153,16 +153,16 @@ export default class DiningParser {
             prevSlot = { start, end };
           }
         }
-    
+
         // Format and add merged time slots
         mergedTimeSlots.forEach(slot => {
           let { start, end } = slot;
-    
+
           // Handle case where end time is 12:00 AM
           if (/12:00 AM$/i.test(end)) {
             end = end.replace(/12:00 AM$/i, "11:59 PM");
           }
-    
+
           const scheduleString = `${dayStr.trim()}, ${start} - ${end}`;
           if (!addedSchedules.has(scheduleString)) {
             addedSchedules.add(scheduleString);
@@ -171,9 +171,9 @@ export default class DiningParser {
         });
       }
     }
-    
+
     builder.setTimes(timeBuilder.build());           
-    
+
     const onlineDiv = $("div.navItems.orderOnline").toArray();
     builder.setAcceptsOnlineOrders(onlineDiv.length > 0);
   }
