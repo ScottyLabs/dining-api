@@ -122,7 +122,6 @@ export default class DiningParser {
         }
 
         const scheduleString = dayStr.trim() + ", " + modifiedTimeSlot.trim();
-        console.log(scheduleString)
         
         // Check if the schedule string already exists
         if (!addedSchedules.has(scheduleString)) {
