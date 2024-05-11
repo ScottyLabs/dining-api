@@ -1,4 +1,5 @@
 import { getHTMLResponse } from "../utils/requestUtils";
+import { determineTimeInfoType, TimeInfoType } from "../utils/timeUtils";
 import { CheerioAPI, load } from "cheerio";
 import LocationBuilder, { ILocation } from "../containers/locationBuilder";
 import Coordinate from "../utils/coordinate";
@@ -99,7 +100,8 @@ export default class DiningParser {
 
     const timeBuilder = new TimeBuilder();
     const nextSevenDays = $("ul.schedule").find("li").toArray();
-    const addedSchedules = new Set(); 
+    const addedSchedules = new Set();
+
     for (const day of nextSevenDays) {
       let dayStr = load(day)("strong").text();
       dayStr = dayStr.charAt(0).toUpperCase() + dayStr.slice(1).toLowerCase();
@@ -110,32 +112,67 @@ export default class DiningParser {
         .replace(dayStr, "")
         .trim();
 
-      let [dateStr, timeStr] = dataStr.split(/,(.+)/); // Split by the first comma
+      let [dateStr, timeStr] = dataStr.split(/,(.+)/);
       dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1).toLowerCase();
-      timeStr = timeStr.toUpperCase();
+      timeStr = timeStr.toUpperCase().trim();
 
-      const timeSlots = timeStr.split(","); // Split the time for cases like 8:00 AM - 4:00 PM, 8:00 AM - 4:00 PM
+      const timeInfoType = determineTimeInfoType(timeStr);
 
-      timeSlots.forEach(timeSlot => {
+      if (timeInfoType === TimeInfoType.CLOSED || timeInfoType === TimeInfoType.TWENTYFOURHOURS) {
+        const scheduleString = `${dayStr.trim()}, ${timeStr}`;
+        addedSchedules.add(scheduleString);
+        timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), timeStr]);
+      } else if (timeInfoType === TimeInfoType.TIME) {
+        const timeSlots = timeStr.split(",").map(slot => slot.trim());
 
-        let modifiedTimeSlot = timeSlot.trim();
+        // Sort time slots based on opening time
+        timeSlots.sort((a, b) => {
+          const [aStart, aEnd] = a.split("-").map(time => time.trim());
+          const [bStart, bEnd] = b.split("-").map(time => time.trim());
+          const startComparison = aStart.localeCompare(bStart);
+          if (startComparison !== 0) {
+            return startComparison;
+          }
+          return bEnd.localeCompare(aEnd); // Reverse order for end times
+        });
 
-        // Check if the time slot ends with "12:00 AM"
-        if (/12:00 AM$/i.test(modifiedTimeSlot)) {
-          // Replace "12:00 AM" with "11:59 PM"
-          modifiedTimeSlot = modifiedTimeSlot.replace(/12:00 AM$/i, "11:59 PM");
+        // Merge overlapping, contained, and duplicate time slots
+        const mergedTimeSlots = [];
+        let prevSlot = null;
+        for (const timeSlot of timeSlots) {
+          const [start, end] = timeSlot.split("-").map(time => time.trim());
+
+          if (prevSlot && start === prevSlot.start) {
+            // If the current time slot has the same opening time as the previous one
+            // Update the previous slot with the later closing time
+            if (end > prevSlot.end) {
+              prevSlot.end = end;
+            }
+          } else {
+            mergedTimeSlots.push({ start, end });
+            prevSlot = { start, end };
+          }
         }
 
-        const scheduleString = dayStr.trim() + ", " + modifiedTimeSlot.trim();
-        
-        // Check if the schedule string already exists
-        if (!addedSchedules.has(scheduleString)) {
-          addedSchedules.add(scheduleString); // Add to the set to track
-          timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), timeSlot.trim()]);
-        }
-      });
+        // Format and add merged time slots
+        mergedTimeSlots.forEach(slot => {
+          let { start, end } = slot;
+
+          // Handle case where end time is 12:00 AM
+          if (/12:00 AM$/i.test(end)) {
+            end = end.replace(/12:00 AM$/i, "11:59 PM");
+          }
+
+          const scheduleString = `${dayStr.trim()}, ${start} - ${end}`;
+          if (!addedSchedules.has(scheduleString)) {
+            addedSchedules.add(scheduleString);
+            timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), `${start} - ${end}`]);
+          }
+        });
+      }
     }
-    builder.setTimes(timeBuilder.build());
+
+    builder.setTimes(timeBuilder.build());           
 
     const onlineDiv = $("div.navItems.orderOnline").toArray();
     builder.setAcceptsOnlineOrders(onlineDiv.length > 0);
