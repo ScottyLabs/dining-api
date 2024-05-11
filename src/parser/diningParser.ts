@@ -123,7 +123,7 @@ export default class DiningParser {
         addedSchedules.add(scheduleString);
         timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), timeStr]);
       } else if (timeInfoType === TimeInfoType.TIME) {
-        const timeSlots = timeStr.split(",").map(slot => slot.trim());
+        const timeSlots = timeStr.split(/[,;]/).map(slot => slot.trim());
 
         // Sort time slots based on opening time
         timeSlots.sort((a, b) => {
