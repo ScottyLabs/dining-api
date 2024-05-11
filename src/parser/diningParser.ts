@@ -101,14 +101,19 @@ export default class DiningParser {
     const nextSevenDays = $("ul.schedule").find("li").toArray();
     const addedSchedules = new Set(); 
     for (const day of nextSevenDays) {
-      const dayStr = load(day)("strong").text();
+      let dayStr = load(day)("strong").text();
+      dayStr = dayStr.charAt(0).toUpperCase() + dayStr.slice(1).toLowerCase();
+
       const dataStr = load(day)
         .text()
         .replace(/\s\s+/g, " ")
         .replace(dayStr, "")
         .trim();
 
-      const [dateStr, timeStr] = dataStr.split(/,(.+)/); // Split by the first comma
+      let [dateStr, timeStr] = dataStr.split(/,(.+)/); // Split by the first comma
+      dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1).toLowerCase();
+      timeStr = timeStr.toUpperCase();
+
       const timeSlots = timeStr.split(","); // Split the time for cases like 8:00 AM - 4:00 PM, 8:00 AM - 4:00 PM
 
       timeSlots.forEach(timeSlot => {
