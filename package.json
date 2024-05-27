@@ -6,7 +6,7 @@
   "scripts": {
     "test": "bun test",
     "start": "bun --hot run src/server.ts",
-    "build": "bun build ./src/server.ts --outdir dist"
+    "build": "bun build ./src/index.ts --outdir dist"
   },
   "repository": {
     "type": "git",

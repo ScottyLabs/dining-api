@@ -14,7 +14,7 @@ async function reload(): Promise<void> {
   console.log("Dining API cache reloaded");
 }
 
-const app = new Elysia();
+export const app = new Elysia();
 
 app.use(cors());
 
