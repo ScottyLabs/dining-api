@@ -5,8 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "test": "bun test",
-    "start": "bun run build && bun --hot run src/server.ts",
-    "build": "bun scripts/transformPaths.ts"
+    "start": "bun --hot run src/server.ts"
   },
   "repository": {
     "type": "git",
