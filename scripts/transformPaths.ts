@@ -2,6 +2,7 @@
  * This file will transform all relative imports to absolute imports
  * inside the src/ directory.
  * (assumes TS config compilerOptions.paths = { "~/*": ["./src/*"] })
+ * Source: https://github.com/syhner/elysia-kickstart/blob/main/scripts/transform-paths.ts
  */
 
 import fs from 'node:fs/promises';
