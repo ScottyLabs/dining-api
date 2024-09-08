@@ -1,6 +1,5 @@
 import { DayOfTheWeek } from "../utils/timeUtils";
-import Coordinate from "../utils/coordinate";
-import { SpecialSchema } from "./specials/specialsBuilder";
+import { ISpecial } from "./specials/specialsBuilder";
 
 export interface ILocation {
   conceptId: number;
@@ -10,24 +9,27 @@ export interface ILocation {
   url: string;
   menu?: string;
   location: string;
-  coordinates?: Coordinate;
+  coordinates?: ICoordinate;
   acceptsOnlineOrders: boolean;
-  times: TimeSchema[];
-  todaysSpecials?: SpecialSchema[];
-  todaysSoups?: SpecialSchema[];
+  times: ITime[];
+  todaysSpecials?: ISpecial[];
+  todaysSoups?: ISpecial[];
 }
 
-interface MomentTimeSchema {
+interface IMomentTime {
   day: DayOfTheWeek;
   hour: number;
   minute: number;
 }
 
-export interface TimeSchema {
-  start: MomentTimeSchema;
-  end: MomentTimeSchema;
+export interface ITime {
+  start: IMomentTime;
+  end: IMomentTime;
 }
-
+export interface ICoordinate {
+  lat: number;
+  lng: number;
+}
 /**
  * For building the location data structure
  */
@@ -42,11 +44,11 @@ export default class LocationBuilder {
   private url?: string;
   private location?: string;
   private menu?: string;
-  private coordinates?: Coordinate;
+  private coordinates?: ICoordinate;
   private acceptsOnlineOrders?: boolean;
-  private times?: TimeSchema[];
-  private specials?: SpecialSchema[];
-  private soups?: SpecialSchema[];
+  private times?: ITime[];
+  private specials?: ISpecial[];
+  private soups?: ISpecial[];
   private valid: boolean = true;
 
   constructor(conceptId: number) {
@@ -68,7 +70,7 @@ export default class LocationBuilder {
     return this;
   }
 
-  setCoordinates(coordinates: Coordinate): LocationBuilder {
+  setCoordinates(coordinates: ICoordinate): LocationBuilder {
     this.coordinates = coordinates;
     return this;
   }
@@ -93,17 +95,17 @@ export default class LocationBuilder {
     return this;
   }
 
-  setTimes(times: TimeSchema[]) {
+  setTimes(times: ITime[]) {
     this.times = times;
     return this;
   }
 
-  setSpecials(specials: SpecialSchema[]) {
+  setSpecials(specials: ISpecial[]) {
     this.specials = specials;
     return this;
   }
 
-  setSoups(soups: SpecialSchema[]) {
+  setSoups(soups: ISpecial[]) {
     this.soups = soups;
     return this;
   }
@@ -131,7 +133,7 @@ export default class LocationBuilder {
       this.location === undefined
     ) {
       throw Error(
-        "Didn't finish configuring restaurant before building metadata!",
+        "Didn't finish configuring restaurant before building metadata!"
       );
       // All fetches were good - yet we have missing data. This is a problem.
     }
