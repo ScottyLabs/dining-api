@@ -8,11 +8,13 @@ jest.mock("axios");
 function last<T>(ar: T[]) {
   return ar[ar.length - 1];
 }
+
 test("the whole thing, including locationOverwrites", async () => {
   mockOutAxiosWithLocalHTMLFiles();
   const parser = new DiningParser();
   expect(await parser.process()).toEqual(expectedLocationData);
 });
+
 function mockOutAxiosWithLocalHTMLFiles() {
   (axios.get as jest.Mock).mockImplementation(async (url: string) => {
     const urlToFile = [
@@ -47,6 +49,7 @@ function mockOutAxiosWithLocalHTMLFiles() {
     throw new Error(`unhandled url ${url}`);
   });
 }
+
 const expectedLocationData = [
   {
     conceptId: 113,
