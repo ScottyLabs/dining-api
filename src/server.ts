@@ -1,17 +1,24 @@
-import { Elysia }  from 'elysia';
-import { cors } from '@elysiajs/cors';
+import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "./containers/locationBuilder";
 
 const PORT = process.env.PORT ?? 5010;
-let cached: ILocation[];
+let cachedLocations: ILocation[];
 
 async function reload(): Promise<void> {
   console.log("Loading Dining API...");
   const parser = new DiningParser();
-  cached = await parser.process();
-
-  console.log("Dining API cache reloaded");
+  const locations = await parser.process();
+  if (locations.length < cachedLocations.length - 1) {
+    console.log(
+      "Ignored location fetch since it (likely) has missing data",
+      locations
+    );
+  } else {
+    cachedLocations = locations;
+    console.log("Dining API cache reloaded");
+  }
 }
 
 export const app = new Elysia();
@@ -22,19 +29,19 @@ app.get("/", () => {
   return "ScottyLabs Dining API";
 });
 
-app.get("/locations", () => ({ locations: cached }));
+app.get("/locations", () => ({ locations: cachedLocations }));
 
 app.get("/location/:name", ({ params: { name } }) => {
-  const filteredLocation = cached.filter((location) => {
+  const filteredLocation = cachedLocations.filter((location) => {
     return location.name?.toLowerCase().includes(name.toLowerCase());
   });
-  return ({
+  return {
     locations: filteredLocation,
-  });
+  };
 });
 
 app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
-  const result = cached.filter((el) => {
+  const result = cachedLocations.filter((el) => {
     let returning = false;
     el.times?.forEach((element) => {
       const startMins =
@@ -43,17 +50,15 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
         element.start.minute;
       const endMins =
         element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
-        const currentMins =
-        parseInt(day) * 1440 +
-        parseInt(hour) * 60 +
-        parseInt(min);
+      const currentMins =
+        parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
       if (currentMins >= startMins && currentMins < endMins) {
         returning = true;
       }
     });
     return returning;
   });
-  return ({ locations: result });
+  return { locations: result };
 });
 
 // Cache TTL: 3 hours
