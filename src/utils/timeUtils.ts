@@ -39,14 +39,17 @@ export function sortAndMergeTimeRanges(timeRanges: ITimeRange[]) {
     const lastTimeRange = mergedRanges.length
       ? mergedRanges[mergedRanges.length - 1]
       : undefined;
-    if (lastTimeRange && lastTimeRange.end >= timeRange.start) {
-      if (compareTimeMoments(lastTimeRange.end, timeRange.end) > 0) {
+    if (
+      lastTimeRange &&
+      compareTimeMoments(lastTimeRange.end, timeRange.start) >= 0
+    ) {
+      if (compareTimeMoments(timeRange.end, lastTimeRange.end) > 0) {
         lastTimeRange.end = timeRange.end; // join current range with last range
-        continue;
       }
+    } else {
+      mergedRanges.push(timeRange);
     }
-
-    mergedRanges.push(timeRange);
   }
+  console.log(timeRanges, mergedRanges);
   return mergedRanges;
 }
