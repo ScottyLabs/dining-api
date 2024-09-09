@@ -5,7 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest",
-    "start": "bun --hot run src/server.ts"
+    "start": "bun --hot run src/server.ts",
+    "build": "bun build ./src/index.ts --outdir dist"
   },
   "repository": {
     "type": "git",
