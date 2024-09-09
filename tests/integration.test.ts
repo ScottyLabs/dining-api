@@ -1,53 +1,76 @@
 import axios from "axios";
 import DiningParser from "../src/parser/diningParser";
-import path from "path";
-import fs from "fs";
+
+import { getFileContent, last } from "./utils";
 
 jest.mock("axios");
 
-function last<T>(ar: T[]) {
-  return ar[ar.length - 1];
-}
-
 test("the whole thing, including locationOverwrites", async () => {
-  mockOutAxiosWithLocalHTMLFiles();
+  mockOutAxios({
+    conceptListFilePath: "html/listconcepts.html",
+    specialsFilePath: "html/specials.html",
+    soupsFilePath: "html/soups.html",
+    getConceptFilePath: (locationId: string) =>
+      ["92", "110", "113", "175"].includes(locationId)
+        ? `html/concepts/${locationId}.html`
+        : "html/blank.html",
+  });
   const parser = new DiningParser();
   expect(await parser.process()).toEqual(expectedLocationData);
 });
 
-function mockOutAxiosWithLocalHTMLFiles() {
+test(
+  "parser throws on repeated axios error",
+  async () => {
+    mockOutAxios({});
+    const parser = new DiningParser();
+
+    await expect(async () => {
+      await parser.process();
+    }).rejects.toThrow("not found!");
+  },
+  10 * 1000
+);
+
+const ALL_LOCATIONS_URL =
+  "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts";
+const SPECIALS_URL =
+  "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials";
+const SOUPS_URL =
+  "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
+const LOCATION_URL_PREFIX =
+  "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/";
+
+/**
+ *
+ * @param filePathObject if the file path is not provided or points to an invalid file, the mocked axios will error out.
+ */
+function mockOutAxios({
+  conceptListFilePath,
+  specialsFilePath,
+  soupsFilePath,
+  getConceptFilePath,
+}: {
+  conceptListFilePath?: string;
+  specialsFilePath?: string;
+  soupsFilePath?: string;
+  getConceptFilePath?: (locationId: string) => string;
+}) {
   (axios.get as jest.Mock).mockImplementation(async (url: string) => {
-    const urlToFile = [
-      [
-        "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts",
-        "html/listconcepts.html",
-      ],
-      [
-        "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials",
-        "html/specials.html",
-      ],
-      [
-        "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups",
-        "html/soups.html",
-      ],
-      [
-        "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/",
-        (url: string) => `html/concepts/${last(url.split("/"))}.html`,
-      ],
-    ] as const;
-    for (const [testUrl, file] of urlToFile)
-      if (url.startsWith(testUrl)) {
-        const fileName = typeof file === "string" ? file : file(url);
-        const filePath = path.resolve(__dirname, fileName);
-        if (!(await fs.existsSync(filePath))) return { data: "" };
-        return {
-          data: await fs.readFileSync(filePath, {
-            encoding: "utf8",
-          }),
-        };
-      }
-    throw new Error(`unhandled url ${url}`);
+    const localFilePath = getFilePath(url);
+    if (localFilePath === undefined) throw new Error(`${url} not found!`);
+    return getFileContent(localFilePath);
   });
+
+  const getFilePath = (url: string) => {
+    if (url === ALL_LOCATIONS_URL && conceptListFilePath)
+      return conceptListFilePath;
+    if (url === SPECIALS_URL && specialsFilePath) return specialsFilePath;
+    if (url === SOUPS_URL && soupsFilePath) return soupsFilePath;
+    if (url.startsWith(LOCATION_URL_PREFIX) && getConceptFilePath)
+      return getConceptFilePath(last(url.split("/")));
+    return undefined;
+  };
 }
 
 const expectedLocationData = [
