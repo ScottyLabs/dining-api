@@ -1,4 +1,4 @@
-export interface SpecialSchema {
+export interface ISpecial {
   title: string;
   description?: string;
 }
@@ -7,7 +7,7 @@ export interface SpecialSchema {
  * For building the specials/soups data structure
  */
 export default class SpecialsBuilder {
-  private specials: SpecialSchema[];
+  private specials: ISpecial[];
   constructor() {
     this.specials = [];
   }
@@ -20,7 +20,7 @@ export default class SpecialsBuilder {
     return this;
   }
 
-  build(): SpecialSchema[] {
+  build(): ISpecial[] {
     return this.specials;
   }
 }
