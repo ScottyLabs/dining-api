@@ -30,7 +30,7 @@ bun install
 Then, you can run the server with `bun start` and it should work! You can also use
 `bun run start` since `bun start` is its shorthand version.
 
-Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update`to update all outdated dependencies to the latest version.
+Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
 
 ## Before submitting a PR
 
