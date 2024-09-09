@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
-import { ILocation } from "./containers/locationBuilder";
+import { ILocation } from "types";
 
 const PORT = process.env.PORT ?? 5010;
 let cachedLocations: ILocation[];

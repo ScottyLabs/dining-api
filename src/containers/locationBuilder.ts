@@ -1,35 +1,10 @@
-import { DayOfTheWeek } from "../utils/timeUtils";
-import { ISpecial } from "./specials/specialsBuilder";
+import { Element, load } from "cheerio";
+import { getHTMLResponse } from "utils/requestUtils";
+import { LocationOverwrites } from "overwrites/locationOverwrites";
+import { getTimeRangesFromString } from "./timeBuilder";
+import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
+import { sortAndMergeTimeRanges } from "utils/timeUtils";
 
-export interface ILocation {
-  conceptId: number;
-  name?: string;
-  shortDescription?: string;
-  description: string;
-  url: string;
-  menu?: string;
-  location: string;
-  coordinates?: ICoordinate;
-  acceptsOnlineOrders: boolean;
-  times: ITime[];
-  todaysSpecials?: ISpecial[];
-  todaysSoups?: ISpecial[];
-}
-
-interface IMomentTime {
-  day: DayOfTheWeek;
-  hour: number;
-  minute: number;
-}
-
-export interface ITime {
-  start: IMomentTime;
-  end: IMomentTime;
-}
-export interface ICoordinate {
-  lat: number;
-  lng: number;
-}
 /**
  * For building the location data structure
  */
@@ -37,7 +12,7 @@ export default class LocationBuilder {
   static readonly CONCEPT_BASE_LINK =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/";
 
-  private conceptId: number;
+  private conceptId?: number;
   private name?: string;
   private shortDescription?: string;
   private description?: string;
@@ -46,94 +21,86 @@ export default class LocationBuilder {
   private menu?: string;
   private coordinates?: ICoordinate;
   private acceptsOnlineOrders?: boolean;
-  private times?: ITime[];
+  private times?: ITimeRange[];
   private specials?: ISpecial[];
   private soups?: ISpecial[];
-  private valid: boolean = true;
 
-  constructor(conceptId: number) {
-    this.conceptId = conceptId;
+  constructor(card: Element) {
+    const link = load(card)("h3.name.detailsLink");
+    const conceptId = link.attr("onclick")?.match(/Concept\/(\d+)/)?.[1];
+    this.conceptId = conceptId !== undefined ? parseInt(conceptId) : undefined;
+    this.name = link.text().trim();
+    this.shortDescription = load(card)("div.description").text().trim();
   }
-
-  setName(name: string): LocationBuilder {
-    this.name = name;
-    return this;
+  overwriteLocation(locationOverwrites: LocationOverwrites) {
+    if (
+      this.name !== undefined &&
+      locationOverwrites[this.name] !== undefined
+    ) {
+      this.coordinates = locationOverwrites[this.name];
+    }
   }
-
-  setShortDesc(shortDesc: string): LocationBuilder {
-    this.shortDescription = shortDesc;
-    return this;
+  setSoup(soupList: Record<string, ISpecial[]>) {
+    if (this.name && soupList[this.name] !== undefined) {
+      this.soups = soupList[this.name];
+    }
   }
-
-  setDesc(desc: string): LocationBuilder {
-    this.description = desc;
-    return this;
+  setSpecials(specialList: Record<string, ISpecial[]>) {
+    if (this.name && specialList[this.name] !== undefined) {
+      this.specials = specialList[this.name];
+    }
   }
-
-  setCoordinates(coordinates: ICoordinate): LocationBuilder {
-    this.coordinates = coordinates;
-    return this;
-  }
-
-  setLocation(location: string): LocationBuilder {
-    this.location = location;
-    return this;
-  }
-
-  setAcceptsOnlineOrders(acceptsOnlineOrders: boolean) {
-    this.acceptsOnlineOrders = acceptsOnlineOrders;
-    return this;
-  }
-
-  setURL(url: string) {
-    this.url = url;
-    return this;
+  convertMapsLinkToCoordinates(link: string) {
+    const atIndex = link.indexOf("@");
+    const locationUrl = link.slice(atIndex + 1, link.length);
+    const commaIndex = locationUrl.indexOf(",");
+    const latitude = locationUrl.slice(0, commaIndex);
+    const longitude = locationUrl.slice(commaIndex + 1, locationUrl.length);
+    return { lat: parseFloat(latitude), lng: parseFloat(longitude) };
   }
 
-  setMenu(menuLink: string) {
-    this.menu = menuLink;
-    return this;
+  async populateDetailedInfo(getHTML: typeof getHTMLResponse) {
+    const conceptURL = this.getConceptLink();
+    if (!conceptURL) return;
+    const $ = load(await getHTML(conceptURL));
+    this.url = conceptURL.toString();
+    this.description = $("div.description p").text().trim();
+    this.menu = $("div.navItems > a#getMenu").attr("href");
+
+    this.location = $("div.location a").text().trim();
+    const locationHref = $("div.location a").attr("href");
+
+    if (locationHref !== undefined) {
+      this.coordinates = this.convertMapsLinkToCoordinates(locationHref);
+    }
+
+    const nextSevenDays = $("ul.schedule").find("li").toArray();
+    this.times = sortAndMergeTimeRanges(
+      nextSevenDays.reduce<ITimeRange[]>(
+        (timeRanges, rowHTML) =>
+          timeRanges.concat(getTimeRangesFromString(rowHTML)),
+        []
+      )
+    );
+    this.acceptsOnlineOrders =
+      $("div.navItems.orderOnline").toArray().length > 0;
+  }
+  getConceptLink() {
+    if (this.conceptId === undefined) return undefined;
+    return new URL(LocationBuilder.CONCEPT_BASE_LINK + this.conceptId);
   }
 
-  setTimes(times: ITime[]) {
-    this.times = times;
-    return this;
-  }
-
-  setSpecials(specials: ISpecial[]) {
-    this.specials = specials;
-    return this;
-  }
-
-  setSoups(soups: ISpecial[]) {
-    this.soups = soups;
-    return this;
-  }
-
-  getConceptLink(): string {
-    return LocationBuilder.CONCEPT_BASE_LINK + this.conceptId;
-  }
-
-  getName(): string | undefined {
-    return this.name;
-  }
-  invalidate() {
-    this.valid = false;
-  }
-  isValid() {
-    return this.valid;
-  }
   build(): ILocation {
-    if (!this.valid) throw Error("Location has been invalidated!");
     if (
       this.times === undefined ||
       this.acceptsOnlineOrders === undefined ||
       this.description === undefined ||
       this.url === undefined ||
-      this.location === undefined
+      this.location === undefined ||
+      this.conceptId === undefined
     ) {
       throw Error(
-        "Didn't finish configuring restaurant before building metadata!"
+        "Didn't finish configuring location before building metadata!"
       );
       // All fetches were good - yet we have missing data. This is a problem.
     }
