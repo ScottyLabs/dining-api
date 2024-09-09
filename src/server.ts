@@ -10,7 +10,10 @@ async function reload(): Promise<void> {
   console.log("Loading Dining API...");
   const parser = new DiningParser();
   const locations = await parser.process();
-  if (cachedLocations && locations.length < cachedLocations.length - 1) {
+  if (
+    cachedLocations !== undefined &&
+    locations.length < cachedLocations.length - 1
+  ) {
     console.log(
       "Ignored location fetch since it (likely) has missing data",
       locations
