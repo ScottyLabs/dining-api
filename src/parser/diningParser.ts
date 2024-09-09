@@ -2,10 +2,9 @@ import { getHTMLResponse } from "../utils/requestUtils";
 import { determineTimeInfoType, TimeInfoType } from "../utils/timeUtils";
 import { CheerioAPI, load } from "cheerio";
 import LocationBuilder, { ILocation } from "../containers/locationBuilder";
-import Coordinate from "../utils/coordinate";
 import TimeBuilder from "../containers/timeBuilder";
 import SpecialsBuilder, {
-  SpecialSchema,
+  ISpecial,
 } from "../containers/specials/specialsBuilder";
 import locationOverwrites from "../overwrites/locationOverwrites";
 
@@ -95,7 +94,7 @@ export default class DiningParser {
       builder.setCoordinates(locationOverwrites[name]);
     } else if (locationHref !== undefined) {
       const [lat, lng] = this.convertMapsLinkToCoordinates(locationHref);
-      builder.setCoordinates(new Coordinate(lat, lng));
+      builder.setCoordinates({ lat, lng });
     }
 
     const timeBuilder = new TimeBuilder();
@@ -113,22 +112,26 @@ export default class DiningParser {
         .trim();
 
       let [dateStr, timeStr] = dataStr.split(/,(.+)/);
-      dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1).toLowerCase();
+      dateStr =
+        dateStr.charAt(0).toUpperCase() + dateStr.slice(1).toLowerCase();
       timeStr = timeStr.toUpperCase().trim();
 
       const timeInfoType = determineTimeInfoType(timeStr);
 
-      if (timeInfoType === TimeInfoType.CLOSED || timeInfoType === TimeInfoType.TWENTYFOURHOURS) {
+      if (
+        timeInfoType === TimeInfoType.CLOSED ||
+        timeInfoType === TimeInfoType.TWENTYFOURHOURS
+      ) {
         const scheduleString = `${dayStr.trim()}, ${timeStr}`;
         addedSchedules.add(scheduleString);
         timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), timeStr]);
       } else if (timeInfoType === TimeInfoType.TIME) {
-        const timeSlots = timeStr.split(/[,;]/).map(slot => slot.trim());
+        const timeSlots = timeStr.split(/[,;]/).map((slot) => slot.trim());
 
         // Sort time slots based on opening time
         timeSlots.sort((a, b) => {
-          const [aStart, aEnd] = a.split("-").map(time => time.trim());
-          const [bStart, bEnd] = b.split("-").map(time => time.trim());
+          const [aStart, aEnd] = a.split("-").map((time) => time.trim());
+          const [bStart, bEnd] = b.split("-").map((time) => time.trim());
           const startComparison = aStart.localeCompare(bStart);
           if (startComparison !== 0) {
             return startComparison;
@@ -140,7 +143,7 @@ export default class DiningParser {
         const mergedTimeSlots = [];
         let prevSlot = null;
         for (const timeSlot of timeSlots) {
-          const [start, end] = timeSlot.split("-").map(time => time.trim());
+          const [start, end] = timeSlot.split("-").map((time) => time.trim());
 
           if (prevSlot && start === prevSlot.start) {
             // If the current time slot has the same opening time as the previous one
@@ -155,7 +158,7 @@ export default class DiningParser {
         }
 
         // Format and add merged time slots
-        mergedTimeSlots.forEach(slot => {
+        mergedTimeSlots.forEach((slot) => {
           let { start, end } = slot;
 
           // Handle case where end time is 12:00 AM
@@ -166,43 +169,45 @@ export default class DiningParser {
           const scheduleString = `${dayStr.trim()}, ${start} - ${end}`;
           if (!addedSchedules.has(scheduleString)) {
             addedSchedules.add(scheduleString);
-            timeBuilder.addSchedule([dayStr.trim(), dateStr.trim(), `${start} - ${end}`]);
+            timeBuilder.addSchedule([
+              dayStr.trim(),
+              dateStr.trim(),
+              `${start} - ${end}`,
+            ]);
           }
         });
       }
     }
 
-    builder.setTimes(timeBuilder.build());           
+    builder.setTimes(timeBuilder.build());
 
     const onlineDiv = $("div.navItems.orderOnline").toArray();
     builder.setAcceptsOnlineOrders(onlineDiv.length > 0);
   }
 
-  private async retrieveSpecials(
-    url: URL
-  ): Promise<Map<string, SpecialSchema[]>> {
+  private async retrieveSpecials(url: URL): Promise<Map<string, ISpecial[]>> {
     const specialsHTML = await getHTMLResponse(url);
     const $ = load(specialsHTML);
     const cards = $("div.card").toArray();
-  
-    const locationSpecialMap = new Map<string, SpecialSchema[]>();
-  
+
+    const locationSpecialMap = new Map<string, ISpecial[]>();
+
     for (const card of cards) {
       const name = load(card)("h3.name").text().trim();
       const specialsBuilder = new SpecialsBuilder();
-  
+
       const specialsText = load(card)("div.specialDetails").text().trim();
       const specialsArray = specialsText.split(/(?<=\n)\s*(?=\S)/);
-  
+
       for (let i = 0; i < specialsArray.length; i += 2) {
         const title = specialsArray[i].trim();
         const description = specialsArray[i + 1]?.trim() || "";
         specialsBuilder.addSpecial(title, description);
       }
-  
+
       locationSpecialMap.set(name, specialsBuilder.build());
     }
-  
+
     return locationSpecialMap;
   }
 

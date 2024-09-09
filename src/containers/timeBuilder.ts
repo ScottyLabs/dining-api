@@ -4,7 +4,7 @@ import {
   getNextDay,
   TimeInfoType,
 } from "../utils/timeUtils";
-import { TimeSchema } from "./locationBuilder";
+import { ITime } from "./locationBuilder";
 import ParsedTime, { ParsedTimeRange } from "./time/parsedTime";
 import ParsedTimeForDate, { ParsedTimeDate } from "./time/parsedTimeForDate";
 import ParsedTimeForDay from "./time/parsedTimeForDay";
@@ -114,7 +114,7 @@ export default class TimeBuilder {
   }
 
   build() {
-    const result: TimeSchema[] = [];
+    const result: ITime[] = [];
     for (const time of this.times) {
       if (Array.isArray(time.times)) {
         result.push(
