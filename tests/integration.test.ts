@@ -128,10 +128,10 @@ describe("time edge cases", () => {
       [Sat]: "9:00 AM - 4:00 PM, 8:00 AM - 4:00 PM",
     });
     await queryParserAndAssertTimingsCorrect([
-      [Wed, 8, 0, Thur, 16, 0],
-      [Thur, 8, 0, Fri, 16, 0],
-      [Fri, 8, 0, Sat, 16, 0],
-      [Sat, 8, 0, Sun, 16, 0],
+      [Wed, 8, 0, Wed, 16, 0],
+      [Thur, 8, 0, Thur, 16, 0],
+      [Fri, 8, 0, Fri, 16, 0],
+      [Sat, 8, 0, Sat, 16, 0],
     ]);
   });
 
