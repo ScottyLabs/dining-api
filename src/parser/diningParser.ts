@@ -3,7 +3,7 @@ import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
 import locationOverwrites from "overwrites/locationOverwrites";
-import { ILocation } from "types";
+import { ILocation, ISpecial } from "types";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -16,12 +16,31 @@ export default class DiningParser {
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials";
   static readonly DINING_SOUPS_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
-  static readonly DINING_MENUS_BASE_URL =
-    "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/";
 
   constructor() {}
 
-  private getBasicLocationInfo(mainPageHTML: string): LocationBuilder[] {
+  async process(): Promise<ILocation[]> {
+    const locationBuilders =
+      await this.initializeLocationBuildersFromMainPage();
+
+    const [specials, soups] = await this.fetchSpecials();
+
+    for (const builder of locationBuilders) {
+      await builder.populateDetailedInfo();
+      builder.setSoup(soups);
+      builder.setSpecials(specials);
+      builder.overwriteLocation(locationOverwrites);
+    }
+
+    return locationBuilders.map((builder) => builder.build());
+  }
+
+  private async initializeLocationBuildersFromMainPage(): Promise<
+    LocationBuilder[]
+  > {
+    const mainPageHTML = await getHTMLResponse(
+      new URL(DiningParser.DINING_URL)
+    );
     const mainContainer = load(mainPageHTML)("div.conceptCards");
     if (mainContainer === undefined) {
       throw new Error("Unable to load page");
@@ -33,12 +52,10 @@ export default class DiningParser {
     return Array.from(linkHeaders).map((card) => new LocationBuilder(card));
   }
 
-  async process(): Promise<ILocation[]> {
-    const locationBuilders = this.getBasicLocationInfo(
-      await getHTMLResponse(new URL(DiningParser.DINING_URL))
-    );
-
-    const [specials, soups] = await Promise.all([
+  private async fetchSpecials(): Promise<
+    [Record<string, ISpecial[]>, Record<string, ISpecial[]>]
+  > {
+    return await Promise.all([
       retrieveSpecials(
         await getHTMLResponse(new URL(DiningParser.DINING_SPECIALS_URL))
       ),
@@ -46,14 +63,5 @@ export default class DiningParser {
         await getHTMLResponse(new URL(DiningParser.DINING_SOUPS_URL))
       ),
     ]);
-
-    for (const builder of locationBuilders) {
-      await builder.populateDetailedInfo(getHTMLResponse);
-      builder.setSoup(soups);
-      builder.setSpecials(specials);
-      builder.overwriteLocation(locationOverwrites);
-    }
-
-    return locationBuilders.map((builder) => builder.build());
   }
 }

@@ -27,9 +27,11 @@ export default class LocationBuilder {
 
   constructor(card: Element) {
     const link = load(card)("h3.name.detailsLink");
+    this.name = link.text().trim();
+
     const conceptId = link.attr("onclick")?.match(/Concept\/(\d+)/)?.[1];
     this.conceptId = conceptId !== undefined ? parseInt(conceptId) : undefined;
-    this.name = link.text().trim();
+
     this.shortDescription = load(card)("div.description").text().trim();
   }
   overwriteLocation(locationOverwrites: LocationOverwrites) {
@@ -59,17 +61,19 @@ export default class LocationBuilder {
     return { lat: parseFloat(latitude), lng: parseFloat(longitude) };
   }
 
-  async populateDetailedInfo(getHTML: typeof getHTMLResponse) {
+  async populateDetailedInfo() {
     const conceptURL = this.getConceptLink();
     if (!conceptURL) return;
-    const $ = load(await getHTML(conceptURL));
+
+    const $ = load(await getHTMLResponse(conceptURL));
     this.url = conceptURL.toString();
     this.description = $("div.description p").text().trim();
     this.menu = $("div.navItems > a#getMenu").attr("href");
-
     this.location = $("div.location a").text().trim();
-    const locationHref = $("div.location a").attr("href");
+    this.acceptsOnlineOrders =
+      $("div.navItems.orderOnline").toArray().length > 0;
 
+    const locationHref = $("div.location a").attr("href");
     if (locationHref !== undefined) {
       this.coordinates = this.convertMapsLinkToCoordinates(locationHref);
     }
@@ -78,8 +82,6 @@ export default class LocationBuilder {
     this.times = sortAndMergeTimeRanges(
       nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
     );
-    this.acceptsOnlineOrders =
-      $("div.navItems.orderOnline").toArray().length > 0;
   }
   getConceptLink() {
     if (this.conceptId === undefined) return undefined;
