@@ -26,7 +26,7 @@ test("the whole thing, including locationOverwrites", async () => {
     specialsFilePath: "html/specials.html",
     soupsFilePath: "html/soups.html",
     getConceptFilePath: (locationId: string) =>
-      ["92", "110", "113", "175"].includes(locationId)
+      ["92", "110", "113", "175", "108"].includes(locationId)
         ? `html/concepts/${locationId}.html`
         : "html/blank.html",
   });
@@ -113,11 +113,13 @@ describe("time edge cases", () => {
       [Mon]: "12:00 AM - 12:00 AM",
       [Tue]: "2:00 AM - 12:00 AM",
       [Wed]: "11:00 AM - 12:00 AM",
+      [Thur]: "6:00 PM - 12:00 AM",
     });
     await queryParserAndAssertTimingsCorrect([
       [Mon, 0, 0, Mon, 23, 59],
       [Tue, 2, 0, Tue, 23, 59],
       [Wed, 11, 0, Wed, 23, 59],
+      [Thur, 18, 0, Thur, 23, 59],
     ]);
   });
   test("same and different opening and closing times", async () => {

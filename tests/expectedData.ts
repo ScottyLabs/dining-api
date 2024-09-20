@@ -376,13 +376,243 @@ export const expectedLocationData = [
     conceptId: 108,
     name: "SCHATZ DINING ROOM",
     shortDescription: "All-you-care-to-eat residential dining hall",
-    description: "",
+    description:
+      "Schatz Dining Room is piloting all-you-care-to-eat lunchtime service for all community members, including undergraduate students.Schatz Dining Room offers campus's only all-you-care-to-eat residential dining room. Schatz serves breakfast, lunch and dinner, Monday - Friday, and brunch and dinner on the weekends. Breakfast and brunch offerings include cereal, fruit, egg dishes, breakfast meats, hot griddled items like pancakes and french toast, make-your-own waffles, and an avoiding gluten breakfast station and avoiding gluten options for lunch and dinner. Lunch and dinner include five stations serving a rotating menu of hot entrees, vegan and vegetarian options, soup and salad, made-to-order sandwiches, beverages and desserts. To make a reservation, please email schatzreservations@andrew.cmu.edu",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/108",
-    location: "",
+    location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: { lat: 40.44318, lng: -79.942498 },
     acceptsOnlineOrders: false,
-    times: [],
+    times: [
+      {
+        start: {
+          day: 0,
+          hour: 10,
+          minute: 30,
+        },
+        end: {
+          day: 0,
+          hour: 14,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 0,
+          hour: 16,
+          minute: 30,
+        },
+        end: {
+          day: 0,
+          hour: 20,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 1,
+          hour: 7,
+          minute: 30,
+        },
+        end: {
+          day: 1,
+          hour: 10,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 1,
+          hour: 11,
+          minute: 0,
+        },
+        end: {
+          day: 1,
+          hour: 14,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 1,
+          hour: 16,
+          minute: 30,
+        },
+        end: {
+          day: 1,
+          hour: 20,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 2,
+          hour: 7,
+          minute: 30,
+        },
+        end: {
+          day: 2,
+          hour: 10,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 2,
+          hour: 11,
+          minute: 0,
+        },
+        end: {
+          day: 2,
+          hour: 14,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 2,
+          hour: 16,
+          minute: 30,
+        },
+        end: {
+          day: 2,
+          hour: 20,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 3,
+          hour: 7,
+          minute: 30,
+        },
+        end: {
+          day: 3,
+          hour: 10,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 3,
+          hour: 11,
+          minute: 0,
+        },
+        end: {
+          day: 3,
+          hour: 14,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 3,
+          hour: 16,
+          minute: 30,
+        },
+        end: {
+          day: 3,
+          hour: 20,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 4,
+          hour: 7,
+          minute: 30,
+        },
+        end: {
+          day: 4,
+          hour: 10,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 4,
+          hour: 11,
+          minute: 0,
+        },
+        end: {
+          day: 4,
+          hour: 14,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 4,
+          hour: 16,
+          minute: 30,
+        },
+        end: {
+          day: 4,
+          hour: 20,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 5,
+          hour: 7,
+          minute: 30,
+        },
+        end: {
+          day: 5,
+          hour: 10,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 5,
+          hour: 11,
+          minute: 0,
+        },
+        end: {
+          day: 5,
+          hour: 14,
+          minute: 0,
+        },
+      },
+      {
+        start: {
+          day: 5,
+          hour: 16,
+          minute: 30,
+        },
+        end: {
+          day: 5,
+          hour: 20,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 6,
+          hour: 10,
+          minute: 30,
+        },
+        end: {
+          day: 6,
+          hour: 14,
+          minute: 30,
+        },
+      },
+      {
+        start: {
+          day: 6,
+          hour: 16,
+          minute: 30,
+        },
+        end: {
+          day: 6,
+          hour: 20,
+          minute: 30,
+        },
+      },
+    ],
     todaysSpecials: undefined,
     todaysSoups: undefined,
   },

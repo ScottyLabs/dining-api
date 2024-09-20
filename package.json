@@ -4,7 +4,7 @@
   "description": "Carnegie Mellon University Dining API",
   "main": "server.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "bun --hot run src/server.ts",
     "build": "bun build ./src/index.ts --outdir dist"
   },
