@@ -107,12 +107,9 @@ function getTimeRangesFromTimeRow(time: ITimeRowAttributes) {
   }
   const allRanges: ITimeRange[] = [];
   for (const range of time.times ?? []) {
-    if (range.end.hour === 0 && range.end.minute === 0) {
-      range.end.hour = 23;
-      range.end.minute = 59; // roll back from 12AM to 11:59 previous day
-    }
+    rollBack12AmEndTime(range);
 
-    const spillToNextDay =
+    const shouldSpillToNextDay =
       range.start.hour * 60 + range.start.minute >
       range.end.hour * 60 + range.end.minute;
 
@@ -123,11 +120,17 @@ function getTimeRangesFromTimeRow(time: ITimeRowAttributes) {
         minute: range.start.minute,
       },
       end: {
-        day: spillToNextDay ? getNextDay(time.day) : time.day,
+        day: shouldSpillToNextDay ? getNextDay(time.day) : time.day,
         hour: range.end.hour,
         minute: range.end.minute,
       },
     });
   }
   return allRanges;
+}
+function rollBack12AmEndTime(range: IParsedTimeRange) {
+  if (range.end.hour === 0 && range.end.minute === 0) {
+    range.end.hour = 23;
+    range.end.minute = 59;
+  }
 }

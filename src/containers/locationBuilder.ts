@@ -76,11 +76,7 @@ export default class LocationBuilder {
 
     const nextSevenDays = $("ul.schedule").find("li").toArray();
     this.times = sortAndMergeTimeRanges(
-      nextSevenDays.reduce<ITimeRange[]>(
-        (timeRanges, rowHTML) =>
-          timeRanges.concat(getTimeRangesFromString(rowHTML)),
-        []
-      )
+      nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
     );
     this.acceptsOnlineOrders =
       $("div.navItems.orderOnline").toArray().length > 0;
