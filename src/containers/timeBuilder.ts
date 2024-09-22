@@ -1,138 +1,136 @@
-import {
-  DayOfTheWeek,
-  determineTimeInfoType,
-  getNextDay,
-  TimeInfoType,
-} from "../utils/timeUtils";
-import { ITime } from "./locationBuilder";
-import ParsedTime, { ParsedTimeRange } from "./time/parsedTime";
-import ParsedTimeForDate, { ParsedTimeDate } from "./time/parsedTimeForDate";
-import ParsedTimeForDay from "./time/parsedTimeForDay";
+import { Element, load } from "cheerio";
+import { getNextDay } from "../utils/timeUtils";
+import { IParsedTimeRange } from "./time/parsedTime";
+import { IParsedTimeDate } from "./time/parsedTimeForDate";
+import { DayOfTheWeek, ITimeRange, TimeInfoType } from "types";
+import { parseToken } from "utils/parseTimeToken";
 
-interface TimeBuilderSchema {
+interface ITimeRowAttributes {
   day?: DayOfTheWeek;
-  date?: ParsedTimeDate;
+  date?: IParsedTimeDate;
   /** Multiple times in the same day (ex. https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/180) */
-  times?: ParsedTimeRange[];
+  times?: IParsedTimeRange[];
   closed?: boolean;
   twentyFour?: boolean;
 }
 
 /**
- * For building the location schedules/times data structure
+ *
+ * @param rowString ex. Monday, September 09,  7:30 AM - 10:00 AM, 11:00 AM - 2:00 PM, 4:30 PM - 8:30 PM
  */
-export default class TimeBuilder {
-  private times: TimeBuilderSchema[];
+export function getTimeRangesFromString(rowHTML: Element) {
+  let timeRowInfo: ITimeRowAttributes = getTimeAttributesFromRow(rowHTML);
+  timeRowInfo = resolveAttributeConflicts(timeRowInfo);
+  return getTimeRangesFromTimeRow(timeRowInfo);
+}
 
-  constructor() {
-    this.times = [];
+function getTimeAttributesFromRow(rowHTML: Element) {
+  const { day, date, timeSlots } = tokenizeTimeRow(rowHTML);
+  return getTimeInfoWithRawAttributes([day, date, ...timeSlots]);
+}
+
+function tokenizeTimeRow(rowHTML: Element) {
+  const $ = load(rowHTML);
+  let day = $("strong").text();
+  const dataStr = $.text().replace(/\s\s+/g, " ").replace(day, "").trim();
+  let [date, time] = dataStr.split(/,(.+)/);
+
+  day = (day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()).trim();
+  date = (date.charAt(0).toUpperCase() + date.slice(1).toLowerCase()).trim();
+  time = time.toUpperCase().trim();
+  const timeSlots = time.split(/[,;]/).map((slot) => slot.trim());
+  return { day, date, timeSlots };
+}
+
+function getTimeInfoWithRawAttributes(tokens: string[]) {
+  const timeInfo: ITimeRowAttributes = {};
+
+  for (const token of tokens) {
+    try {
+      const { type: timeInfoType, value } = parseToken(token);
+      switch (timeInfoType) {
+        case TimeInfoType.DAY:
+          timeInfo.day = value;
+          break;
+        case TimeInfoType.DATE:
+          timeInfo.date = value;
+          break;
+        case TimeInfoType.TIME:
+          if (timeInfo.times !== undefined) {
+            timeInfo.times.push(value);
+          } else {
+            timeInfo.times = [value];
+          }
+          break;
+        case TimeInfoType.CLOSED:
+          timeInfo.closed = true;
+          break;
+        case TimeInfoType.TWENTYFOURHOURS:
+          timeInfo.twentyFour = true;
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+      continue;
+    }
   }
+  return timeInfo;
+}
 
-  private resolveConflicts(input: TimeBuilderSchema): TimeBuilderSchema {
-    if (input.closed) {
-      return {
-        day: input.day,
-        date: input.date,
-        closed: input.closed,
-      };
-    }
-    if (input.times && input.times.length > 0) {
-      return {
-        day: input.day,
-        date: input.date,
-        times: input.times,
-      };
-    }
+function resolveAttributeConflicts(
+  input: ITimeRowAttributes
+): ITimeRowAttributes {
+  if (input.closed) {
     return {
       day: input.day,
       date: input.date,
-      times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
+      closed: input.closed,
     };
   }
-
-  addSchedule(timeArray: Array<string>): TimeBuilder {
-    const timeFields: TimeBuilderSchema = {};
-    for (const token of timeArray) {
-      const timeInfoType = determineTimeInfoType(token);
-      try {
-        switch (timeInfoType) {
-          case TimeInfoType.DAY:
-            timeFields.day = new ParsedTimeForDay(token).parse().value;
-            break;
-          case TimeInfoType.DATE:
-            timeFields.date = new ParsedTimeForDate(token).parse().value;
-            break;
-          case TimeInfoType.TIME:
-            const timeRange = new ParsedTime(token).parse().value;
-            if (Array.isArray(timeFields.times)) {
-              timeFields.times.push(timeRange);
-            } else {
-              timeFields.times = [timeRange];
-            }
-            break;
-          case TimeInfoType.CLOSED:
-            timeFields.closed = true;
-            break;
-          case TimeInfoType.TWENTYFOURHOURS:
-            timeFields.twentyFour = true;
-            break;
-        }
-      } catch (err) {
-        console.error(err);
-        continue;
-      }
-    }
-    const normalizedSchedule = this.resolveConflicts(timeFields);
-    this.times.push(normalizedSchedule);
-
-    return this;
+  if (input.times && input.times.length > 0) {
+    return {
+      day: input.day,
+      date: input.date,
+      times: input.times,
+    };
   }
+  return {
+    day: input.day,
+    date: input.date,
+    times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
+  };
+}
 
-  private convertTimeRangeToTimeSchema(
-    time: TimeBuilderSchema,
-    range: ParsedTimeRange
-  ) {
-    if (time.day === undefined) {
-      throw new Error("Cannot convert when day is not set");
-    }
-    const spillToNextDay =
+function getTimeRangesFromTimeRow(time: ITimeRowAttributes) {
+  if (time.day === undefined) {
+    throw new Error("Cannot convert when day is not set");
+  }
+  const allRanges: ITimeRange[] = [];
+  for (const range of time.times ?? []) {
+    rollBack12AmEndTime(range);
+
+    const shouldSpillToNextDay =
       range.start.hour * 60 + range.start.minute >
       range.end.hour * 60 + range.end.minute;
 
-    return {
+    allRanges.push({
       start: {
         day: time.day,
         hour: range.start.hour,
         minute: range.start.minute,
       },
       end: {
-        day: spillToNextDay ? getNextDay(time.day) : time.day,
+        day: shouldSpillToNextDay ? getNextDay(time.day) : time.day,
         hour: range.end.hour,
         minute: range.end.minute,
       },
-    };
-  }
-
-  build() {
-    const result: ITime[] = [];
-    for (const time of this.times) {
-      if (Array.isArray(time.times)) {
-        result.push(
-          ...time.times.map((current) => {
-            return this.convertTimeRangeToTimeSchema(time, current);
-          })
-        );
-      }
-    }
-    result.sort((timeA, timeB) => {
-      const startA = timeA.start;
-      const startB = timeB.start;
-
-      if (startA.day !== startB.day) return startA.day - startB.day;
-      if (startA.hour !== startB.hour) return startA.hour - startB.hour;
-      return startA.minute - startB.minute;
     });
-
-    return result;
+  }
+  return allRanges;
+}
+function rollBack12AmEndTime(range: IParsedTimeRange) {
+  if (range.end.hour === 0 && range.end.minute === 0) {
+    range.end.hour = 23;
+    range.end.minute = 59;
   }
 }

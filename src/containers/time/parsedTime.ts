@@ -5,7 +5,7 @@ interface Time {
   minute: number;
 }
 
-export interface ParsedTimeRange {
+export interface IParsedTimeRange {
   start: Time;
   end: Time;
 }
@@ -15,7 +15,7 @@ export interface ParsedTimeRange {
  * structure
  */
 export default class ParsedTime extends ParsedTimeBase {
-  declare value: ParsedTimeRange;
+  declare value: IParsedTimeRange;
 
   private parseTime(timeStr: string): Time {
     const normalizedStr = timeStr.trim().toLowerCase();
