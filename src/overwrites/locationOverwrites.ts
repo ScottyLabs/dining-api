@@ -1,6 +1,6 @@
-import { ICoordinate } from "containers/locationBuilder";
+import { ICoordinate } from "types";
 
-type LocationOverwrites = {
+export type LocationOverwrites = {
   [conceptName: string]: ICoordinate;
 };
 

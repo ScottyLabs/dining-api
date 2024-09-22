@@ -4,4 +4,5 @@ module.exports = {
   transform: {
     "^.+.tsx?$": ["ts-jest", { diagnostics: { warnOnly: true } }],
   },
+  moduleDirectories: ['node_modules', 'src']
 };

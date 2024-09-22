@@ -4,7 +4,10 @@ const wait = (ms: number) => {
   return new Promise((re) => setTimeout(re, ms));
 };
 
-export async function getHTMLResponse(url: URL, retriesLeft = 4): Promise<any> {
+export async function getHTMLResponse(
+  url: URL,
+  retriesLeft = 4
+): Promise<string> {
   try {
     const response = await axios.get(url.toString());
     return response.data;

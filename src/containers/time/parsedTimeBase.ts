@@ -1,5 +1,3 @@
-import type { TimeInfoType } from "../../utils/timeUtils";
-
 /**
  * Base class for parsing time from a string
  */
