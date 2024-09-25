@@ -67,7 +67,11 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
 // Cache TTL: 3 hours
 const interval = 1000 * 60 * 60 * 3;
 setInterval(() => {
-  reload().catch(console.error);
+  const today = new Date();
+  const dayOfWeek = today.getDay();
+  if (dayOfWeek === 6) {
+    reload().catch(console.error);
+  }
 }, interval);
 
 reload().then(() => {
