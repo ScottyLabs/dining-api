@@ -10,7 +10,9 @@ export async function getHTMLResponse(
   retriesLeft = 4
 ): Promise<string> {
   try {
+    console.log(`Scraping ${url}`);
     const response = await axios.get(url.toString());
+    console.log({"message": `Scraped ${url}`, "html": response.data, "url": url.toString()});
     return response.data;
   } catch (err) {
     if (!IS_TESTING) console.error(err);

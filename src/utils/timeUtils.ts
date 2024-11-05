@@ -50,6 +50,5 @@ export function sortAndMergeTimeRanges(timeRanges: ITimeRange[]) {
       mergedRanges.push(timeRange);
     }
   }
-  console.log(timeRanges, mergedRanges);
   return mergedRanges;
 }
