@@ -7,7 +7,8 @@ const PORT = process.env.PORT ?? 5010;
 let cachedLocations: ILocation[];
 
 async function reload(): Promise<void> {
-  console.log("Loading Dining API...");
+  const now = new Date();
+  console.log(`Reloading Dining API: ${now}`);
   const parser = new DiningParser();
   const locations = await parser.process();
   if (
@@ -67,11 +68,7 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
 // Cache TTL: 3 hours
 const interval = 1000 * 60 * 60 * 3;
 setInterval(() => {
-  const today = new Date();
-  const dayOfWeek = today.getDay();
-  if (dayOfWeek === 6) {
-    reload().catch(console.error);
-  }
+  reload().catch(console.error);
 }, interval);
 
 reload().then(() => {
