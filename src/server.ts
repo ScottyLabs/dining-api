@@ -65,10 +65,18 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   return { locations: result };
 });
 
-// Cache TTL: 3 hours
-const interval = 1000 * 60 * 60 * 3;
+// Check the time every 10 minutes and reload if between 11:45 and 11:55PM.
+// Doing this avoids problems with daylight saving time.
+// We choose this range of times to avoid "edge cases"
+// (for example, we don't want to start scraping at 11:59:59).
+const interval = 1000 * 60 * 10;
 setInterval(() => {
-  reload().catch(console.error);
+  const today = new Date();
+  const hr = today.getHours();
+  const min = today.getMinutes();
+  if (hr == 23 && 45 <= min && min < 55) {
+    reload().catch(console.error);
+  }
 }, interval);
 
 reload().then(() => {
