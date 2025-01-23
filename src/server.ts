@@ -65,28 +65,13 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   return { locations: result };
 });
 
-// Check the time every 10 minutes and reload if between 11:45 and 11:55PM.
-// Doing this avoids problems with daylight saving time.
-// We choose this range of times to avoid "edge cases"
-// (for example, we don't want to start scraping at 11:59:59).
+// Update the cache every 10 minutes
 const interval = 1000 * 60 * 10;
 setInterval(() => {
-  // ensure we get the correct time zone
-  // TODO: can anyone find a better solution to this...
-  const timeStr: String = new Date().toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: false,
-    timeZone: "America/New_York",
-  }); // this returns a string [hours]:[minutes]
-  const hm = timeStr.split(":").map((x) => parseInt(x));
-  const hr = hm[0];
-  const min = hm[1];
-  if (hr == 23 && 45 <= min && min < 55) {
-    reload().catch(console.error);
-  }
+  reload().catch(console.error);
 }, interval);
 
+// Initial load and start the server
 reload().then(() => {
   app.listen(PORT);
 
