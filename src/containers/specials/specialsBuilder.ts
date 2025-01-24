@@ -25,25 +25,23 @@ export default class SpecialsBuilder {
 
 export async function retrieveSpecials(htmlContent: string) {
   const $ = load(htmlContent);
-  const cards = $("div.card").toArray();
 
   const locationSpecialMap: Record<string, ISpecial[]> = {};
 
-  for (const card of cards) {
-    const name = load(card)("h3.name").text().trim();
-    const specialsBuilder = new SpecialsBuilder();
+  const specialsSections = $("h2:contains('Today's Specials'), h2:contains('Today's Soups')")
+    .nextUntil("h2")
+    .find("li");
 
-    const specialsText = load(card)("div.specialDetails").text().trim();
-    const specialsArray = specialsText.split(/(?<=\n)\s*(?=\S)/);
+  specialsSections.each((_, element) => {
+    const name = $(element).closest("h2").text().trim();
+    const specialsBuilder = locationSpecialMap[name] || new SpecialsBuilder();
 
-    for (let i = 0; i < specialsArray.length; i += 2) {
-      const title = specialsArray[i].trim();
-      const description = specialsArray[i + 1]?.trim() || "";
-      specialsBuilder.addSpecial(title, description);
-    }
+    const title = $(element).find("strong").text().trim();
+    const description = $(element).text().replace(title, "").trim();
 
+    specialsBuilder.addSpecial(title, description);
     locationSpecialMap[name] = specialsBuilder.build();
-  }
+  });
 
   return locationSpecialMap;
 }
