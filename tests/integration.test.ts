@@ -1,7 +1,7 @@
 import DiningParser from "../src/parser/diningParser";
 
 import { expectedLocationData } from "./expectedData";
-import { mockAxiosGETWithFilePaths } from "./mockAxios";
+import { mockAxiosGETMethodWithFilePaths } from "./mockAxios";
 import {
   setUpTimingTest,
   queryParserAndAssertTimingsCorrect,
@@ -19,9 +19,8 @@ jest.mock("../src/config", () => ({
   AXIOS_RETRY_INTERVAL_MS: 0,
   IS_TESTING: true,
 }));
-
 test("the whole thing, including locationOverwrites", async () => {
-  mockAxiosGETWithFilePaths({
+  mockAxiosGETMethodWithFilePaths({
     conceptListFilePath: "html/listconcepts.html",
     specialsFilePath: "html/specials.html",
     soupsFilePath: "html/soups.html",
@@ -31,13 +30,44 @@ test("the whole thing, including locationOverwrites", async () => {
         : "html/blank.html",
   });
   const parser = new DiningParser();
-  expect(await parser.process()).toEqual(expectedLocationData);
+  expect(await parser.process()).toStrictEqual(expectedLocationData);
+});
+test("specials for The Exchange", async () => {
+  mockAxiosGETMethodWithFilePaths({
+    conceptListFilePath: "html/listconcepts.html",
+    specialsFilePath: "html/specials-for-92.html",
+    soupsFilePath: "html/soups.html",
+    getConceptFilePath: (locationId: string) =>
+      ["92", "110", "113", "175", "108"].includes(locationId)
+        ? `html/concepts/${locationId}.html`
+        : "html/blank.html",
+  });
+  const parser = new DiningParser();
+  expect((await parser.process()).map((data) => data.todaysSpecials)).toEqual(
+    expect.arrayContaining([
+      [
+        {
+          title: "BYOBurger with Cole Slaw and Fries",
+          description: "We Build it Just the way you LOVE it",
+        },
+        {
+          title: "Sopa de Fideo Pasta",
+          description:
+            "Linguine Pasta Browned and Finished with a Salsa Style Tomato Sauce VEGETARIAN",
+        },
+        {
+          title: "BBQ Chicken with Fries and Cole Slaw",
+          description: "YUM YUM YUM!!!",
+        },
+      ],
+    ])
+  );
 });
 
 test(
   "parser throws on repeated axios error",
   async () => {
-    mockAxiosGETWithFilePaths({});
+    mockAxiosGETMethodWithFilePaths({});
     const parser = new DiningParser();
 
     await expect(async () => {

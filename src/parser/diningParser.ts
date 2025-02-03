@@ -32,7 +32,9 @@ export default class DiningParser {
       builder.overwriteLocation(locationOverwrites);
     }
 
-    return locationBuilders.map((builder) => builder.build());
+    return locationBuilders
+      .map((builder) => builder.build())
+      .filter((data) => !!data);
   }
 
   private async initializeLocationBuildersFromMainPage(): Promise<
@@ -53,7 +55,7 @@ export default class DiningParser {
   }
 
   private async fetchSpecials(): Promise<
-    [Record<string, ISpecial[]>, Record<string, ISpecial[]>]
+    [Record<number, ISpecial[]>, Record<number, ISpecial[]>]
   > {
     return await Promise.all([
       retrieveSpecials(

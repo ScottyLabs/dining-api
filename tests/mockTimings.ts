@@ -1,5 +1,5 @@
 import DiningParser from "../src/parser/diningParser";
-import { mockAxiosGET } from "./mockAxios";
+import { mockAxiosGETMethod } from "./mockAxios";
 import { getFileContent } from "./utils";
 
 enum DayOfTheWeek {
@@ -30,7 +30,7 @@ export async function queryParserAndAssertTimingsCorrect(
   const parser = new DiningParser();
   const result = await parser.process();
   expect(result.length).toBe(1);
-  expect(result[0].times).toEqual(
+  expect(result[0].times).toStrictEqual(
     times.map((time) => {
       return {
         start: {
@@ -66,17 +66,17 @@ export function setUpTimingTest(
   timeRows: Partial<Record<DayOfTheWeek, string>>
 ) {
   const fillInHTMLWithTimes = (html: string) => {
-    // could be in a for loop, open to changes
-    html = html.replace("[MONDAY]", timeRows[Mon] ?? "CLOSED");
-    html = html.replace("[TUESDAY]", timeRows[Tue] ?? "CLOSED");
-    html = html.replace("[WEDNESDAY]", timeRows[Wed] ?? "CLOSED");
-    html = html.replace("[THURSDAY]", timeRows[Thur] ?? "CLOSED");
-    html = html.replace("[FRIDAY]", timeRows[Fri] ?? "CLOSED");
-    html = html.replace("[SATURDAY]", timeRows[Sat] ?? "CLOSED");
-    html = html.replace("[SUNDAY]", timeRows[Sun] ?? "CLOSED");
+    html = html
+      .replace("[MONDAY]", timeRows[Mon] ?? "CLOSED")
+      .replace("[TUESDAY]", timeRows[Tue] ?? "CLOSED")
+      .replace("[WEDNESDAY]", timeRows[Wed] ?? "CLOSED")
+      .replace("[THURSDAY]", timeRows[Thur] ?? "CLOSED")
+      .replace("[FRIDAY]", timeRows[Fri] ?? "CLOSED")
+      .replace("[SATURDAY]", timeRows[Sat] ?? "CLOSED")
+      .replace("[SUNDAY]", timeRows[Sun] ?? "CLOSED");
     return html;
   };
-  mockAxiosGET({
+  mockAxiosGETMethod({
     conceptListHTML: getFileContent("html/listconcepts-just-113.html"),
     soupsHTML: getFileContent("html/blank.html"),
     specialsHTML: getFileContent("html/blank.html"),

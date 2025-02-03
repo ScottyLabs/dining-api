@@ -1,4 +1,6 @@
-import { Element, load } from "cheerio";
+import { load } from "cheerio";
+import type { Element } from "domhandler";
+
 import { getHTMLResponse } from "utils/requestUtils";
 import { LocationOverwrites } from "overwrites/locationOverwrites";
 import { getTimeRangesFromString } from "./timeBuilder";
@@ -43,13 +45,16 @@ export default class LocationBuilder {
     }
   }
   setSoup(soupList: Record<string, ISpecial[]>) {
-    if (this.name && soupList[this.name] !== undefined) {
-      this.soups = soupList[this.name];
+    if (
+      this.conceptId !== undefined &&
+      soupList[this.conceptId] !== undefined
+    ) {
+      this.soups = soupList[this.conceptId];
     }
   }
   setSpecials(specialList: Record<string, ISpecial[]>) {
-    if (this.name && specialList[this.name] !== undefined) {
-      this.specials = specialList[this.name];
+    if (this.conceptId && specialList[this.conceptId] !== undefined) {
+      this.specials = specialList[this.conceptId];
     }
   }
   convertMapsLinkToCoordinates(link: string) {
@@ -80,7 +85,7 @@ export default class LocationBuilder {
 
     const nextSevenDays = $("ul.schedule").find("li").toArray();
     this.times = sortAndMergeTimeRanges(
-      nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
+            nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
     );
   }
   getConceptLink() {
@@ -100,7 +105,7 @@ export default class LocationBuilder {
       throw Error(
         "Didn't finish configuring location before building metadata!"
       );
-      // All fetches were good - yet we have missing data. This is a problem.
+            // All fetches were good - yet we have missing data. This is a problem.
     }
 
     return {
