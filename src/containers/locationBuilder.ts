@@ -85,7 +85,7 @@ export default class LocationBuilder {
 
     const nextSevenDays = $("ul.schedule").find("li").toArray();
     this.times = sortAndMergeTimeRanges(
-            nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
+      nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
     );
   }
   getConceptLink() {
@@ -105,7 +105,7 @@ export default class LocationBuilder {
       throw Error(
         "Didn't finish configuring location before building metadata!"
       );
-            // All fetches were good - yet we have missing data. This is a problem.
+      // All fetches were good - yet we have missing data. This is a problem.
     }
 
     return {

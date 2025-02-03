@@ -11,7 +11,7 @@ export default class SpecialsBuilder {
   }
 
   addSpecial(title: string, description: string): SpecialsBuilder {
-    if (title.length === 0) return this;
+    if (title.length === 0) return this; // if a special doesn't have a title, it's probably not supposed to be there
     this.specials.push({
       title,
       description,
