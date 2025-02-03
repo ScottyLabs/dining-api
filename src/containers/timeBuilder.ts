@@ -1,4 +1,6 @@
-import { Element, load } from "cheerio";
+import { load } from "cheerio";
+import type { Element } from "domhandler";
+
 import { getNextDay } from "../utils/timeUtils";
 import { IParsedTimeRange } from "./time/parsedTime";
 import { IParsedTimeDate } from "./time/parsedTimeForDate";

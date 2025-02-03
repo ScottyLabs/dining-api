@@ -32,6 +32,10 @@ Then, you can run the server with `bun start` and it should work! You can also u
 
 Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
 
+## Under the hood
+
+We get the entire list of locations from `DINING_URL`, fetch location specifics under their corresponding `CONCEPT_BASE_LINK`, and retrieve soups and specials from `DINING_SOUPS_URL` and `DINING_SPECIALS_URL`, respectively. See the `process()` method in `diningParser.ts` for more details.
+
 ## Before submitting a PR
 
-- Make sure all tests pass with `bun run test` or `bun run test --watch` for watch mode.
+- Make sure all tests pass with `bun run test` or `bun run test --watch` for watch mode. (NOTE! `bun test` does something different and does NOT work!)

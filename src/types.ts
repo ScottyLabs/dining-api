@@ -14,7 +14,7 @@ export interface ILocation {
 }
 export interface ISpecial {
   title: string;
-  description?: string;
+  description: string;
 }
 
 export interface ITimeMoment {

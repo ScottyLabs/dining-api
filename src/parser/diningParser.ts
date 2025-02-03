@@ -53,7 +53,7 @@ export default class DiningParser {
   }
 
   private async fetchSpecials(): Promise<
-    [Record<string, ISpecial[]>, Record<string, ISpecial[]>]
+    [Record<number, ISpecial[]>, Record<number, ISpecial[]>]
   > {
     return await Promise.all([
       retrieveSpecials(
