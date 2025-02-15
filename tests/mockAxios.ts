@@ -52,7 +52,7 @@ export function mockAxiosGETMethodWithFilePaths({
   conceptListFilePath?: string;
   specialsFilePath?: string;
   soupsFilePath?: string;
-  getConceptFilePath?: (locationId: string) => string;
+  getConceptFilePath?: (conceptId: string) => string;
 }) {
   mockAxiosGETMethod({
     conceptListHTML: getFileContent(conceptListFilePath),

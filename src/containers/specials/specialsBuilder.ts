@@ -32,15 +32,15 @@ export async function retrieveSpecials(
 
   const specialCards = $(".specialsList>.card");
   for (const card of specialCards) {
-    const locationId = parseInt(
+    const conceptId = parseInt(
       $(card).find(".detailsLink").attr("onclick")?.split("/")[1] ?? ""
     );
-    if (isNaN(locationId)) {
-      console.error("Failed to parse out locationId of card", $(card).html());
+    if (isNaN(conceptId)) {
+      console.error("Failed to parse out conceptId of card", $(card).html());
       continue;
     }
     const specialBuilder =
-      locationSpecialMap[locationId] || new SpecialsBuilder(); // just in case two cards have the same corresponding id... you never know
+      locationSpecialMap[conceptId] || new SpecialsBuilder(); // just in case two cards have the same corresponding id... you never know
 
     const specials = $(card).find(".specialDetails>ul>li");
     for (const special of specials) {
@@ -52,13 +52,13 @@ export async function retrieveSpecials(
         description.replace(/\s+/g, " ")
       );
     }
-    locationSpecialMap[locationId] = specialBuilder;
+    locationSpecialMap[conceptId] = specialBuilder;
   }
 
   return Object.entries(locationSpecialMap).reduce(
-    (acc, [locationId, specialsBuilder]) => ({
+    (acc, [conceptId, specialsBuilder]) => ({
       ...acc,
-      [parseInt(locationId)]: specialsBuilder.build(),
+      [parseInt(conceptId)]: specialsBuilder.build(),
     }),
     {}
   );

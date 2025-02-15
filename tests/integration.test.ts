@@ -24,9 +24,9 @@ test("the whole thing, including locationOverwrites", async () => {
     conceptListFilePath: "html/listconcepts.html",
     specialsFilePath: "html/specials.html",
     soupsFilePath: "html/soups.html",
-    getConceptFilePath: (locationId: string) =>
-      ["92", "110", "113", "175", "108"].includes(locationId)
-        ? `html/concepts/${locationId}.html`
+    getConceptFilePath: (conceptId: string) =>
+      ["92", "110", "113", "175", "108"].includes(conceptId)
+        ? `html/concepts/${conceptId}.html`
         : "html/blank.html",
   });
   const parser = new DiningParser();
@@ -37,9 +37,9 @@ test("specials for The Exchange", async () => {
     conceptListFilePath: "html/listconcepts.html",
     specialsFilePath: "html/specials-for-92.html",
     soupsFilePath: "html/soups.html",
-    getConceptFilePath: (locationId: string) =>
-      ["92", "110", "113", "175", "108"].includes(locationId)
-        ? `html/concepts/${locationId}.html`
+    getConceptFilePath: (conceptId: string) =>
+      ["92", "110", "113", "175", "108"].includes(conceptId)
+        ? `html/concepts/${conceptId}.html`
         : "html/blank.html",
   });
   const parser = new DiningParser();
