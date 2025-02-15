@@ -14,7 +14,7 @@ const LOCATION_URL_PREFIX =
  *
  * @param param0 Anything property that is undefined (or returns undefined) will effectively simulate a 404 page
  */
-export function mockAxiosGET({
+export function mockAxiosGETMethod({
   conceptListHTML,
   specialsHTML,
   soupsHTML,
@@ -43,7 +43,7 @@ export function mockAxiosGET({
  *
  * @param param0 Any file path that is not provided will make the corresponding GET call error out
  */
-export function mockAxiosGETWithFilePaths({
+export function mockAxiosGETMethodWithFilePaths({
   conceptListFilePath,
   specialsFilePath,
   soupsFilePath,
@@ -52,9 +52,9 @@ export function mockAxiosGETWithFilePaths({
   conceptListFilePath?: string;
   specialsFilePath?: string;
   soupsFilePath?: string;
-  getConceptFilePath?: (locationId: string) => string;
+  getConceptFilePath?: (conceptId: string) => string;
 }) {
-  mockAxiosGET({
+  mockAxiosGETMethod({
     conceptListHTML: getFileContent(conceptListFilePath),
     specialsHTML: getFileContent(specialsFilePath),
     soupsHTML: getFileContent(soupsFilePath),

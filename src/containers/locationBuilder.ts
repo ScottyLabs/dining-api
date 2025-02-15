@@ -1,4 +1,6 @@
-import { Element, load } from "cheerio";
+import { load } from "cheerio";
+import type { Element } from "domhandler";
+
 import { getHTMLResponse } from "utils/requestUtils";
 import { LocationOverwrites } from "overwrites/locationOverwrites";
 import { getTimeRangesFromString } from "./timeBuilder";
@@ -43,13 +45,16 @@ export default class LocationBuilder {
     }
   }
   setSoup(soupList: Record<string, ISpecial[]>) {
-    if (this.name && soupList[this.name] !== undefined) {
-      this.soups = soupList[this.name];
+    if (
+      this.conceptId !== undefined &&
+      soupList[this.conceptId] !== undefined
+    ) {
+      this.soups = soupList[this.conceptId];
     }
   }
   setSpecials(specialList: Record<string, ISpecial[]>) {
-    if (this.name && specialList[this.name] !== undefined) {
-      this.specials = specialList[this.name];
+    if (this.conceptId && specialList[this.conceptId] !== undefined) {
+      this.specials = specialList[this.conceptId];
     }
   }
   convertMapsLinkToCoordinates(link: string) {
