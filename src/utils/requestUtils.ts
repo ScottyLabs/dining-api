@@ -33,7 +33,11 @@ export default class Scraper {
         await wait(10000);
       }
       const response = await this.page!.content();
-      console.log({"message": `Scraped ${url}`, "html": response, "url": url.toString()});
+      console.log({
+        message: `Scraped ${url}`,
+        html: response,
+        url: url.toString(),
+      });
       return response;
     } catch (err) {
       if (!IS_TESTING) console.error(err);
