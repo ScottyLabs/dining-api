@@ -1,7 +1,6 @@
+import Scraper from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
-
-import { getHTMLResponse } from "utils/requestUtils";
 import { LocationOverwrites } from "overwrites/locationOverwrites";
 import { getTimeRangesFromString } from "./timeBuilder";
 import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
@@ -26,8 +25,9 @@ export default class LocationBuilder {
   private times?: ITimeRange[];
   private specials?: ISpecial[];
   private soups?: ISpecial[];
+  private scraper: Scraper;
 
-  constructor(card: Element) {
+  constructor(card: Element, scraper: Scraper) {
     const link = load(card)("h3.name.detailsLink");
     this.name = link.text().trim();
 
@@ -35,6 +35,7 @@ export default class LocationBuilder {
     this.conceptId = conceptId !== undefined ? parseInt(conceptId) : undefined;
 
     this.shortDescription = load(card)("div.description").text().trim();
+    this.scraper = scraper;
   }
   overwriteLocation(locationOverwrites: LocationOverwrites) {
     if (
@@ -70,7 +71,7 @@ export default class LocationBuilder {
     const conceptURL = this.getConceptLink();
     if (!conceptURL) return;
 
-    const $ = load(await getHTMLResponse(conceptURL));
+    const $ = load(await this.scraper.getHTML(conceptURL));
     this.url = conceptURL.toString();
     this.description = $("div.description p").text().trim();
     this.menu = $("div.navItems > a#getMenu").attr("href");
