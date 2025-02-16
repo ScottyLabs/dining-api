@@ -27,14 +27,16 @@ Now install the API's dependencies by 'cd'-ing into the root of the repository a
 bun install
 ```
 
-Then, you can run the server with `bun start` and it should work! You can also use
-`bun run start` since `bun start` is its shorthand version.
+Then, you can run the server with `bun dev` and it should work! You can also use
+`bun run dev` since `bun dev` is its shorthand version.
 
 Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
 
 ## Under the hood
 
 We get the entire list of locations from `DINING_URL`, fetch location specifics under their corresponding `CONCEPT_BASE_LINK`, and retrieve soups and specials from `DINING_SOUPS_URL` and `DINING_SPECIALS_URL`, respectively. See the `process()` method in `diningParser.ts` for more details.
+
+Instead of using a naive `fetch`, we use puppeteer to simulate a browser page and wait a generous amount of time before scraping the data from each page.
 
 ## Before submitting a PR
 

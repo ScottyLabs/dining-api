@@ -27,7 +27,7 @@ export default class Scraper {
     try {
       console.log(`Scraping ${url}`);
       await this.page!.goto(url.toString());
-      if (IS_TESTING) {
+      if (IS_TESTING || process.env.DEV) {
         await wait(1000);
       } else {
         await wait(10000);
