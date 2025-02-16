@@ -11,7 +11,7 @@ export default class Scraper {
   private initialized: Boolean = false;
 
   async initialize() {
-    this.browser = await puppeteer.launch();
+    this.browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     this.page = await this.browser.newPage();
     this.initialized = true;
   }
