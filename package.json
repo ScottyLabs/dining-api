@@ -5,8 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest --coverage",
-    "start": "bun --hot run src/server.ts",
-    "build": "bun build ./src/index.ts --outdir dist"
+    "start": "tsc && bun --hot run src/server.ts",
+    "build": "tsc && bun build ./src/index.ts --outdir dist"
   },
   "repository": {
     "type": "git",
