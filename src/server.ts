@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
+import Scraper from "./utils/requestUtils";
 import { ILocation } from "types";
 
 const PORT = process.env.PORT ?? 5010;
@@ -9,8 +10,11 @@ let cachedLocations: ILocation[];
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
-  const parser = new DiningParser();
+  const scraper = new Scraper();
+  await scraper.initialize();
+  const parser = new DiningParser(scraper);
   const locations = await parser.process();
+  await scraper.close();
   if (
     cachedLocations !== undefined &&
     locations.length < cachedLocations.length - 1
