@@ -1,7 +1,5 @@
 FROM node:alpine
 
-FROM oven/bun:latest
-
 WORKDIR /runtime
 COPY . /runtime
 
