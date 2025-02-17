@@ -1,6 +1,6 @@
 import puppeteer, { Browser, Page } from "puppeteer";
 import { AXIOS_RETRY_INTERVAL_MS, IS_TESTING } from "../config";
-
+import axios from "axios";
 const wait = (ms: number) => {
   return new Promise((re) => setTimeout(re, ms));
 };
@@ -21,23 +21,39 @@ export default class Scraper {
   }
 
   async getHTML(url: URL, retriesLeft = 4): Promise<string> {
-    if (!this.initialized) {
+    if (!this.initialized || !this.page) {
       throw new Error("Scraper not initialized");
     }
     try {
-      console.log(`Scraping ${url}`);
-      await this.page!.goto(url.toString());
-      if (IS_TESTING || process.env.DEV) {
-        await wait(1000);
-      } else {
-        await wait(10000);
-      }
-      const response = await this.page!.content();
-      console.log({
-        message: `Scraped ${url}`,
-        html: response,
-        url: url.toString(),
+      // console.log(`Scraping ${url}`);
+      // await this.page.setViewport({ width: 1280, height: 720 });
+
+      await this.page!.goto(url.toString(), {
+        waitUntil: ["domcontentloaded", "networkidle2"],
       });
+      // const res = (await axios.get(url.toString())).data;
+      // await wait(1000);
+      // return res;
+      // if (IS_TESTING || process.env.DEV) {
+      //   await wait(1000);
+      // } else {
+      //   await wait(10000);
+      // }
+      // console.log({
+      //   message: `Scraped ${url}`,
+      //   html: response,
+      //   url: url.toString(),
+      // });
+      const now = new Date();
+      // await this.page.screenshot({
+      //   path: "screens/screenshot" + new Date() + ".jpg",
+      // });
+      // await wait(20000);
+      // await this.page.screenshot({
+      //   path: "screens/screenshot" + new Date() + "_wait.jpg",
+      // });
+      const response = await this.page!.content();
+
       return response;
     } catch (err) {
       if (!IS_TESTING) console.error(err);

@@ -3,15 +3,43 @@ import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
 import Scraper from "./utils/requestUtils";
 import { ILocation } from "types";
+import { load } from "cheerio";
+import { getTimeRangesFromString } from "containers/timeBuilder";
+import { sortAndMergeTimeRanges } from "utils/timeUtils";
 
 const PORT = process.env.PORT ?? 5010;
 let cachedLocations: ILocation[];
 
+async function bash() {
+  let fails = 0;
+  const scraper = new Scraper();
+  await scraper.initialize();
+
+  for (let i = 0; true; i++) {
+    const html = await scraper.getHTML(
+      new URL(
+        "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/175"
+      )
+    );
+    const $ = load(html);
+    const nextSevenDays = $("ul.schedule").find("li").toArray();
+
+    const times = sortAndMergeTimeRanges(
+      nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
+    );
+    if (times.length != 5) {
+      fails++;
+    }
+    console.log(fails / (i + 1), fails, i + 1);
+    // console.log(new Date(), times.length, JSON.stringify(times));
+  }
+}
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
   const scraper = new Scraper();
   await scraper.initialize();
+
   const parser = new DiningParser(scraper);
   const locations = await parser.process();
   await scraper.close();
@@ -76,10 +104,12 @@ setInterval(() => {
 }, interval);
 
 // Initial load and start the server
-reload().then(() => {
-  app.listen(PORT);
+bash().then(() =>
+  reload().then(() => {
+    app.listen(PORT);
 
-  console.log(
-    `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
-  );
-});
+    console.log(
+      `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
+    );
+  })
+);
