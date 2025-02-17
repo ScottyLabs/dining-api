@@ -1,5 +1,5 @@
-import { Elysia } from "elysia";
-import { cors } from "@elysiajs/cors";
+import express, { Express, Request, Response, Application } from "express";
+
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "types";
 
@@ -25,15 +25,15 @@ async function reload(): Promise<void> {
   }
 }
 
-export const app = new Elysia();
+const app: Application = express();
 
-app.use(cors());
+// app.use(cors());
 
 app.get("/", () => {
   return "ScottyLabs Dining API";
 });
 
-app.get("/locations", () => ({ locations: cachedLocations }));
+app.get("/locations", (req, res) => res.send({ locations: cachedLocations }));
 
 app.get("/location/:name", ({ params: { name } }) => {
   const filteredLocation = cachedLocations.filter((location) => {
@@ -75,7 +75,5 @@ setInterval(() => {
 reload().then(() => {
   app.listen(PORT);
 
-  console.log(
-    `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
-  );
+  console.log(`Dining API is running`);
 });
