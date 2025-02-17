@@ -1,9 +1,11 @@
+FROM node:alpine
+
 FROM oven/bun:latest
 
 WORKDIR /runtime
 COPY . /runtime
 
-RUN bun install
+RUN npm install
 
 EXPOSE 5010
-CMD bun start
+CMD npm start
