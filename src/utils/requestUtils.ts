@@ -28,12 +28,12 @@ export default class Scraper {
       // console.log(`Scraping ${url}`);
       // await this.page.setViewport({ width: 1280, height: 720 });
 
-      await this.page!.goto(url.toString(), {
-        waitUntil: ["domcontentloaded", "networkidle2"],
-      });
-      // const res = (await axios.get(url.toString())).data;
-      // await wait(1000);
-      // return res;
+      // await this.page!.goto(url.toString(), {
+      //   waitUntil: ["domcontentloaded", "networkidle2"],
+      // });
+      const res = (await axios.get(url.toString())).data;
+      await wait(1000);
+      return res;
       // if (IS_TESTING || process.env.DEV) {
       //   await wait(1000);
       // } else {

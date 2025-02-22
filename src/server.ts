@@ -16,21 +16,28 @@ async function bash() {
   await scraper.initialize();
 
   for (let i = 0; true; i++) {
-    const html = await scraper.getHTML(
-      new URL(
-        "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/175"
-      )
-    );
-    const $ = load(html);
-    const nextSevenDays = $("ul.schedule").find("li").toArray();
+    try {
+      const html = await scraper.getHTML(
+        new URL(
+          "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/175"
+        )
+      );
+      const $ = load(html);
+      const nextSevenDays = $("ul.schedule").find("li").toArray();
 
-    const times = sortAndMergeTimeRanges(
-      nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
-    );
-    if (times.length != 5) {
+      const times = sortAndMergeTimeRanges(
+        nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
+      );
+
+      if (times.length != 5) {
+        fails++;
+      }
+    } catch (e) {
+      console.error(e);
       fails++;
     }
     console.log(fails / (i + 1), fails, i + 1);
+
     // console.log(new Date(), times.length, JSON.stringify(times));
   }
 }
@@ -99,9 +106,6 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
 
 // Update the cache every 10 minutes
 const interval = 1000 * 60 * 10;
-setInterval(() => {
-  reload().catch(console.error);
-}, interval);
 
 // Initial load and start the server
 bash().then(() =>
@@ -111,5 +115,8 @@ bash().then(() =>
     console.log(
       `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
     );
+    setInterval(() => {
+      reload().catch(console.error);
+    }, interval);
   })
 );
