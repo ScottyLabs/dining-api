@@ -63,7 +63,18 @@ test("specials for The Exchange", async () => {
     ])
   );
 });
+test("113 broken should return empty data", async () => {
+  mockAxiosGETMethodWithFilePaths({
+    conceptListFilePath: "html/listconcepts-just-113.html",
+    specialsFilePath: "html/specials-for-92.html",
+    soupsFilePath: "html/soups.html",
+    getConceptFilePath: (conceptId: string) =>
+      conceptId === "113" ? `html/concepts/113-broken.html` : "html/blank.html",
+  });
+  const parser = new DiningParser();
 
+  expect(await parser.process()).toStrictEqual([]);
+});
 test(
   "parser throws on repeated axios error",
   async () => {
