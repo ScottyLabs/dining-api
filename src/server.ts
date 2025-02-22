@@ -65,16 +65,13 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   return { locations: result };
 });
 
-// Update the cache every 10 minutes
-const interval = 1000 * 60 * 10;
-setInterval(() => {
-  reload().catch(console.error);
-}, interval);
-
 // Initial load and start the server
 reload().then(() => {
   app.listen(PORT);
-
+  const interval = 1000 * 60 * 10; // 10 minutes
+  setInterval(() => {
+    reload().catch(console.error);
+  }, interval);
   console.log(
     `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
   );
