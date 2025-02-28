@@ -1,4 +1,4 @@
-import Scraper from "../utils/requestUtils";
+import { getHTMLResponse } from "../utils/requestUtils";
 import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
@@ -16,11 +16,8 @@ export default class DiningParser {
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials";
   static readonly DINING_SOUPS_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
-  private scraper: Scraper;
 
-  constructor(scraper: Scraper) {
-    this.scraper = scraper;
-  }
+  constructor() {}
 
   async process(): Promise<ILocation[]> {
     const locationBuilders =
@@ -41,7 +38,7 @@ export default class DiningParser {
   private async initializeLocationBuildersFromMainPage(): Promise<
     LocationBuilder[]
   > {
-    const mainPageHTML = await this.scraper.getHTML(
+    const mainPageHTML = await getHTMLResponse(
       new URL(DiningParser.DINING_URL)
     );
     const mainContainer = load(mainPageHTML)("div.conceptCards");
@@ -51,7 +48,7 @@ export default class DiningParser {
       throw new Error("Unable to load page");
     }
     return Array.from(linkHeaders).map(
-      (card) => new LocationBuilder(card, this.scraper)
+      (card) => new LocationBuilder(card)
     );
   }
 
@@ -60,10 +57,10 @@ export default class DiningParser {
   > {
     return await Promise.all([
       retrieveSpecials(
-        await this.scraper.getHTML(new URL(DiningParser.DINING_SPECIALS_URL))
+        await getHTMLResponse(new URL(DiningParser.DINING_SPECIALS_URL))
       ),
       retrieveSpecials(
-        await this.scraper.getHTML(new URL(DiningParser.DINING_SOUPS_URL))
+        await getHTMLResponse(new URL(DiningParser.DINING_SOUPS_URL))
       ),
     ]);
   }

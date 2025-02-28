@@ -1,4 +1,4 @@
-import Scraper from "utils/requestUtils";
+import { getHTMLResponse }  from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 import { LocationOverwrites } from "overwrites/locationOverwrites";
@@ -25,9 +25,8 @@ export default class LocationBuilder {
   private times?: ITimeRange[];
   private specials?: ISpecial[];
   private soups?: ISpecial[];
-  private scraper: Scraper;
 
-  constructor(card: Element, scraper: Scraper) {
+  constructor(card: Element) {
     const link = load(card)("h3.name.detailsLink");
     this.name = link.text().trim();
 
@@ -35,7 +34,6 @@ export default class LocationBuilder {
     this.conceptId = conceptId !== undefined ? parseInt(conceptId) : undefined;
 
     this.shortDescription = load(card)("div.description").text().trim();
-    this.scraper = scraper;
   }
   overwriteLocation(locationOverwrites: LocationOverwrites) {
     if (
@@ -71,7 +69,7 @@ export default class LocationBuilder {
     const conceptURL = this.getConceptLink();
     if (!conceptURL) return;
 
-    const $ = load(await this.scraper.getHTML(conceptURL));
+    const $ = load(await getHTMLResponse(conceptURL));
     this.url = conceptURL.toString();
     this.description = $("div.description p").text().trim();
     this.menu = $("div.navItems > a#getMenu").attr("href");
