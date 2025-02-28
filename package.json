@@ -23,8 +23,7 @@
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
     "elysia": "^1.0.16",
-    "npm-check-updates": "^16.14.20",
-    "puppeteer": "^24.2.1"
+    "npm-check-updates": "^16.14.20"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

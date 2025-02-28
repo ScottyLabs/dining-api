@@ -42,8 +42,6 @@ Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash -p 12
 
 We get the entire list of locations from `DINING_URL`, fetch location specifics under their corresponding `CONCEPT_BASE_LINK`, and retrieve soups and specials from `DINING_SOUPS_URL` and `DINING_SPECIALS_URL`, respectively. See the `process()` method in `diningParser.ts` for more details.
 
-Instead of using a naive `fetch`, we use puppeteer to simulate a browser page and wait a generous amount of time before scraping the data from each page.
-
 ## Before submitting a PR
 
 - Make sure all tests pass with `bun run test` or `bun run test --watch` for watch mode. (NOTE! `bun test` does something different and does NOT work!)
