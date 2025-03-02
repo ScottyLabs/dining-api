@@ -6,11 +6,55 @@ import { ILocation } from "types";
 const PORT = process.env.PORT ?? 5010;
 let cachedLocations: ILocation[];
 
+const NUMBER_SCRAPES = 10;
+const SCRAPE_WAIT_INTERVAL = 5000;
+
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
   const parser = new DiningParser();
-  const locations = await parser.process();
+  let locations: ILocation[] = [];
+
+  // majorityDict.get(restaurantName) is a Map<string, number>
+  // where the keys are JSON.stringify-ed lists of times
+  // and the values are the frequencies
+  const majorityDict = new Map<string, Map<string, number>>();
+  for (let i = 0; i < NUMBER_SCRAPES; i++) {
+    // Wait a bit before starting the next round of scrapes.
+    await new Promise((re) => setTimeout(re, SCRAPE_WAIT_INTERVAL));
+
+    const tempLocations = await parser.process();
+    for (const location of tempLocations) {
+      const timesString = JSON.stringify(location.times);
+      if (!majorityDict.has(location.name!)) {
+        majorityDict.set(location.name!, new Map<string, number>());
+      }
+      const subDict = majorityDict.get(location.name!)!;
+      subDict.set(timesString, (subDict.get(timesString) ?? 0) + 1);
+    }
+    
+    // On the first scrape, also populate the locations array.
+    // This is to get all the descriptions and menus and such.
+    // We will replace the times after populating majorityDict.
+    if (i == 0) {
+      locations = tempLocations;
+    }
+  }
+
+  for (const location of locations) {
+    const subDict = majorityDict.get(location.name!)!;
+    let pluralityTimes: string = "";
+    let pluralityFrequency: number = 0;
+    subDict.forEach((freq, times) => {
+      if (freq > pluralityFrequency) {
+        pluralityTimes = times;
+        pluralityFrequency = freq;
+      }
+    });
+    console.log(`${location.name!} frequencies: ${subDict.values().toArray()}`);
+    location.times = JSON.parse(pluralityTimes);
+  }
+
   if (
     cachedLocations !== undefined &&
     locations.length < cachedLocations.length - 1
@@ -65,8 +109,8 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   return { locations: result };
 });
 
-// Update the cache every 10 minutes
-const interval = 1000 * 60 * 10;
+// Update the cache every 30 minutes
+const interval = 1000 * 60 * 30;
 setInterval(() => {
   reload().catch(console.error);
 }, interval);

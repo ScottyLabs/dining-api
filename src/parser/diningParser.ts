@@ -42,14 +42,14 @@ export default class DiningParser {
       new URL(DiningParser.DINING_URL)
     );
     const mainContainer = load(mainPageHTML)("div.conceptCards");
-    if (mainContainer === undefined) {
+    const linkHeaders = mainContainer.find("div.card");
+
+    if (linkHeaders.length === 0) {
       throw new Error("Unable to load page");
     }
-    const linkHeaders = mainContainer.find("div.card");
-    if (linkHeaders === undefined) {
-      return [];
-    }
-    return Array.from(linkHeaders).map((card) => new LocationBuilder(card));
+    return Array.from(linkHeaders).map(
+      (card) => new LocationBuilder(card)
+    );
   }
 
   private async fetchSpecials(): Promise<

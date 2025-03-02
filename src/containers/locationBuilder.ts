@@ -1,7 +1,6 @@
+import { getHTMLResponse }  from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
-
-import { getHTMLResponse } from "utils/requestUtils";
 import { LocationOverwrites } from "overwrites/locationOverwrites";
 import { getTimeRangesFromString } from "./timeBuilder";
 import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";

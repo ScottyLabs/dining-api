@@ -5,7 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest --coverage",
-    "start": "bun --hot run src/server.ts",
+    "dev": "DEV=true bun --hot run src/server.ts",
+    "start": "bun run src/server.ts",
     "build": "bun build ./src/index.ts --outdir dist"
   },
   "repository": {
@@ -22,8 +23,7 @@
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
     "elysia": "^1.0.16",
-    "npm-check-updates": "^16.14.20",
-    "puppeteer": "^24.2.1"
+    "npm-check-updates": "^16.14.20"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
