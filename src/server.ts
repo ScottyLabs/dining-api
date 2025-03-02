@@ -6,7 +6,7 @@ import { ILocation } from "types";
 const PORT = process.env.PORT ?? 5010;
 let cachedLocations: ILocation[];
 
-const NUMBER_SCRAPES = 11;
+const NUMBER_SCRAPES = 10;
 const SCRAPE_WAIT_INTERVAL = 5000;
 
 async function reload(): Promise<void> {
@@ -51,7 +51,7 @@ async function reload(): Promise<void> {
         pluralityFrequency = freq;
       }
     });
-    console.log(`${location.name!} had ${pluralityFrequency} correct scrapes`);
+    console.log(`${location.name!} frequencies: ${subDict.values().toArray()}`);
     location.times = JSON.parse(pluralityTimes);
   }
 
@@ -109,8 +109,8 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   return { locations: result };
 });
 
-// Update the cache every 10 minutes
-const interval = 1000 * 60 * 10;
+// Update the cache every 30 minutes
+const interval = 1000 * 60 * 30;
 setInterval(() => {
   reload().catch(console.error);
 }, interval);
