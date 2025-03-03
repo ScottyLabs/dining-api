@@ -24,15 +24,23 @@ export default class DiningParser {
       await this.initializeLocationBuildersFromMainPage();
 
     const [specials, soups] = await this.fetchSpecials();
-
+    const finalLocationData: ILocation[] = [];
     for (const builder of locationBuilders) {
-      await builder.populateDetailedInfo();
-      builder.setSoup(soups);
-      builder.setSpecials(specials);
-      builder.overwriteLocation(locationOverwrites);
+      try {
+        await builder.populateDetailedInfo();
+        builder.setSoup(soups);
+        builder.setSpecials(specials);
+        builder.overwriteLocation(locationOverwrites);
+        finalLocationData.push(builder.build());
+      } catch (e) {
+        console.error(
+          `Parsing location ${builder.getConceptLink()} failed with error`,
+          e
+        );
+      }
     }
 
-    return locationBuilders.map((builder) => builder.build());
+    return finalLocationData;
   }
 
   private async initializeLocationBuildersFromMainPage(): Promise<
