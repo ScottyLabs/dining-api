@@ -321,7 +321,7 @@ export const expectedLocationData = [
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/127",
     location: "",
     menu: undefined,
-    coordinates: { lat: 40.4438318, lng: -79.9422587 },
+    coordinates: { lat: 40.44296, lng: -79.941815 },
     acceptsOnlineOrders: false,
     times: [],
     todaysSpecials: undefined,
