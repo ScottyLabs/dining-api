@@ -2,7 +2,7 @@ import { getHTMLResponse } from "../utils/requestUtils";
 import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
-import locationOverwrites from "overwrites/locationOverwrites";
+import locationCoordinates from "overwrites/locationOverwrites";
 import { ILocation, ISpecial } from "types";
 
 /**
@@ -29,7 +29,7 @@ export default class DiningParser {
       await builder.populateDetailedInfo();
       builder.setSoup(soups);
       builder.setSpecials(specials);
-      builder.overwriteLocation(locationOverwrites);
+      builder.overwriteLocationCoordinates(locationCoordinates);
     }
 
     return locationBuilders.map((builder) => builder.build());
