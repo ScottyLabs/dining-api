@@ -30,7 +30,8 @@ test("the whole thing, including locationOverwrites", async () => {
         : "html/blank.html",
   });
   const parser = new DiningParser();
-  expect(await parser.process()).toStrictEqual(expectedLocationData);
+  const parsedLocationData = await parser.process();
+  expect(parsedLocationData).toStrictEqual(expectedLocationData);
 });
 test("specials for The Exchange", async () => {
   mockAxiosGETMethodWithFilePaths({

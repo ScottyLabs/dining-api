@@ -1,7 +1,6 @@
 import { getHTMLResponse }  from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
-import { LocationOverwrites } from "overwrites/locationOverwrites";
 import { getTimeRangesFromString } from "./timeBuilder";
 import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
 import { sortAndMergeTimeRanges } from "utils/timeUtils";
@@ -35,14 +34,16 @@ export default class LocationBuilder {
 
     this.shortDescription = load(card)("div.description").text().trim();
   }
-  overwriteLocation(locationOverwrites: LocationOverwrites) {
-    if (
-      this.name !== undefined &&
-      locationOverwrites[this.name] !== undefined
-    ) {
-      this.coordinates = locationOverwrites[this.name];
+  
+  overwriteLocationCoordinates(overwrites: Map<number, ICoordinate>) {
+    if (this.conceptId !== undefined) {
+      const coords = overwrites.get(this.conceptId);
+      if (coords) {
+        this.coordinates = coords;
+      }
     }
   }
+
   setSoup(soupList: Record<string, ISpecial[]>) {
     if (
       this.conceptId !== undefined &&
