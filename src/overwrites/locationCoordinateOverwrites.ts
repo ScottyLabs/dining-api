@@ -1,4 +1,6 @@
-{
+import { ILocationCoordinateOverwrites } from "types";
+
+const locationCoordinateOverwrites: ILocationCoordinateOverwrites = {
     "136": {
         "labelLatitude": 40.44497677044086,
         "labelLongitude": -79.94526274161514
@@ -128,3 +130,5 @@
         "labelLongitude": -79.93888579754876
     }
 }
+
+export default locationCoordinateOverwrites;

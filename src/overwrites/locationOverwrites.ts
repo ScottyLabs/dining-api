@@ -1,6 +1,5 @@
-import { ICoordinate,ILocationCoordinateOverwrites } from "types";
-
-const locationCoordinateOverwrites = require("./locationOverwrites.json") as ILocationCoordinateOverwrites;
+import { ICoordinate } from "types";
+import locationCoordinateOverwrites from "./locationCoordinateOverwrites";
 
 /**
  * Overwrite dining locations' coordinates because they are wrong on the dining website.
