@@ -15,45 +15,39 @@ async function reload(): Promise<void> {
   const parser = new DiningParser();
   let locations: ILocation[] = [];
 
-  // majorityDict.get(restaurantName) is a Map<string, number>
-  // where the keys are JSON.stringify-ed lists of times
-  // and the values are the frequencies
-  const majorityDict = new Map<string, Map<string, number>>();
+  // majorityDict.get(restaurantId) is a Map<string, number>
+  // where the keys are JSON.stringify-ed locations
+  // and the values are the frequencies.
+  const majorityDict = new Map<number, Map<string, number>>();
   for (let i = 0; i < NUMBER_SCRAPES; i++) {
     // Wait a bit before starting the next round of scrapes.
     await new Promise((re) => setTimeout(re, SCRAPE_WAIT_INTERVAL));
 
     const tempLocations = await parser.process();
     for (const location of tempLocations) {
-      const timesString = JSON.stringify(location.times);
-      if (!majorityDict.has(location.name!)) {
-        majorityDict.set(location.name!, new Map<string, number>());
+      const locationString = JSON.stringify(location);
+      if (!majorityDict.has(location.conceptId)) {
+        majorityDict.set(location.conceptId, new Map<string, number>());
       }
-      const subDict = majorityDict.get(location.name!)!;
-      subDict.set(timesString, (subDict.get(timesString) ?? 0) + 1);
-    }
-    
-    // On the first scrape, also populate the locations array.
-    // This is to get all the descriptions and menus and such.
-    // We will replace the times after populating majorityDict.
-    if (i == 0) {
-      locations = tempLocations;
+      const subDict = majorityDict.get(location.conceptId)!;
+      subDict.set(locationString, (subDict.get(locationString) ?? 0) + 1);
     }
   }
 
-  for (const location of locations) {
-    const subDict = majorityDict.get(location.name!)!;
-    let pluralityTimes: string = "";
+  // Populate the location array based on majorityDict.
+  majorityDict.forEach((subDict, _) => {
+    let pluralityLocationString: string = "";
     let pluralityFrequency: number = 0;
-    subDict.forEach((freq, times) => {
+    subDict.forEach((freq, locationString) => {
       if (freq > pluralityFrequency) {
-        pluralityTimes = times;
+        pluralityLocationString = locationString;
         pluralityFrequency = freq;
       }
     });
-    console.log(`${location.name!} frequencies: ${subDict.values().toArray()}`);
-    location.times = JSON.parse(pluralityTimes);
-  }
+    const location: ILocation = JSON.parse(pluralityLocationString);
+    console.log(`${location.name ?? ""} frequencies: ${subDict.values().toArray()}`);
+    locations.push(location);
+  });
 
   if (
     cachedLocations !== undefined &&
