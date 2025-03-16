@@ -4,7 +4,7 @@ import type { Element } from "domhandler";
 import { getNextDay } from "../utils/timeUtils";
 import { IParsedTimeRange } from "./time/parsedTime";
 import { IParsedTimeDate } from "./time/parsedTimeForDate";
-import { DayOfTheWeek, ITimeRange, TimeInfoType } from "types";
+import { DayOfTheWeek, ITimeRange, TimeInfoType, MonthOfTheYear } from "types";
 import { parseToken } from "utils/parseTimeToken";
 
 interface ITimeRowAttributes {
@@ -110,6 +110,13 @@ function getTimeRangesFromTimeRow(time: ITimeRowAttributes) {
   const allRanges: ITimeRange[] = [];
   for (const range of time.times ?? []) {
     rollBack12AmEndTime(range);
+    // March 16 Hunan fix
+    if (time.date?.month === MonthOfTheYear.MARCH
+      && time.date?.date === 16
+      && range.start.hour === 23
+      && range.start.minute === 45) {
+      range.start.hour -= 12;
+    }
 
     const shouldSpillToNextDay =
       range.start.hour * 60 + range.start.minute >
