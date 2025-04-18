@@ -57,7 +57,9 @@ export default class LocationBuilder {
     }
   }
   setTimes(times: ITimeRange[]) {
-    this.times = times;
+    if (this.conceptId && times !== undefined) {
+      this.times = times;
+    }
   }
   convertMapsLinkToCoordinates(link: string) {
     const atIndex = link.indexOf("@");
@@ -95,7 +97,8 @@ export default class LocationBuilder {
     return new URL(LocationBuilder.CONCEPT_BASE_LINK + this.conceptId);
   }
 
-  getConceptId(): number | undefined {
+  getConceptId() {
+    if (this.conceptId === undefined) return undefined;
     return this.conceptId;
   }
 
