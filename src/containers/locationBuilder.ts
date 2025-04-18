@@ -1,4 +1,4 @@
-import { getHTMLResponse }  from "utils/requestUtils";
+import { getHTMLResponse } from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 import { LocationOverwrites } from "overwrites/locationOverwrites";
@@ -56,6 +56,9 @@ export default class LocationBuilder {
       this.specials = specialList[this.conceptId];
     }
   }
+  setTimes(times: ITimeRange[]) {
+    this.times = times;
+  }
   convertMapsLinkToCoordinates(link: string) {
     const atIndex = link.indexOf("@");
     const locationUrl = link.slice(atIndex + 1, link.length);
@@ -90,6 +93,10 @@ export default class LocationBuilder {
   getConceptLink() {
     if (this.conceptId === undefined) return undefined;
     return new URL(LocationBuilder.CONCEPT_BASE_LINK + this.conceptId);
+  }
+
+  getConceptId(): number | undefined {
+    return this.conceptId;
   }
 
   build(): ILocation {
