@@ -1,22 +1,34 @@
-import { ICoordinate } from "types";
+import { ICoordinate, ITimeRange } from "types";
 
 export type LocationOverwrites = {
-  [conceptName: string]: ICoordinate;
+  [conceptName: string]: {
+    coordinate?: ICoordinate;
+    times?: ITimeRange[];
+  };
 };
 
 /**
  * Dining locations coordinates that we manually overwrite because they are
- * wrong on the dining API.
+ * wrong on the dining API, or if we want to manually force a location to be closed.
  */
 
-function makeCoordinates(lat: number, lng: number): ICoordinate {
-  return { lat, lng };
+function makeCoordinates(lat: number, lng: number) {
+  return { coordinate: { lat, lng } };
 }
+
+function makeTimeChange(times: ITimeRange[]) {
+  return { times };
+}
+
 const overwrites: LocationOverwrites = {
   "AU BON PAIN AT SKIBO CAFÉ": makeCoordinates(40.444107, -79.942206),
   "BACK BAR GRILL": makeCoordinates(40.44352019390539, -79.94207258798099),
   BEEFSTEAK: makeCoordinates(40.443658, -79.942019),
   "CARNEGIE MELLON CAFÉ - THE EGG SHOPPE": makeCoordinates(40.442429, -79.9397),
+  "CAPITAL GRAINS - ROHR COMMONS": {
+    ...makeCoordinates(40.4449525806329, -79.94546729610397),
+    ...makeTimeChange([]), // merged: coordinate + forced closed
+  },
   CUCINA: makeCoordinates(40.442684, -79.940225),
   "ENTROPY+": makeCoordinates(40.442923, -79.942103),
   "THE EXCHANGE": makeCoordinates(40.441499, -79.941951),
@@ -45,10 +57,6 @@ const overwrites: LocationOverwrites = {
   "URBAN REVOLUTION AND GLOBAL EATS": makeCoordinates(40.442522, -79.939982),
   "WILD BLUE SUSHI": makeCoordinates(40.442684, -79.940225),
   "ZEBRA LOUNGE": makeCoordinates(40.441633, -79.943015),
-  "CAPITAL GRAINS - ROHR COMMONS": makeCoordinates(
-    40.4449525806329,
-    -79.94546729610397
-  ),
   "E.A.T. (EVENINGS AT TEPPER) - ROHR COMMONS": makeCoordinates(
     40.444902436996365,
     -79.94550403887685
