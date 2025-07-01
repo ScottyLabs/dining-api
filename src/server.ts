@@ -16,7 +16,7 @@ async function reload(): Promise<void> {
   // where the keys are JSON.stringify-ed lists of times
   // and the values are the frequencies
   const majorityDict = new Map<string, Map<string, number>>();
-  for (let i = 0; i < env.NUMBER_SCRAPES; i++) {
+  for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
     // Wait a bit before starting the next round of scrapes.
     if (i > 0)
       await new Promise((re) => setTimeout(re, env.INTER_SCRAPE_WAIT_INTERVAL));
