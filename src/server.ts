@@ -2,12 +2,9 @@ import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "types";
+import { env } from "env";
 
-const PORT = process.env.PORT ?? 5010;
 let cachedLocations: ILocation[];
-
-const NUMBER_SCRAPES = 10;
-const SCRAPE_WAIT_INTERVAL = 5000;
 
 async function reload(): Promise<void> {
   const now = new Date();
@@ -19,9 +16,10 @@ async function reload(): Promise<void> {
   // where the keys are JSON.stringify-ed lists of times
   // and the values are the frequencies
   const majorityDict = new Map<string, Map<string, number>>();
-  for (let i = 0; i < NUMBER_SCRAPES; i++) {
+  for (let i = 0; i < env.NUMBER_SCRAPES; i++) {
     // Wait a bit before starting the next round of scrapes.
-    await new Promise((re) => setTimeout(re, SCRAPE_WAIT_INTERVAL));
+    if (i > 0)
+      await new Promise((re) => setTimeout(re, env.INTER_SCRAPE_WAIT_INTERVAL));
 
     const tempLocations = await parser.process();
     for (const location of tempLocations) {
@@ -32,7 +30,7 @@ async function reload(): Promise<void> {
       const subDict = majorityDict.get(location.name!)!;
       subDict.set(timesString, (subDict.get(timesString) ?? 0) + 1);
     }
-    
+
     // On the first scrape, also populate the locations array.
     // This is to get all the descriptions and menus and such.
     // We will replace the times after populating majorityDict.
@@ -110,14 +108,14 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
 });
 
 // Update the cache every 30 minutes
-const interval = 1000 * 60 * 30;
+
 setInterval(() => {
   reload().catch(console.error);
-}, interval);
+}, env.RELOAD_WAIT_INTERVAL);
 
 // Initial load and start the server
 reload().then(() => {
-  app.listen(PORT);
+  app.listen(env.PORT);
 
   console.log(
     `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
