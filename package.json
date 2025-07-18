@@ -4,7 +4,7 @@
   "description": "Carnegie Mellon University Dining API",
   "main": "server.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true jest --coverage",
     "dev": "DEV=true bun --hot run src/server.ts",
     "start": "bun run src/server.ts",
     "build": "bun build ./src/index.ts --outdir dist"

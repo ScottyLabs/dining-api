@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
-import * as dotenv from "dotenv";
-dotenv.config(); // load in .env file env variables
+import "dotenv/config";
+
 const envSchema = z.object({
   PORT: z.coerce.number().default(5010),
   NUMBER_OF_SCRAPES: z.coerce.number().default(1),
