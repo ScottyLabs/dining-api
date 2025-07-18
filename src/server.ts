@@ -3,6 +3,8 @@ import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "types";
 import { env } from "env";
+import { notifySlack } from "utils/slack";
+import { node } from "@elysiajs/node";
 
 let cachedLocations: ILocation[];
 
@@ -22,11 +24,14 @@ async function reload(): Promise<void> {
       await new Promise((re) => setTimeout(re, env.INTER_SCRAPE_WAIT_INTERVAL));
 
     const tempLocations = await parser.process();
+
     for (const location of tempLocations) {
+      console.log(location.name);
       const timesString = JSON.stringify(location.times);
       if (!majorityDict.has(location.name!)) {
         majorityDict.set(location.name!, new Map<string, number>());
       }
+      console.log("HUH?", new Map<string, number>().values().toArray());
       const subDict = majorityDict.get(location.name!)!;
       subDict.set(timesString, (subDict.get(timesString) ?? 0) + 1);
     }
@@ -67,8 +72,15 @@ async function reload(): Promise<void> {
   }
 }
 
-export const app = new Elysia();
+export const app = new Elysia({ adapter: node() }); // I don't trust bun enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
+app.onError(({ error, path }) => {
+  notifySlack(
+    `<!channel> handling request on ${path} failed with error ${error}\n${
+      error instanceof Error ? error.stack : "No stack trace"
+    }`
+  );
+});
 app.use(cors());
 
 app.get("/", () => {
@@ -89,7 +101,7 @@ app.get("/location/:name", ({ params: { name } }) => {
 app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   const result = cachedLocations.filter((el) => {
     let returning = false;
-    el.times?.forEach((element) => {
+    el.times.forEach((element) => {
       const startMins =
         element.start.day * 1440 +
         element.start.hour * 60 +
@@ -110,14 +122,20 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
 // Update the cache every 30 minutes
 
 setInterval(() => {
-  reload().catch(console.error);
+  reload().catch(
+    (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+  );
 }, env.RELOAD_WAIT_INTERVAL);
 
 // Initial load and start the server
-reload().then(() => {
-  app.listen(env.PORT);
-
-  console.log(
-    `Dining API is running at ${app.server?.hostname}:${app.server?.port}`
-  );
-});
+reload()
+  .then(() => {
+    app.listen(env.PORT, ({ hostname, port }) => {
+      notifySlack(`Dining API is running at ${hostname}:${port}`);
+    });
+  })
+  .catch(async (er) => {
+    await notifySlack("<!channel> Dining API startup failed!!");
+    await notifySlack(`*Error caught*\n${er.stack}`);
+    process.exit(1);
+  });

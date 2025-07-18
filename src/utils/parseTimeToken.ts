@@ -15,6 +15,7 @@ export function parseToken(token: string) {
       value: new ParsedTimeForDay(token).parse().value,
     } as const;
   }
+
   const testMonth = token.split(/\s/)[0];
   if (isMonth(testMonth)) {
     return {
@@ -30,6 +31,7 @@ export function parseToken(token: string) {
   ) {
     return { type: TimeInfoType.TWENTYFOURHOURS } as const;
   }
+
   if (token === "closed") {
     return { type: TimeInfoType.CLOSED } as const;
   }

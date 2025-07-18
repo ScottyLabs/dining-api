@@ -109,7 +109,8 @@ export default class LocationBuilder {
       this.description === undefined ||
       this.url === undefined ||
       this.location === undefined ||
-      this.conceptId === undefined
+      this.conceptId === undefined ||
+      this.name === undefined
     ) {
       throw Error(
         "Didn't finish configuring location before building metadata!"
