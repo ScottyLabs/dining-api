@@ -6,4 +6,4 @@ COPY . /runtime
 RUN bun install
 
 EXPOSE 5010
-CMD bun start
+CMD bun run build
