@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "types";
+import { getEmails } from "./db";
 
 const PORT = process.env.PORT ?? 5010;
 let cachedLocations: ILocation[];
@@ -51,7 +52,7 @@ async function reload(): Promise<void> {
         pluralityFrequency = freq;
       }
     });
-    console.log(`${location.name!} frequencies: ${subDict.values().toArray()}`);
+    console.log(`${location.name!} frequencies: ${Array.from(subDict.values())}`);
     location.times = JSON.parse(pluralityTimes);
   }
 
@@ -107,6 +108,16 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
     return returning;
   });
   return { locations: result };
+});
+
+app.get("/api/emails", async () => {
+  try {
+    const emails = await getEmails();
+    return emails;
+  } catch (error) {
+    console.error('Error fetching emails:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
 });
 
 // Update the cache every 30 minutes
