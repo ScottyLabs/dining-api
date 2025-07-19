@@ -1,5 +1,4 @@
 import { z } from "zod/v4";
-import "dotenv/config";
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(5010),
@@ -12,5 +11,5 @@ const envSchema = z.object({
   IN_TEST_MODE: z.stringbool().default(false),
   SLACK_MESSAGE_PREFIX: z.string().default("local-dev"),
 });
-
+console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);
