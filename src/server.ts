@@ -31,7 +31,6 @@ async function reload(): Promise<void> {
       if (!majorityDict.has(location.name!)) {
         majorityDict.set(location.name!, new Map<string, number>());
       }
-      console.log("HUH?", new Map<string, number>().values().toArray());
       const subDict = majorityDict.get(location.name!)!;
       subDict.set(timesString, (subDict.get(timesString) ?? 0) + 1);
     }
@@ -74,12 +73,16 @@ async function reload(): Promise<void> {
 
 export const app = new Elysia({ adapter: node() }); // I don't trust bun enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
-app.onError(({ error, path }) => {
-  notifySlack(
-    `<!channel> handling request on ${path} failed with error ${error}\n${
-      error instanceof Error ? error.stack : "No stack trace"
-    }`
-  );
+app.onError(({ error, path, code }) => {
+  if (code === "NOT_FOUND") {
+    notifySlack(`Someone tried visiting ${path}, which does not exist :P`);
+  } else {
+    notifySlack(
+      `<!channel> handling request on ${path} failed with error ${error}\n${
+        error instanceof Error ? error.stack : "No stack trace"
+      }`
+    );
+  }
 });
 app.use(cors());
 
