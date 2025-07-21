@@ -82,7 +82,7 @@ async function reload(): Promise<void> {
   }
 }
 
-export const app = new Elysia({ adapter: node() }); // I don't trust bun enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
+export const app = new Elysia({ adapter: node() }); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
   if (code === "NOT_FOUND") {

@@ -12,7 +12,6 @@
     "baseUrl": "./src",
     "outDir": "./dist",
     "moduleResolution": "bundler",
-    // node
     // "allowImportingTsExtensions": true,
     // "resolveJsonModule": true,
     "isolatedModules": true,
