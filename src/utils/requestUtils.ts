@@ -19,6 +19,7 @@ export async function getHTMLResponse(
         html: response.data,
         url: url.toString(),
       });
+
     return response.data;
   } catch (err: any) {
     notifySlack(`Error scraping ${url}\n${err.stack}`);

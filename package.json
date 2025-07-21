@@ -5,6 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "test": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ jest --coverage",
+    "test-watch": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ jest --watch",
     "dev": "dotenv -- tsx watch src/server.ts",
     "start": "NODE_ENV=production dotenv -- node dist/server.js",
     "build": "rollup -c"

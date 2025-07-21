@@ -5,69 +5,80 @@ import { ILocation } from "types";
 import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
+import { logDiffs } from "utils/diff";
 
-let cachedLocations: ILocation[];
+let cachedLocations: ILocation[] = [];
+
+class LocationMerger {
+  majorityDict: Partial<
+    Record<
+      number,
+      Partial<Record<string, { cnt: number; originalData: ILocation }>>
+    >
+  > = {}; // Partial type because the values don't exist initially
+  addLocation(location: ILocation) {
+    const majorityDictLocationData =
+      this.majorityDict[location.conceptId] ?? {};
+    const hashedVersion = JSON.stringify(location);
+
+    majorityDictLocationData[hashedVersion] = {
+      cnt: (majorityDictLocationData[hashedVersion]?.cnt ?? 0) + 1,
+      originalData: location, // theoretically this should be the same as all previous versions
+    };
+    this.majorityDict[location.conceptId] = majorityDictLocationData;
+  }
+  getMostFrequentLocations() {
+    return Object.entries(this.majorityDict).map(([conceptId, freqData]) => {
+      if (freqData === undefined) {
+        throw new Error(`Expected frequency data for concept id ${conceptId}`);
+      }
+
+      const bestMatch = Object.values(freqData).reduce((bestMatch, curVal) => {
+        if (curVal === undefined) throw new Error();
+        return bestMatch === undefined || curVal.cnt > bestMatch.cnt
+          ? curVal
+          : bestMatch;
+      }, undefined);
+      if (bestMatch === undefined) throw new Error();
+      console.log(
+        `${bestMatch.originalData.name} frequencies: ${Object.values(
+          freqData
+        ).map((val) => val?.cnt)}`
+      );
+      return bestMatch.originalData;
+    });
+  }
+}
 
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
   const parser = new DiningParser();
-  let locations: ILocation[] = [];
+  const locationMerger = new LocationMerger();
 
-  // majorityDict.get(restaurantName) is a Map<string, number>
-  // where the keys are JSON.stringify-ed lists of times
-  // and the values are the frequencies
-  const majorityDict = new Map<string, Map<string, number>>();
   for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
     // Wait a bit before starting the next round of scrapes.
     if (i > 0)
       await new Promise((re) => setTimeout(re, env.INTER_SCRAPE_WAIT_INTERVAL));
 
-    const tempLocations = await parser.process();
-
-    for (const location of tempLocations) {
-      console.log(location.name);
-      const timesString = JSON.stringify(location.times);
-      if (!majorityDict.has(location.name!)) {
-        majorityDict.set(location.name!, new Map<string, number>());
-      }
-      const subDict = majorityDict.get(location.name!)!;
-      subDict.set(timesString, (subDict.get(timesString) ?? 0) + 1);
-    }
-
-    // On the first scrape, also populate the locations array.
-    // This is to get all the descriptions and menus and such.
-    // We will replace the times after populating majorityDict.
-    if (i == 0) {
-      locations = tempLocations;
-    }
+    const locations = await parser.process();
+    locations.forEach((location) => locationMerger.addLocation(location));
   }
-
-  for (const location of locations) {
-    const subDict = majorityDict.get(location.name!)!;
-    let pluralityTimes: string = "";
-    let pluralityFrequency: number = 0;
-    subDict.forEach((freq, times) => {
-      if (freq > pluralityFrequency) {
-        pluralityTimes = times;
-        pluralityFrequency = freq;
-      }
-    });
-    console.log(`${location.name!} frequencies: ${subDict.values().toArray()}`);
-    location.times = JSON.parse(pluralityTimes);
-  }
-
+  const finalLocations = locationMerger.getMostFrequentLocations();
+  logDiffs(cachedLocations, finalLocations);
   if (
     cachedLocations !== undefined &&
-    locations.length < cachedLocations.length - 1
+    finalLocations.length < cachedLocations.length - 1
   ) {
-    console.log(
-      "Ignored location fetch since it (likely) has missing data",
-      locations
+    notifySlack(
+      `<!channel> Ignored location fetch since it (likely) has missing data ${JSON.stringify(
+        finalLocations
+      )}`
     );
   } else {
-    cachedLocations = locations;
-    console.log("Dining API cache reloaded");
+    cachedLocations = finalLocations;
+
+    notifySlack("Dining API cache reloaded");
   }
 }
 
