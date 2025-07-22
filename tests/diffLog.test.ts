@@ -1,4 +1,4 @@
-import { logObjDiffs } from "../src/utils/diff";
+import { getObjDiffs } from "../src/utils/diff";
 
 jest.mock("../src/utils/slack", () => {
   return { notifySlack: jest.fn((str: string) => console.log(str)) };
@@ -6,47 +6,37 @@ jest.mock("../src/utils/slack", () => {
 
 describe("test diff checking", () => {
   test("basic", () => {
-    const logSpy = jest.spyOn(console, "log");
-    logObjDiffs([3], [2, 3]);
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/inserted.*2/));
+    const diffs = getObjDiffs([3], [2, 3]);
+    expect(diffs).toContainEqual(expect.stringMatching(/inserted.*2/));
   });
   test("basic", () => {
-    const logSpy = jest.spyOn(console, "log");
-    logObjDiffs([1, 3], [2, 3]);
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/inserted.*2/));
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/deleted.*1/));
+    const diffs = getObjDiffs([1, 3], [2, 3]);
+    expect(diffs).toContainEqual(expect.stringMatching(/inserted.*2/));
+    expect(diffs).toContainEqual(expect.stringMatching(/deleted.*1/));
   });
   test("basic", () => {
-    const logSpy = jest.spyOn(console, "log");
-    logObjDiffs({ a: 1, b: 2 }, { a: 3, c: [1, 3] });
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/deleted.*b.*2/));
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/changed.*a/));
-    expect(logSpy).toHaveBeenCalledWith(
-      expect.stringMatching(/inserted.*c.*[1,3]/)
-    );
+    const diffs = getObjDiffs({ a: 1, b: 2 }, { a: 3, c: [1, 3] });
+    expect(diffs).toContainEqual(expect.stringMatching(/deleted.*b.*2/));
+    expect(diffs).toContainEqual(expect.stringMatching(/changed.*a/));
+    expect(diffs).toContainEqual(expect.stringMatching(/inserted.*c.*[1,3]/));
   });
   test("basic", () => {
-    const logSpy = jest.spyOn(console, "log");
-    logObjDiffs(undefined, { a: 3, c: [1, 3] });
-    expect(logSpy).toHaveBeenCalledWith(expect.stringMatching(/inserted/));
+    const diffs = getObjDiffs(undefined, { a: 3, c: [1, 3] });
+    expect(diffs).toContainEqual(expect.stringMatching(/inserted/));
   });
   test("nested", () => {
-    const logSpy = jest.spyOn(console, "log");
-    logObjDiffs(
+    const diffs = getObjDiffs(
       { a: { b: { c: { d: [1, 2, 3] } } } },
       { a: { b: { c: { d: [1, 2], e: "extra" } }, be: "extra" } }
     );
-    expect(logSpy).toHaveBeenCalledWith(
+    expect(diffs).toContainEqual(
       expect.stringMatching(/deleted.*a\/b\/c\/d.*3/)
     );
-    expect(logSpy).toHaveBeenCalledWith(
+    expect(diffs).toContainEqual(
       expect.stringMatching(/inserted.*a\/b\/c\/e.*extra/)
     );
-    expect(logSpy).toHaveBeenCalledWith(
+    expect(diffs).toContainEqual(
       expect.stringMatching(/inserted.*a\/be.*extra/)
-    );
-    expect(logSpy).toHaveBeenCalledWith(
-      expect.stringMatching(/inserted.*c.*[1,3]/)
     );
   });
 });

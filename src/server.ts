@@ -5,7 +5,7 @@ import { ILocation } from "types";
 import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
-import { logDiffs } from "utils/diff";
+import { getDiffsBetweenLocationData } from "utils/diff";
 import { getEmails } from "./db";
 
 let cachedLocations: ILocation[] = [];
@@ -66,20 +66,14 @@ async function reload(): Promise<void> {
     locations.forEach((location) => locationMerger.addLocation(location));
   }
   const finalLocations = locationMerger.getMostFrequentLocations();
-  logDiffs(cachedLocations, finalLocations);
-  if (
-    cachedLocations !== undefined &&
-    finalLocations.length < cachedLocations.length - 1
-  ) {
-    notifySlack(
-      `<!channel> Ignored location fetch since it (likely) has missing data ${JSON.stringify(
-        finalLocations
-      )}`
-    );
-  } else {
-    cachedLocations = finalLocations;
+  const diffs = getDiffsBetweenLocationData(cachedLocations, finalLocations);
 
-    notifySlack("Dining API cache reloaded");
+  cachedLocations = finalLocations;
+  if (diffs.length === 0) {
+    notifySlack("Dining API reloaded (data unchanged)");
+  } else {
+    notifySlack("Dining API reloaded with the following changes:");
+    diffs.forEach((diff) => notifySlack(diff));
   }
 }
 

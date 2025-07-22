@@ -1,8 +1,12 @@
 import { ILocation } from "types";
-import { notifySlack } from "./slack";
 
 type T = { [key: string]: T } | T[] | string | number | undefined;
-export function logObjDiffs(prevObject: T, newObject: T, path: string = "~") {
+export function getObjDiffs(
+  prevObject: T,
+  newObject: T,
+  path: string = "~"
+): string[] {
+  let diffs: string[] = [];
   if (typeof prevObject === "object" && typeof newObject === "object") {
     if (prevObject instanceof Array && newObject instanceof Array) {
       // assume that the list is unordered, so we'll just stringify everything and compare those, naively
@@ -11,28 +15,39 @@ export function logObjDiffs(prevObject: T, newObject: T, path: string = "~") {
 
       for (const prevVal of prevSet) {
         if (!newSet.has(prevVal)) {
-          notifySlack(`deleted value at ${path}: ${prevVal}`);
+          diffs.push(`deleted value at ${path}: ${prevVal}`);
         }
       }
       for (const newVal of newSet) {
         if (!prevSet.has(newVal)) {
-          notifySlack(`inserted value at ${path}: ${newVal}`);
+          diffs.push(`inserted value at ${path}: ${newVal}`);
         }
       }
     } else if (
       !(prevObject instanceof Array) &&
       !(newObject instanceof Array)
     ) {
+      // two objects, so we just compare the values key by key
       const setOfAllKeys = new Set([
         ...Object.keys(prevObject),
         ...Object.keys(newObject),
       ]);
       for (const key of setOfAllKeys) {
-        logObjDiffs(prevObject[key], newObject[key], path + "/" + key);
+        let newDiffs = getObjDiffs(
+          prevObject[key],
+          newObject[key],
+          path + "/" + key
+        );
+        // always merge the smaller list into the larger one for slightly more efficiency (kinda unnecessary)
+        // see: https://usaco.guide/plat/merging?lang=cpp
+        if (newDiffs.length > diffs.length) {
+          [diffs, newDiffs] = [newDiffs, diffs]; // with ES6, we can now write cursed abominations like this
+        }
+        diffs = diffs.concat(newDiffs);
       }
     } else {
       // comparing an array to a plain object
-      notifySlack(
+      diffs.push(
         `diff in object type at ${path}! ${JSON.stringify(
           prevObject
         )} ${JSON.stringify(newObject)}`
@@ -40,15 +55,16 @@ export function logObjDiffs(prevObject: T, newObject: T, path: string = "~") {
     }
   } else {
     if (prevObject === undefined && newObject !== undefined) {
-      notifySlack(`inserted value at ${path}: ${JSON.stringify(newObject)}`);
+      diffs.push(`inserted value at ${path}: ${JSON.stringify(newObject)}`);
     } else if (prevObject !== undefined && newObject === undefined) {
-      notifySlack(`deleted value at ${path}: ${JSON.stringify(prevObject)}`);
+      diffs.push(`deleted value at ${path}: ${JSON.stringify(prevObject)}`);
     } else if (prevObject !== newObject) {
-      notifySlack(`changed value at ${path}: ${prevObject} ${newObject}`);
+      diffs.push(`changed value at ${path}: ${prevObject} ${newObject}`);
     }
   }
+  return diffs;
 }
-export function logDiffs(
+export function getDiffsBetweenLocationData(
   prevLocations: ILocation[],
   newLocations: ILocation[]
 ) {
@@ -68,5 +84,5 @@ export function logDiffs(
     {}
   );
 
-  logObjDiffs(prevLocationDict, newLocationDict);
+  return getObjDiffs(prevLocationDict, newLocationDict, "~");
 }
