@@ -72,8 +72,10 @@ async function reload(): Promise<void> {
   if (diffs.length === 0) {
     notifySlack("Dining API reloaded (data unchanged)");
   } else {
-    notifySlack("Dining API reloaded with the following changes:");
-    diffs.forEach((diff) => notifySlack(diff));
+    await notifySlack("Dining API reloaded with the following changes:");
+    for (const diff of diffs) {
+      await notifySlack(diff);
+    }
   }
 }
 
