@@ -6,6 +6,7 @@ import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
 import { logDiffs } from "utils/diff";
+import { getEmails } from "./db";
 
 let cachedLocations: ILocation[] = [];
 
@@ -131,6 +132,16 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
     return returning;
   });
   return { locations: result };
+});
+
+app.get("/api/emails", async () => {
+  try {
+    const emails = await getEmails();
+    return emails;
+  } catch (error) {
+    console.error("Error fetching emails:", error);
+    return new Response("Internal Server Error", { status: 500 });
+  }
 });
 
 // Update the cache every 30 minutes
