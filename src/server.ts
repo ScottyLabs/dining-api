@@ -134,17 +134,7 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
   return { locations: result };
 });
 
-app.get("/api/emails", async () => {
-  try {
-    const emails = await getEmails();
-    return emails;
-  } catch (error) {
-    console.error("Error fetching emails:", error);
-    return new Response("Internal Server Error", { status: 500 });
-  }
-});
-
-// Update the cache every 30 minutes
+app.get("/api/emails", getEmails);
 
 setInterval(() => {
   reload().catch(
