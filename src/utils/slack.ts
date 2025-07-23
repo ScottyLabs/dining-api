@@ -1,6 +1,8 @@
 import axios, { AxiosError } from "axios";
 import { env } from "env";
-
+async function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 export async function notifySlack(message: string) {
   if (env.IN_TEST_MODE) return;
   console.log("Sending message to slack:", message);
@@ -25,9 +27,8 @@ export async function notifySlack(message: string) {
     if (error instanceof AxiosError) {
       if (error.status === 429) {
         // rate limited (we still want to send the message eventually)
-        setTimeout(() => {
-          notifySlack(message);
-        }, 30000);
+        await wait(30 * 1000);
+        await notifySlack(message);
       }
     }
   }
