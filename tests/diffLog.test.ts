@@ -24,6 +24,29 @@ describe("test diff checking", () => {
     const diffs = getObjDiffs(undefined, { a: 3, c: [1, 3] });
     expect(diffs).toContainEqual(expect.stringMatching(/inserted/));
   });
+  test("same", () => {
+    const obj1 = {
+      a: 1,
+      b: {
+        c: [1, 2, 3],
+        d: {
+          e: "test",
+          f: { g: "nested", h: [4, 5, 6] },
+        },
+      },
+      i: "string",
+      j: [7, 8, 9],
+    };
+
+    const diffs = getObjDiffs(obj1, obj1);
+    expect(diffs.length).toBe(0);
+  });
+  test("duplicates in array", () => {
+    const diffs = getObjDiffs(["A", "A", "A", "B"], ["A", "C", "C"]);
+    expect(diffs).toContainEqual(expect.stringMatching(/inserted.*2 times.*C/));
+    expect(diffs).toContainEqual(expect.stringMatching(/frequency.*A.*3.*1/));
+    expect(diffs).toContainEqual(expect.stringMatching(/deleted.*B/));
+  });
   test("nested", () => {
     const diffs = getObjDiffs(
       { a: { b: { c: { d: [1, 2, 3] } } } },

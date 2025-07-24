@@ -9,20 +9,7 @@ export function getObjDiffs(
   let diffs: string[] = [];
   if (typeof prevObject === "object" && typeof newObject === "object") {
     if (prevObject instanceof Array && newObject instanceof Array) {
-      // assume that the list is unordered, so we'll just stringify everything and compare those, naively
-      const prevSet = new Set(prevObject.map((obj) => JSON.stringify(obj)));
-      const newSet = new Set(newObject.map((obj) => JSON.stringify(obj)));
-
-      for (const prevVal of prevSet) {
-        if (!newSet.has(prevVal)) {
-          diffs.push(`deleted value at ${path}: ${prevVal}`);
-        }
-      }
-      for (const newVal of newSet) {
-        if (!prevSet.has(newVal)) {
-          diffs.push(`inserted value at ${path}: ${newVal}`);
-        }
-      }
+      diffs = diffs.concat(getArrayDiffs(prevObject, newObject, path));
     } else if (
       !(prevObject instanceof Array) &&
       !(newObject instanceof Array)
@@ -85,4 +72,44 @@ export function getDiffsBetweenLocationData(
   );
 
   return getObjDiffs(prevLocationDict, newLocationDict, "~");
+}
+
+function getArrayDiffs(prevArray: any[], newArray: any[], path: string) {
+  const diffs: string[] = [];
+  // assume that the list is unordered, so we'll just stringify everything and compare those, naively
+  const prevFreqCnt = getFreqMap(prevArray.map((obj) => JSON.stringify(obj)));
+  const newFreqCnt = getFreqMap(newArray.map((obj) => JSON.stringify(obj)));
+  const allKeys = new Set([
+    ...Object.keys(prevFreqCnt),
+    ...Object.keys(newFreqCnt),
+  ]);
+  for (const key of allKeys) {
+    if (prevFreqCnt[key] !== newFreqCnt[key]) {
+      if (prevFreqCnt[key] === undefined) {
+        diffs.push(
+          `inserted value at ${path} ${
+            newFreqCnt[key] > 1 ? newFreqCnt[key] + " times" : ""
+          }: ${key}`
+        );
+      } else if (newFreqCnt[key] === undefined) {
+        diffs.push(
+          `deleted value at ${path} ${
+            prevFreqCnt[key] > 1 ? prevFreqCnt[key] + " times" : ""
+          }: ${key}`
+        );
+      } else {
+        diffs.push(
+          `frequency of ${key} changed from ${prevFreqCnt[key]} to ${newFreqCnt[key]}`
+        );
+      }
+    }
+  }
+  return diffs;
+}
+function getFreqMap(strs: string[]) {
+  const freqMap: Record<string, number> = {};
+  for (const str of strs) {
+    freqMap[str] = (freqMap[str] ?? 0) + 1;
+  }
+  return freqMap;
 }
