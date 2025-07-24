@@ -20,21 +20,27 @@ async function reload(): Promise<void> {
   for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
     // Wait a bit before starting the next round of scrapes.
     if (i > 0)
-      await new Promise((re) => setTimeout(re, env.INTER_SCRAPE_WAIT_INTERVAL));
+      await new Promise((resolve) =>
+        setTimeout(resolve, env.INTER_SCRAPE_WAIT_INTERVAL)
+      );
 
     const locations = await parser.process();
     locations.forEach((location) => locationMerger.addLocation(location));
   }
   const finalLocations = locationMerger.getMostFrequentLocations();
-  const diffs = getDiffsBetweenLocationData(cachedLocations, finalLocations);
-
-  cachedLocations = finalLocations;
-  if (diffs.length === 0) {
-    notifySlack("Dining API reloaded (data unchanged)");
+  if (finalLocations.length === 0) {
+    notifySlack("<!channel> No data scraped! Skipping");
   } else {
-    await notifySlack("Dining API reloaded with the following changes:");
-    for (const diff of diffs) {
-      await notifySlack(diff);
+    const diffs = getDiffsBetweenLocationData(cachedLocations, finalLocations);
+    cachedLocations = finalLocations;
+
+    if (diffs.length === 0) {
+      notifySlack("Dining API reloaded (data unchanged)");
+    } else {
+      await notifySlack("Dining API reloaded with the following changes:");
+      for (const diff of diffs) {
+        await notifySlack(diff);
+      }
     }
   }
 }
