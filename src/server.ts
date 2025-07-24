@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { cors } from "@elysiajs/cors";
 import DiningParser from "./parser/diningParser";
 import { ILocation } from "types";
@@ -131,6 +131,17 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
 });
 
 app.get("/api/emails", getEmails);
+app.post(
+  "/api/sendSlackMessage",
+  async ({ body: { message } }) => {
+    await notifySlack(`From web: ${message}`);
+  },
+  {
+    body: t.Object({
+      message: t.String(),
+    }),
+  }
+);
 
 setInterval(() => {
   reload().catch(
