@@ -1,5 +1,8 @@
 # Dining API
 
+> [!IMPORTANT]  
+> Make sure `bun` is on the latest version! (Earlier versions are rather buggy) Run `bun upgrade` to update.
+
 This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://apis.scottylabs.org/dining/).
 
 To build and deploy the service, you'll need [Bun](https://bun.sh),
