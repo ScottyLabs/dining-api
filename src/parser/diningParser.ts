@@ -2,8 +2,8 @@ import { getHTMLResponse } from "../utils/requestUtils";
 import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
-import locationCoordinates from "overwrites/locationOverwrites";
 import { ILocation, ISpecial } from "types";
+import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -29,7 +29,7 @@ export default class DiningParser {
       await builder.populateDetailedInfo();
       builder.setSoup(soups);
       builder.setSpecials(specials);
-      builder.overwriteLocationCoordinates(locationCoordinates);
+      builder.overwriteLocationCoordinates(locationCoordinateOverwrites);
     }
 
     return locationBuilders.map((builder) => builder.build());

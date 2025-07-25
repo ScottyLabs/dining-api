@@ -2,7 +2,13 @@ import { getHTMLResponse } from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 import { getTimeRangesFromString } from "./timeBuilder";
-import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
+import {
+  ICoordinate,
+  ILocation,
+  ILocationCoordinateOverwrites,
+  ISpecial,
+  ITimeRange,
+} from "../types";
 import { sortAndMergeTimeRanges } from "utils/timeUtils";
 
 /**
@@ -34,13 +40,13 @@ export default class LocationBuilder {
 
     this.shortDescription = load(card)("div.description").text().trim();
   }
-  
-  overwriteLocationCoordinates(overwrites: Map<number, ICoordinate>) {
-    if (this.conceptId !== undefined) {
-      const coords = overwrites.get(this.conceptId);
-      if (coords) {
-        this.coordinates = coords;
-      }
+
+  overwriteLocationCoordinates(overwrites: ILocationCoordinateOverwrites) {
+    if (
+      this.conceptId !== undefined &&
+      overwrites[this.conceptId] !== undefined
+    ) {
+      this.coordinates = overwrites[this.conceptId];
     }
   }
 

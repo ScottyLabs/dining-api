@@ -694,13 +694,36 @@ export const expectedLocationData = [
     conceptId: 168,
     name: "TARTAN FOOD TRUCK",
     shortDescription: "Campus food truck",
-    description: "",
+    description:
+      "The Exchange offers custom deli sandwiches, soups, hot entrées, fresh baked goods, fruit, yogurt parfaits, snack and energy bars, and other grab-and-go items. The designated coffee bar includes hot brewed La Prima coffee, specialty and organic teas, cold beverages, and bottled juices.",
+    location: "Posner Hall, 1st Floor",
+    menu: "https://web.archive.org/web/20240721001349/https://apps.studentaffairs.cmu.edu/dining/dashboard_images/Production/menus/92/menu-exchange-2024-25-v2.pdf",
+
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/168",
-    location: "",
-    menu: undefined,
-    coordinates: undefined,
+    coordinates: { lat: 401.441354, lng: -791.942125 },
     acceptsOnlineOrders: false,
-    times: [],
+    times: [
+      {
+        start: { day: 1, hour: 8, minute: 0 },
+        end: { day: 1, hour: 15, minute: 0 },
+      },
+      {
+        start: { day: 2, hour: 8, minute: 0 },
+        end: { day: 2, hour: 15, minute: 0 },
+      },
+      {
+        start: { day: 3, hour: 8, minute: 0 },
+        end: { day: 3, hour: 15, minute: 0 },
+      },
+      {
+        start: { day: 4, hour: 8, minute: 0 },
+        end: { day: 4, hour: 15, minute: 0 },
+      },
+      {
+        start: { day: 5, hour: 8, minute: 0 },
+        end: { day: 5, hour: 15, minute: 0 },
+      },
+    ],
     todaysSpecials: undefined,
     todaysSoups: undefined,
   },
