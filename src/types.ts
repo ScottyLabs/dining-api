@@ -33,10 +33,7 @@ export interface ICoordinate {
 }
 
 export interface ILocationCoordinateOverwrites {
-  [conceptId: string]: {
-    labelLatitude: number;
-    labelLongitude: number;
-  };
+  [conceptId: string]: ICoordinate;
 }
 
 export enum DayOfTheWeek {
