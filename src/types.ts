@@ -31,6 +31,11 @@ export interface ICoordinate {
   lat: number;
   lng: number;
 }
+
+export interface ILocationCoordinateOverwrites {
+  [conceptId: string]: ICoordinate;
+}
+
 export enum DayOfTheWeek {
   SUNDAY = 0,
   MONDAY = 1,
