@@ -1,6 +1,6 @@
 export interface ILocation {
   conceptId: number;
-  name?: string;
+  name: string;
   shortDescription?: string;
   description: string;
   url: string;

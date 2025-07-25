@@ -15,10 +15,7 @@ import {
 } from "./mockTimings";
 
 jest.mock("axios");
-jest.mock("../src/config", () => ({
-  AXIOS_RETRY_INTERVAL_MS: 0,
-  IS_TESTING: true,
-}));
+
 test("the whole thing, including locationOverwrites", async () => {
   mockAxiosGETMethodWithFilePaths({
     conceptListFilePath: "html/listconcepts.html",

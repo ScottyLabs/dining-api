@@ -47,9 +47,7 @@ export default class DiningParser {
     if (linkHeaders.length === 0) {
       throw new Error("Unable to load page");
     }
-    return Array.from(linkHeaders).map(
-      (card) => new LocationBuilder(card)
-    );
+    return Array.from(linkHeaders).map((card) => new LocationBuilder(card));
   }
 
   private async fetchSpecials(): Promise<

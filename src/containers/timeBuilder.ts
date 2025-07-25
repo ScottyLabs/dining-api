@@ -6,6 +6,7 @@ import { IParsedTimeRange } from "./time/parsedTime";
 import { IParsedTimeDate } from "./time/parsedTimeForDate";
 import { DayOfTheWeek, ITimeRange, TimeInfoType } from "types";
 import { parseToken } from "utils/parseTimeToken";
+import { notifySlack } from "utils/slack";
 
 interface ITimeRowAttributes {
   day?: DayOfTheWeek;
@@ -71,8 +72,10 @@ function getTimeInfoWithRawAttributes(tokens: string[]) {
           timeInfo.twentyFour = true;
           break;
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      notifySlack(
+        `<!channel> Failed to parse token \`${token}\` from list of tokens \`${tokens}\`\n${err.stack}`
+      );
       continue;
     }
   }

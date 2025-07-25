@@ -1,4 +1,4 @@
-import { getHTMLResponse }  from "utils/requestUtils";
+import { getHTMLResponse } from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 import { getTimeRangesFromString } from "./timeBuilder";
@@ -57,6 +57,11 @@ export default class LocationBuilder {
       this.specials = specialList[this.conceptId];
     }
   }
+  setTimes(times: ITimeRange[]) {
+    if (this.conceptId && times !== undefined) {
+      this.times = times;
+    }
+  }
   convertMapsLinkToCoordinates(link: string) {
     const atIndex = link.indexOf("@");
     const locationUrl = link.slice(atIndex + 1, link.length);
@@ -93,6 +98,11 @@ export default class LocationBuilder {
     return new URL(LocationBuilder.CONCEPT_BASE_LINK + this.conceptId);
   }
 
+  getConceptId() {
+    if (this.conceptId === undefined) return undefined;
+    return this.conceptId;
+  }
+
   build(): ILocation {
     if (
       this.times === undefined ||
@@ -100,7 +110,8 @@ export default class LocationBuilder {
       this.description === undefined ||
       this.url === undefined ||
       this.location === undefined ||
-      this.conceptId === undefined
+      this.conceptId === undefined ||
+      this.name === undefined
     ) {
       throw Error(
         "Didn't finish configuring location before building metadata!"

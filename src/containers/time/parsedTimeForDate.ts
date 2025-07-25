@@ -1,5 +1,4 @@
 import { MonthOfTheYear } from "types";
-import { isValidDate } from "utils/parseTimeToken";
 import ParsedTimeBase from "./parsedTimeBase";
 
 export interface IParsedTimeDate {
@@ -78,5 +77,27 @@ export function convertMonthStringToEnum(monthStr: string): MonthOfTheYear {
       return MonthOfTheYear.DECEMBER;
     default:
       throw new Error(`Invalid Month: ${monthStr}`);
+  }
+}
+function isValidDate(month: MonthOfTheYear, date: number): boolean {
+  if (!Number.isInteger(date)) {
+    return false;
+  }
+  switch (month) {
+    case MonthOfTheYear.JANUARY:
+    case MonthOfTheYear.MARCH:
+    case MonthOfTheYear.MAY:
+    case MonthOfTheYear.JULY:
+    case MonthOfTheYear.AUGUST:
+    case MonthOfTheYear.OCTOBER:
+    case MonthOfTheYear.DECEMBER:
+      return date <= 31 && date >= 1;
+    case MonthOfTheYear.FEBRUARY:
+      return date <= 29 && date >= 1;
+    case MonthOfTheYear.APRIL:
+    case MonthOfTheYear.JUNE:
+    case MonthOfTheYear.SEPTEMBER:
+    case MonthOfTheYear.NOVEMBER:
+      return date <= 30 && date >= 1;
   }
 }

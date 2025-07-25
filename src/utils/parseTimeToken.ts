@@ -5,7 +5,7 @@ import ParsedTimeForDate, {
 import ParsedTimeForDay, {
   convertDayStringToEnum,
 } from "containers/time/parsedTimeForDay";
-import { TimeInfoType, MonthOfTheYear } from "types";
+import { TimeInfoType } from "types";
 
 export function parseToken(token: string) {
   token = token.trim().toLowerCase();
@@ -15,6 +15,7 @@ export function parseToken(token: string) {
       value: new ParsedTimeForDay(token).parse().value,
     } as const;
   }
+
   const testMonth = token.split(/\s/)[0];
   if (isMonth(testMonth)) {
     return {
@@ -30,6 +31,7 @@ export function parseToken(token: string) {
   ) {
     return { type: TimeInfoType.TWENTYFOURHOURS } as const;
   }
+
   if (token === "closed") {
     return { type: TimeInfoType.CLOSED } as const;
   }
@@ -61,28 +63,5 @@ export function isMonth(input: string): boolean {
     return true;
   } catch {
     return false;
-  }
-}
-
-export function isValidDate(month: MonthOfTheYear, date: number): boolean {
-  if (!Number.isInteger(date)) {
-    return false;
-  }
-  switch (month) {
-    case MonthOfTheYear.JANUARY:
-    case MonthOfTheYear.MARCH:
-    case MonthOfTheYear.MAY:
-    case MonthOfTheYear.JULY:
-    case MonthOfTheYear.AUGUST:
-    case MonthOfTheYear.OCTOBER:
-    case MonthOfTheYear.DECEMBER:
-      return date <= 31 && date >= 1;
-    case MonthOfTheYear.FEBRUARY:
-      return date <= 29 && date >= 1;
-    case MonthOfTheYear.APRIL:
-    case MonthOfTheYear.JUNE:
-    case MonthOfTheYear.SEPTEMBER:
-    case MonthOfTheYear.NOVEMBER:
-      return date <= 30 && date >= 1;
   }
 }
