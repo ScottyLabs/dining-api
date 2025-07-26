@@ -22,12 +22,13 @@ test("the whole thing, including locationOverwrites", async () => {
     specialsFilePath: "html/specials.html",
     soupsFilePath: "html/soups.html",
     getConceptFilePath: (conceptId: string) =>
-      ["92", "110", "113", "175", "108"].includes(conceptId)
+      ["92", "110", "113", "175", "108", "168"].includes(conceptId) // note that location 168 does not have a location overwrite and thus uses the one provided on the page
         ? `html/concepts/${conceptId}.html`
         : "html/blank.html",
   });
   const parser = new DiningParser();
-  expect(await parser.process()).toStrictEqual(expectedLocationData);
+  const parsedLocationData = await parser.process();
+  expect(parsedLocationData).toStrictEqual(expectedLocationData);
 });
 test("specials for The Exchange", async () => {
   mockAxiosGETMethodWithFilePaths({
