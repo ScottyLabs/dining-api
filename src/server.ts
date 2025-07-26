@@ -49,7 +49,7 @@ export const app = new Elysia({ adapter: node() }); // I don't trust bun (as a r
 
 app.onError(({ error, path, code }) => {
   if (code === "NOT_FOUND") {
-    notifySlack(`Someone tried visiting ${path}, which does not exist :P`);
+    console.log(`Someone tried visiting ${path}, which does not exist :P`);
   } else {
     notifySlack(
       `<!channel> handling request on ${path} failed with error ${error}\n${
