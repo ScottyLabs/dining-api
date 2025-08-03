@@ -19,7 +19,7 @@ export default class DiningParser {
 
   constructor() {}
 
-  async process(includeManual: boolean = true): Promise<ILocation[]> {
+  async process(): Promise<ILocation[]> {
     const locationBuilders =
       await this.initializeLocationBuildersFromMainPage();
     const manualLocations: ILocation[] = [
@@ -122,7 +122,7 @@ export default class DiningParser {
 
     return [
       ...locationBuilders.map((builder) => builder.build()),
-      ...(includeManual ? manualLocations : []),
+      ...manualLocations,
     ];
   }
 
