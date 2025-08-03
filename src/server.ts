@@ -8,6 +8,7 @@ import { node } from "@elysiajs/node";
 import { getDiffsBetweenLocationData } from "utils/diff";
 import { getEmails } from "./db";
 import LocationMerger from "utils/locationMerger";
+import { manualLocations } from "manualLocations";
 
 let cachedLocations: ILocation[] = [];
 
@@ -27,7 +28,8 @@ async function reload(): Promise<void> {
     const locations = await parser.process();
     locations.forEach((location) => locationMerger.addLocation(location));
   }
-  const finalLocations = locationMerger.getMostFrequentLocations();
+  let finalLocations = locationMerger.getMostFrequentLocations();
+  finalLocations = [...finalLocations, ...manualLocations];
   if (finalLocations.length === 0) {
     notifySlack("<!channel> No data scraped! Skipping");
   } else {
