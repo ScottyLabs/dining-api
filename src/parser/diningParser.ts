@@ -32,7 +32,7 @@ export default class DiningParser {
       builder.overwriteLocationCoordinates(locationCoordinateOverwrites);
     }
 
-    return [...locationBuilders.map((builder) => builder.build())];
+    return locationBuilders.map((builder) => builder.build());
   }
 
   private async initializeLocationBuildersFromMainPage(): Promise<
