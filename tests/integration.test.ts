@@ -239,7 +239,7 @@ describe("time edge cases", () => {
       [Thur, 2, 0, Thur, 2, 0],
       [Fri, 1, 0, Fri, 1, 0],
     ]);
-  }); // tests literally everything
+  });
   test("single time", async () => {
     setUpTimingTest({
       [Sun]: "3:12 PM - 11:30 PM",
