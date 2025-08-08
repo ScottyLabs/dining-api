@@ -28,8 +28,7 @@ export function getTimeRangesFromString(rowHTML: Element) {
 }
 
 function getTimeAttributesFromRow(rowHTML: Element) {
-  const { day, date, timeSlots } = tokenizeTimeRow(rowHTML);
-  return getTimeInfoWithRawAttributes([day, date, ...timeSlots]);
+  return getTimeInfoWithRawAttributes(tokenizeTimeRow(rowHTML));
 }
 
 function tokenizeTimeRow(rowHTML: Element) {
@@ -37,12 +36,13 @@ function tokenizeTimeRow(rowHTML: Element) {
   let day = $("strong").text();
   const dataStr = $.text().replace(/\s\s+/g, " ").replace(day, "").trim();
   let [date, time] = dataStr.split(/,(.+)/);
+  if (date === undefined || time === undefined) return [];
 
   day = (day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()).trim();
   date = (date.charAt(0).toUpperCase() + date.slice(1).toLowerCase()).trim();
   time = time.toUpperCase().trim();
   const timeSlots = time.split(/[,;]/).map((slot) => slot.trim());
-  return { day, date, timeSlots };
+  return [day, date, ...timeSlots];
 }
 
 function getTimeInfoWithRawAttributes(tokens: string[]) {
@@ -92,6 +92,13 @@ function resolveAttributeConflicts(
       closed: input.closed,
     };
   }
+  if (input.twentyFour) {
+    return {
+      day: input.day,
+      date: input.date,
+      times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
+    };
+  }
   if (input.times && input.times.length > 0) {
     return {
       day: input.day,
@@ -102,18 +109,22 @@ function resolveAttributeConflicts(
   return {
     day: input.day,
     date: input.date,
-    times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
+    times: [],
   };
 }
 
 function getTimeRangesFromTimeRow(time: ITimeRowAttributes) {
   if (time.day === undefined) {
-    throw new Error("Cannot convert when day is not set");
+    notifySlack(
+      `<!channel> Cannot convert time attribute: ${JSON.stringify(
+        time
+      )} since day is not set`
+    );
+    return [];
   }
   const allRanges: ITimeRange[] = [];
   for (const range of time.times ?? []) {
-    rollBack12AmEndTime(range);
-
+    rollBack12AmEndTime(range); // not sure why this was added, but it doesn't hurt I guess (I suppose the only case this actively helps is if the time string is 12:00 AM - 12:00 AM)
     const shouldSpillToNextDay =
       range.start.hour * 60 + range.start.minute >
       range.end.hour * 60 + range.end.minute;
