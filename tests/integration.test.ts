@@ -331,4 +331,16 @@ describe("time edge cases", () => {
       [Fri, 19, 0, Fri, 23, 59],
     ]);
   });
+  test("unparseable token", async () => {
+    setUpTimingTest({
+      [Mon]: "mooooo",
+    });
+    await queryParserAndAssertTimingsCorrect([]);
+  });
+  test("24 hours should override other times", async () => {
+    setUpTimingTest({
+      [Mon]: "OPEN 24 HOURS, 2:00 AM - 3:00 AM",
+    });
+    await queryParserAndAssertTimingsCorrect([[Mon, 0, 0, Mon, 23, 59]]);
+  });
 });

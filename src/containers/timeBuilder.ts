@@ -92,6 +92,13 @@ function resolveAttributeConflicts(
       closed: input.closed,
     };
   }
+  if (input.twentyFour) {
+    return {
+      day: input.day,
+      date: input.date,
+      times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
+    };
+  }
   if (input.times && input.times.length > 0) {
     return {
       day: input.day,
@@ -102,7 +109,7 @@ function resolveAttributeConflicts(
   return {
     day: input.day,
     date: input.date,
-    times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
+    times: [],
   };
 }
 
