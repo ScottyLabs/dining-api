@@ -331,6 +331,36 @@ describe("time edge cases", () => {
       [Fri, 19, 0, Fri, 23, 59],
     ]);
   });
+  test("partial all day", async () => {
+    setUpTimingTest({
+      [Wed]: "open 24 hours",
+      [Thur]: "open 24 hours",
+      [Fri]: "open 24 hours",
+    });
+    await queryParserAndAssertTimingsCorrect([[Wed, 0, 0, Fri, 23, 59]]);
+  });
+  test("partial all day, over the weekend", async () => {
+    setUpTimingTest({
+      [Sat]: "open 24 hours",
+      [Sun]: "open 24 hours",
+      [Mon]: "open 24 hours",
+    });
+    await queryParserAndAssertTimingsCorrect([[Sat, 0, 0, Mon, 23, 59]]);
+  });
+  test("partial all day, over the weekend", async () => {
+    setUpTimingTest({
+      [Sat]: "7:00 AM - 12:01 AM",
+      [Sun]: "open 24 hours",
+      [Mon]: "open 24 hours",
+    });
+    await queryParserAndAssertTimingsCorrect([[Sat, 7, 0, Mon, 23, 59]]);
+  });
+  test("another one", async () => {
+    setUpTimingTest({
+      [Sat]: "7:00 AM - 12:01 AM",
+    });
+    await queryParserAndAssertTimingsCorrect([[Sat, 7, 0, Sun, 0, 1]]);
+  });
   test("unparseable token", async () => {
     setUpTimingTest({
       [Mon]: "mooooo",
