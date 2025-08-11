@@ -17,15 +17,15 @@ export interface ISpecial {
   description: string;
 }
 
-export interface ITimeMoment {
+export interface ITimeSlot {
   day: DayOfTheWeek;
   hour: number;
   minute: number;
 }
 
 export interface ITimeRange {
-  start: ITimeMoment;
-  end: ITimeMoment;
+  start: ITimeSlot;
+  end: ITimeSlot;
 }
 export interface ICoordinate {
   lat: number;
