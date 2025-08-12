@@ -10,6 +10,7 @@ import {
   ITimeRange,
 } from "../types";
 import { sortAndMergeTimeRanges } from "utils/timeUtils";
+import { ChangeOverride } from "./overrides";
 
 /**
  * For building the location data structure
@@ -139,5 +140,18 @@ export default class LocationBuilder {
       todaysSpecials: this.specials,
       todaysSoups: this.soups,
     };
+  }
+
+  applyOverride(override: ChangeOverride) {
+    // Only apply if conceptId matches (optional guard)
+    if (this.conceptId !== override.conceptid) return;
+    if (override.name !== null) this.name = override.name;
+    if (override.description !== null) this.description = override.description;
+    if (override.shortdescription !== null)
+      this.shortDescription = override.shortdescription;
+    if (override.times !== null) this.times = override.times;
+    if (override.menu !== null) this.menu = override.menu;
+    if (override.accepts_online_orders !== null)
+      this.acceptsOnlineOrders = override.accepts_online_orders;
   }
 }

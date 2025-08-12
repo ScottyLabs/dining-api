@@ -7,6 +7,7 @@ import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
 import { getDiffsBetweenLocationData } from "utils/diff";
 import { getEmails } from "./db";
+import { getChanges } from "./db";
 import LocationMerger from "utils/locationMerger";
 
 let cachedLocations: ILocation[] = [];
@@ -97,6 +98,8 @@ app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
 });
 
 app.get("/api/emails", getEmails);
+app.get("/api/changes", getChanges);
+
 app.post(
   "/api/sendSlackMessage",
   async ({ body: { message } }) => {
