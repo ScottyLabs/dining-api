@@ -29,7 +29,7 @@ async function reload(): Promise<void> {
     locations.forEach((location) => locationMerger.addLocation(location));
   }
   let finalLocations = locationMerger.getMostFrequentLocations();
-  finalLocations = [...finalLocations, ...manualLocations];
+  finalLocations = [...finalLocations, ...(await manualLocations())];
   if (finalLocations.length === 0) {
     notifySlack("<!channel> No data scraped! Skipping");
   } else {
