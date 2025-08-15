@@ -11,6 +11,7 @@ const envSchema = z.object({
   IN_TEST_MODE: z.stringbool().default(false),
   SLACK_MESSAGE_PREFIX: z.string().default("local-dev"),
   DATABASE_URL: z.string(),
+  DINING_API_MAPKIT_API_KEY: z.string().optional(),
 });
 console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);

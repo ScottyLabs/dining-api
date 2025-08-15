@@ -1,9 +1,9 @@
 import { ILocation, ITimeRange } from "types";
-
+import "dotenv/config";
 import axios from "axios";
 import { env } from "env";
 
-const APPLE_MAPKIT_API_KEY = env.APPLE_MAPKIT_API_KEY;
+const APPLE_MAPKIT_API_KEY = env.DINING_API_MAPKIT_API_KEY;
 
 async function getLocationHours(placeId: string): Promise<ITimeRange[]> {
   const url = `https://maps-api.apple.com/v1/place/${placeId}`;

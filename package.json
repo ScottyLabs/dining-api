@@ -8,7 +8,9 @@
     "test-watch": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ jest --watch",
     "dev": "dotenv -- tsx watch src/server.ts",
     "start": "NODE_ENV=production dotenv -- node dist/server.js",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "vault:pull": "./scripts/vault-pull.sh all local",
+    "vault:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc"
   },
   "repository": {
     "type": "git",
