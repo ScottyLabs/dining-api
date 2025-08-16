@@ -35,7 +35,7 @@ export default class DiningParser {
       builder.overwriteLocationCoordinates(locationCoordinateOverwrites);
 
       const override = overrides.find(
-        (o) => o.conceptid === builder.getConceptId()
+        (o) => o.conceptId === builder.getConceptId()
       );
       if (override) {
         builder.applyOverride(override);
