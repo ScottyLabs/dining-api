@@ -21,7 +21,7 @@ export async function getHTMLResponse(url: URL, retriesLeft = 4) {
         html: response.data,
         url: url.toString(),
       });
-    console.log(response.headers.date, new Date());
+
     const attemptedParsedDate = DateTime.fromRFC2822(
       response.headers.date
     ).setZone("America/New_York");
