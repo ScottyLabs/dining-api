@@ -10,6 +10,7 @@ import {
   ITimeRange,
 } from "../types";
 import { sortAndMergeTimeRanges } from "utils/timeUtils";
+import { ITimeOverwrites } from "overwrites/timeOverwrites";
 
 /**
  * For building the location data structure
@@ -77,11 +78,12 @@ export default class LocationBuilder {
     return { lat: parseFloat(latitude), lng: parseFloat(longitude) };
   }
 
-  async populateDetailedInfo() {
+  async populateDetailedInfo(timeSlotOverwrites: ITimeOverwrites) {
     const conceptURL = this.getConceptLink();
     if (!conceptURL) return;
 
-    const $ = load(await getHTMLResponse(conceptURL));
+    const { body, serverDate } = await getHTMLResponse(conceptURL);
+    const $ = load(body);
     this.url = conceptURL.toString();
     this.description = $("div.description p").text().trim();
     this.menu = $("div.navItems > a#getMenu").attr("href");
@@ -96,7 +98,9 @@ export default class LocationBuilder {
 
     const nextSevenDays = $("ul.schedule").find("li").toArray();
     this.times = sortAndMergeTimeRanges(
-      nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
+      nextSevenDays.flatMap((rowHTML) =>
+        getTimeRangesFromString(rowHTML, serverDate, timeSlotOverwrites)
+      )
     );
   }
   getConceptLink() {
@@ -105,7 +109,6 @@ export default class LocationBuilder {
   }
 
   getConceptId() {
-    if (this.conceptId === undefined) return undefined;
     return this.conceptId;
   }
 

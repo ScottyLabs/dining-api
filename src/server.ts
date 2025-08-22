@@ -8,13 +8,18 @@ import { node } from "@elysiajs/node";
 import { getDiffsBetweenLocationData } from "utils/diff";
 import { getEmails } from "./db";
 import LocationMerger from "utils/locationMerger";
+import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
+import { timeSlotOverwrites } from "overwrites/timeOverwrites";
 
 let cachedLocations: ILocation[] = [];
 
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
-  const parser = new DiningParser();
+  const parser = new DiningParser(
+    locationCoordinateOverwrites,
+    timeSlotOverwrites
+  );
   const locationMerger = new LocationMerger();
 
   for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {

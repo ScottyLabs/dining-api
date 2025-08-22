@@ -2,8 +2,8 @@ import { getHTMLResponse } from "../utils/requestUtils";
 import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
-import { ILocation, ISpecial } from "types";
-import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
+import { ILocation, ILocationCoordinateOverwrites, ISpecial } from "types";
+import { IAllTimeOverwrites } from "overwrites/timeOverwrites";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -16,8 +16,16 @@ export default class DiningParser {
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials";
   static readonly DINING_SOUPS_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
+  locationOverwrites: ILocationCoordinateOverwrites;
+  timeSlotOverwrites: IAllTimeOverwrites;
 
-  constructor() {}
+  constructor(
+    locationOverwrites: ILocationCoordinateOverwrites,
+    timeSlotOverwrites: IAllTimeOverwrites
+  ) {
+    this.locationOverwrites = locationOverwrites;
+    this.timeSlotOverwrites = timeSlotOverwrites;
+  }
 
   async process(): Promise<ILocation[]> {
     const locationBuilders =
@@ -26,10 +34,12 @@ export default class DiningParser {
     const [specials, soups] = await this.fetchSpecials();
 
     for (const builder of locationBuilders) {
-      await builder.populateDetailedInfo();
+      await builder.populateDetailedInfo(
+        this.timeSlotOverwrites[builder.getConceptId() ?? -1] ?? []
+      );
       builder.setSoup(soups);
       builder.setSpecials(specials);
-      builder.overwriteLocationCoordinates(locationCoordinateOverwrites);
+      builder.overwriteLocationCoordinates(this.locationOverwrites);
     }
 
     return locationBuilders.map((builder) => builder.build());
@@ -38,7 +48,7 @@ export default class DiningParser {
   private async initializeLocationBuildersFromMainPage(): Promise<
     LocationBuilder[]
   > {
-    const mainPageHTML = await getHTMLResponse(
+    const { body: mainPageHTML } = await getHTMLResponse(
       new URL(DiningParser.DINING_URL)
     );
     const mainContainer = load(mainPageHTML)("div.conceptCards");
@@ -55,10 +65,14 @@ export default class DiningParser {
   > {
     return await Promise.all([
       retrieveSpecials(
-        await getHTMLResponse(new URL(DiningParser.DINING_SPECIALS_URL))
+        (
+          await getHTMLResponse(new URL(DiningParser.DINING_SPECIALS_URL))
+        ).body
       ),
       retrieveSpecials(
-        await getHTMLResponse(new URL(DiningParser.DINING_SOUPS_URL))
+        (
+          await getHTMLResponse(new URL(DiningParser.DINING_SOUPS_URL))
+        ).body
       ),
     ]);
   }
