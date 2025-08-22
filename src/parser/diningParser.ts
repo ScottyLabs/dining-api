@@ -16,15 +16,20 @@ export default class DiningParser {
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials";
   static readonly DINING_SOUPS_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
-  locationOverwrites: ILocationCoordinateOverwrites;
-  timeSlotOverwrites: IAllTimeOverwrites;
+  locationCoordinateOverwrites: ILocationCoordinateOverwrites = {};
+  timeSlotOverwrites: IAllTimeOverwrites = {};
 
-  constructor(
-    locationOverwrites: ILocationCoordinateOverwrites,
-    timeSlotOverwrites: IAllTimeOverwrites
-  ) {
-    this.locationOverwrites = locationOverwrites;
-    this.timeSlotOverwrites = timeSlotOverwrites;
+  constructor(overwrites?: {
+    locationCoordinateOverwrites?: ILocationCoordinateOverwrites;
+    timeSlotOverwrites?: IAllTimeOverwrites;
+  }) {
+    if (overwrites?.locationCoordinateOverwrites !== undefined) {
+      this.locationCoordinateOverwrites =
+        overwrites.locationCoordinateOverwrites;
+    }
+    if (overwrites?.timeSlotOverwrites !== undefined) {
+      this.timeSlotOverwrites = overwrites.timeSlotOverwrites;
+    }
   }
 
   async process(): Promise<ILocation[]> {
@@ -39,7 +44,7 @@ export default class DiningParser {
       );
       builder.setSoup(soups);
       builder.setSpecials(specials);
-      builder.overwriteLocationCoordinates(this.locationOverwrites);
+      builder.overwriteLocationCoordinates(this.locationCoordinateOverwrites);
     }
 
     return locationBuilders.map((builder) => builder.build());

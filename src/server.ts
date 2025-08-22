@@ -16,10 +16,10 @@ let cachedLocations: ILocation[] = [];
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
-  const parser = new DiningParser(
+  const parser = new DiningParser({
     locationCoordinateOverwrites,
-    timeSlotOverwrites
-  );
+    timeSlotOverwrites,
+  });
   const locationMerger = new LocationMerger();
 
   for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {

@@ -1,3 +1,4 @@
+import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
 import DiningParser from "../src/parser/diningParser";
 
 import { expectedLocationData } from "./expectedData";
@@ -26,7 +27,9 @@ test("the whole thing, including locationOverwrites", async () => {
         ? `html/concepts/${conceptId}.html`
         : "html/blank.html",
   });
-  const parser = new DiningParser();
+  const parser = new DiningParser({
+    locationCoordinateOverwrites: locationCoordinateOverwrites,
+  });
   const parsedLocationData = await parser.process();
   expect(parsedLocationData).toStrictEqual(expectedLocationData);
 });
