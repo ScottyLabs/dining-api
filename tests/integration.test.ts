@@ -13,7 +13,9 @@ import {
   Fri,
   Sat,
   Sun,
+  setUpArbitraryTest,
 } from "./mockTimings";
+import { DateTime } from "luxon";
 
 jest.mock("axios");
 
@@ -375,5 +377,211 @@ describe("time edge cases", () => {
       [Mon]: "OPEN 24 HOURS, 2:00 AM - 3:00 AM",
     });
     await queryParserAndAssertTimingsCorrect([[Mon, 0, 0, Mon, 23, 59]]);
+  });
+});
+
+describe("test time overwrites", () => {
+  test("no overwrites, more-so testing setUpArbitraryTest functionality", async () => {
+    setUpArbitraryTest(
+      [
+        ["Friday", "August 22", "7:00 AM - 9:00 PM"],
+        ["Saturday", "August 23", "7:00 AM - 9:00 PM"],
+        ["Sunday", "August 24", "7:00 AM - 9:00 PM"],
+        ["Monday", "August 25", "7:00 AM - 9:00 PM"],
+        ["Tuesday", "August 26", "7:00 AM - 9:00 PM"],
+        ["Wednesday", "August 27", "7:00 AM - 9:00 PM"],
+        ["Thursday", "August 28", "7:00 AM - 9:00 PM"],
+      ],
+      DateTime.fromObject({ year: 2025, month: 8, day: 22 })
+    );
+    const diningParser = new DiningParser();
+    await queryParserAndAssertTimingsCorrect(
+      [
+        [Sun, 7, 0, Sun, 21, 0],
+        [Mon, 7, 0, Mon, 21, 0],
+        [Tue, 7, 0, Tue, 21, 0],
+        [Wed, 7, 0, Wed, 21, 0],
+        [Thur, 7, 0, Thur, 21, 0],
+        [Fri, 7, 0, Fri, 21, 0],
+        [Sat, 7, 0, Sat, 21, 0],
+      ],
+      diningParser
+    );
+  });
+  test("basic", async () => {
+    setUpArbitraryTest(
+      [
+        ["Friday", "August 22", "7:00 AM - 9:00 PM"],
+        ["Saturday", "August 23", "7:00 AM - 9:00 PM"],
+        ["Sunday", "August 24", "7:00 AM - 9:00 PM"],
+        ["Monday", "August 25", "7:00 AM - 9:00 PM"],
+        ["Tuesday", "August 26", "7:00 AM - 9:00 PM"],
+        ["Wednesday", "August 27", "7:00 AM - 9:00 PM"],
+        ["Thursday", "August 28", "7:00 AM - 9:00 PM"],
+      ],
+      DateTime.fromObject({ year: 2025, month: 8, day: 22 })
+    );
+    const diningParser = new DiningParser({
+      timeSlotOverwrites: {
+        113: {
+          "8/23/25": ["CLOSED"],
+        },
+      },
+    });
+    await queryParserAndAssertTimingsCorrect(
+      [
+        [Sun, 7, 0, Sun, 21, 0],
+        [Mon, 7, 0, Mon, 21, 0],
+        [Tue, 7, 0, Tue, 21, 0],
+        [Wed, 7, 0, Wed, 21, 0],
+        [Thur, 7, 0, Thur, 21, 0],
+        [Fri, 7, 0, Fri, 21, 0],
+      ],
+      diningParser
+    );
+  });
+  test("basic", async () => {
+    setUpArbitraryTest(
+      [
+        ["Friday", "August 22", "7:00 AM - 9:00 PM"],
+        ["Saturday", "August 23", "7:00 AM - 9:00 PM"],
+        ["Sunday", "August 24", "7:00 AM - 9:00 PM"],
+        ["Monday", "August 25", "7:00 AM - 9:00 PM"],
+        ["Tuesday", "August 26", "7:00 AM - 9:00 PM"],
+        ["Wednesday", "August 27", "7:00 AM - 9:00 PM"],
+        ["Thursday", "August 28", "7:00 AM - 9:00 PM"],
+      ],
+      DateTime.fromObject({ year: 2025, month: 8, day: 22 })
+    );
+    const diningParser = new DiningParser({
+      timeSlotOverwrites: {
+        113: {
+          "8/23/25": ["2:00 AM - 3:00 AM"],
+        },
+      },
+    });
+    await queryParserAndAssertTimingsCorrect(
+      [
+        [Sun, 7, 0, Sun, 21, 0],
+        [Mon, 7, 0, Mon, 21, 0],
+        [Tue, 7, 0, Tue, 21, 0],
+        [Wed, 7, 0, Wed, 21, 0],
+        [Thur, 7, 0, Thur, 21, 0],
+        [Fri, 7, 0, Fri, 21, 0],
+        [Sat, 2, 0, Sat, 3, 0],
+      ],
+      diningParser
+    );
+  });
+  test("overwrite everything", async () => {
+    setUpArbitraryTest(
+      [
+        ["Friday", "August 22", "7:00 AM - 9:00 PM"],
+        ["Saturday", "August 23", "7:00 AM - 9:00 PM"],
+        ["Sunday", "August 24", "7:00 AM - 9:00 PM"],
+        ["Monday", "August 25", "7:00 AM - 9:00 PM"],
+        ["Tuesday", "August 26", "7:00 AM - 9:00 PM"],
+        ["Wednesday", "August 27", "7:00 AM - 9:00 PM"],
+        ["Thursday", "August 28", "7:00 AM - 9:00 PM"],
+      ],
+      DateTime.fromObject({ year: 2025, month: 8, day: 22 })
+    );
+    const diningParser = new DiningParser({
+      timeSlotOverwrites: {
+        113: {
+          "8/22/25": ["2:00 AM - 3:00 AM"],
+          "8/23/25": ["2:00 AM - 3:00 AM"],
+          "8/24/25": ["2:00 AM - 3:00 AM"],
+          "8/25/25": ["2:00 AM - 3:00 AM"],
+          "8/26/25": ["2:00 AM - 3:00 AM"],
+          "8/27/25": ["2:00 AM - 3:00 AM"],
+          "8/28/25": ["2:00 AM - 3:00 AM"],
+        },
+      },
+    });
+    await queryParserAndAssertTimingsCorrect(
+      [
+        [Sun, 2, 0, Sun, 3, 0],
+        [Mon, 2, 0, Mon, 3, 0],
+        [Tue, 2, 0, Tue, 3, 0],
+        [Wed, 2, 0, Wed, 3, 0],
+        [Thur, 2, 0, Thur, 3, 0],
+        [Fri, 2, 0, Fri, 3, 0],
+        [Sat, 2, 0, Sat, 3, 0],
+      ],
+      diningParser
+    );
+  });
+  test("overwrite with coalescing", async () => {
+    setUpArbitraryTest(
+      [
+        ["Friday", "August 22", "7:00 AM - 9:00 PM"],
+        ["Saturday", "August 23", "7:00 AM - 9:00 PM"],
+        ["Sunday", "August 24", "7:00 AM - 9:00 PM"],
+        ["Monday", "August 25", "7:00 AM - 9:00 PM"],
+        ["Tuesday", "August 26", "7:00 AM - 9:00 PM"],
+        ["Wednesday", "August 27", "7:00 AM - 9:00 PM"],
+        ["Thursday", "August 28", "7:00 AM - 9:00 PM"],
+      ],
+      DateTime.fromObject({ year: 2025, month: 8, day: 22 })
+    );
+    const diningParser = new DiningParser({
+      timeSlotOverwrites: {
+        113: {
+          "8/23/25": ["11:00 AM - 10:00 AM"],
+        },
+      },
+    });
+    await queryParserAndAssertTimingsCorrect(
+      [
+        [Mon, 7, 0, Mon, 21, 0],
+        [Tue, 7, 0, Tue, 21, 0],
+        [Wed, 7, 0, Wed, 21, 0],
+        [Thur, 7, 0, Thur, 21, 0],
+        [Fri, 7, 0, Fri, 21, 0],
+        [Sat, 11, 0, Sun, 21, 0],
+      ],
+      diningParser
+    );
+  });
+  test("overwrite everything, into the New Years", async () => {
+    setUpArbitraryTest(
+      [
+        ["Tuesday", "December 30", "7:00 AM - 9:00 PM"],
+        ["Wednesday", "December 31", "7:00 AM - 9:00 PM"],
+        ["Thursday", "January 1", "7:00 AM - 9:00 PM"],
+        ["Friday", "January 2", "7:00 AM - 9:00 PM"],
+        ["Saturday", "January 3", "7:00 AM - 9:00 PM"],
+        ["Sunday", "January 4", "7:00 AM - 9:00 PM"],
+        ["Monday", "January 5", "7:00 AM - 9:00 PM"],
+      ],
+      DateTime.fromObject({ year: 2025, month: 12, day: 30 })
+    );
+    const diningParser = new DiningParser({
+      timeSlotOverwrites: {
+        113: {
+          "8/23/25": ["2:00 AM - 10:00 AM"],
+          "12/30/25": ["2:00 AM - 10:00 AM"],
+          "12/31/25": ["2:00 AM - 10:00 AM"],
+          "1/1/26": ["2:00 AM - 10:00 AM"], // typing this date just gave me an existential crisis. Thanks a lot.
+          "1/2/26": ["2:00 AM - 10:00 AM"],
+          "1/3/26": ["2:00 AM - 10:00 AM"],
+          "1/4/26": ["2:00 AM - 10:00 AM"],
+          "1/5/26": ["2:00 AM - 10:00 AM"],
+        },
+      },
+    });
+    await queryParserAndAssertTimingsCorrect(
+      [
+        [Sun, 2, 0, Sun, 10, 0],
+        [Mon, 2, 0, Mon, 10, 0],
+        [Tue, 2, 0, Tue, 10, 0],
+        [Wed, 2, 0, Wed, 10, 0],
+        [Thur, 2, 0, Thur, 10, 0],
+        [Fri, 2, 0, Fri, 10, 0],
+        [Sat, 2, 0, Sat, 10, 0],
+      ],
+      diningParser
+    );
   });
 });
