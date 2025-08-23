@@ -2,7 +2,9 @@ import { MonthOfTheYear } from "types";
 import ParsedTimeBase from "./parsedTimeBase";
 
 export interface IParsedTimeDate {
+  /** 1-12 */
   month: MonthOfTheYear;
+  /* 1-31 */
   date: number;
 }
 
