@@ -25,6 +25,11 @@ export async function getHTMLResponse(url: URL, retriesLeft = 4) {
     const attemptedParsedDate = DateTime.fromRFC2822(
       response.headers.date
     ).setZone("America/New_York");
+    if (!attemptedParsedDate.isValid) {
+      notifySlack(
+        `<!channel> Ran into unparseable date response header! url: ${url} response headers: ${response.headers.date}`
+      );
+    }
     return {
       body: response.data,
       serverDate: attemptedParsedDate.isValid
