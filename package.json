@@ -4,7 +4,7 @@
   "description": "Carnegie Mellon University Dining API",
   "main": "server.ts",
   "scripts": {
-    "test": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ DATABASE_URL=/ jest --coverage",
+    "test": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_BACKEND_WEBHOOK_URL=/ SLACK_FRONTEND_WEBHOOK_URL=/ DATABASE_URL=/ jest --coverage",
     "test-watch": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ jest --watch",
     "dev": "dotenv -- tsx watch src/server.ts",
     "start": "NODE_ENV=production dotenv -- node dist/server.js",
