@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { getFileContent, last } from "./utils";
 import axios from "axios";
 
@@ -19,14 +20,19 @@ export function mockAxiosGETMethod({
   specialsHTML,
   soupsHTML,
   conceptHTML,
+  serverDate,
 }: {
   conceptListHTML?: string;
   specialsHTML?: string;
   soupsHTML?: string;
   conceptHTML?: (id: string) => string | undefined;
+  serverDate?: DateTime<true>;
 }) {
   (axios.get as jest.Mock).mockImplementation(async (url: string) => {
-    return { data: getHTML(url) };
+    return {
+      data: getHTML(url),
+      headers: { date: (serverDate ?? DateTime.now()).toRFC2822() },
+    };
   });
 
   const getHTML = (url: string) => {
@@ -48,11 +54,13 @@ export function mockAxiosGETMethodWithFilePaths({
   specialsFilePath,
   soupsFilePath,
   getConceptFilePath,
+  serverDate,
 }: {
   conceptListFilePath?: string;
   specialsFilePath?: string;
   soupsFilePath?: string;
   getConceptFilePath?: (conceptId: string) => string;
+  serverDate?: DateTime<true>;
 }) {
   mockAxiosGETMethod({
     conceptListHTML: getFileContent(conceptListFilePath),
@@ -62,5 +70,6 @@ export function mockAxiosGETMethodWithFilePaths({
       getConceptFilePath
         ? getFileContent(getConceptFilePath(conceptId))
         : undefined,
+    serverDate,
   });
 }

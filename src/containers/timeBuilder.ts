@@ -7,6 +7,8 @@ import { IParsedTimeDate } from "./time/parsedTimeForDate";
 import { DayOfTheWeek, ITimeRange, TimeInfoType } from "types";
 import { parseToken } from "utils/parseTimeToken";
 import { notifySlack } from "utils/slack";
+import { DateTime } from "luxon";
+import { ITimeOverwrites } from "overwrites/timeOverwrites";
 
 interface ITimeRowAttributes {
   day?: DayOfTheWeek;
@@ -16,22 +18,56 @@ interface ITimeRowAttributes {
   closed?: boolean;
   twentyFour?: boolean;
 }
-
 /**
  *
  * @param rowString ex. Monday, September 09,  7:30 AM - 10:00 AM, 11:00 AM - 2:00 PM, 4:30 PM - 8:30 PM
+ * @param timeScraped Server time when rowHTML was obtained. we'll use this to derive the year for the row entry (and use that to check for relevant overrides)
  */
-export function getTimeRangesFromString(rowHTML: Element) {
+export function getTimeRangesFromString(
+  rowHTML: Element,
+  timeScraped: DateTime<true>,
+  overwrites: ITimeOverwrites
+) {
   let timeRowInfo: ITimeRowAttributes = getTimeAttributesFromRow(rowHTML);
+  if (timeRowInfo.date) {
+    const { date, month } = timeRowInfo.date;
+
+    let twoDigitYear = timeScraped.year % 100;
+    if (
+      month < timeScraped.month ||
+      (month === timeScraped.month && date < timeScraped.day)
+    ) {
+      // we are in the next year if the row date is before `timeScraped` (note: this requires `timeScraped` to be accurate and in the correct timezone, EST)
+      twoDigitYear++;
+    }
+
+    const overrideEntry = overwrites[`${month}/${date}/${twoDigitYear}`];
+    if (overrideEntry !== undefined) {
+      timeRowInfo = getTimeAttributesFromRow(rowHTML, overrideEntry); // yes, we are reparsing the string again, but we need a first pass to get the date
+    }
+  }
+
   timeRowInfo = resolveAttributeConflicts(timeRowInfo);
   return getTimeRangesFromTimeRow(timeRowInfo);
 }
 
-function getTimeAttributesFromRow(rowHTML: Element) {
-  return getTimeInfoWithRawAttributes(tokenizeTimeRow(rowHTML));
+/**
+ *
+ * @param rowHTML
+ * @param timeSlotOverrides ex. [7:00 AM - 3:00 PM, 4:00 PM - 6:00 PM] (the string should be formatted exactly how the dining site formats the string)
+ * Whatever is put here completely overrides the original time slot values.
+ * @returns
+ */
+function getTimeAttributesFromRow(
+  rowHTML: Element,
+  timeSlotOverrides?: string[]
+) {
+  return getTimeInfoWithRawAttributes(
+    tokenizeTimeRow(rowHTML, timeSlotOverrides)
+  );
 }
 
-function tokenizeTimeRow(rowHTML: Element) {
+function tokenizeTimeRow(rowHTML: Element, timeSlotOverrides?: string[]) {
   const $ = load(rowHTML);
   let day = $("strong").text();
   const dataStr = $.text().replace(/\s\s+/g, " ").replace(day, "").trim();
@@ -41,7 +77,8 @@ function tokenizeTimeRow(rowHTML: Element) {
   day = (day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()).trim();
   date = (date.charAt(0).toUpperCase() + date.slice(1).toLowerCase()).trim();
   time = time.toUpperCase().trim();
-  const timeSlots = time.split(/[,;]/).map((slot) => slot.trim());
+  const timeSlots =
+    timeSlotOverrides ?? time.split(/[,;]/).map((slot) => slot.trim());
   return [day, date, ...timeSlots];
 }
 
