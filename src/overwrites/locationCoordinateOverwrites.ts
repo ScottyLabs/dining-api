@@ -54,8 +54,8 @@ const locationCoordinateOverwrites: ILocationCoordinateOverwrites = {
     lng: -79.9400539411368,
   },
   "95": {
-    lat: 40.44110394047497,
-    lng: -79.94341681666283,
+    lat: 40.44239859745149,
+    lng: -79.93978739035869,
   },
   "103": {
     lat: 40.44294406631636,
