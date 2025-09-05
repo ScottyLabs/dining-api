@@ -5,7 +5,7 @@ export type IAllTimeOverwrites = {
 };
 
 /**
- * key is in the format of MM/DD/YY (omit the first digit of the month if it's 0. same thing for day. (ex: Miku day is represented as 3/9/25))
+ * key is in the format of MM/DD/YYYY (omit the first digit of the month if it's 0. same thing for day. (ex: Miku day is represented as 3/9/25))
  * NOTE: There is no coalescing between the existing time string for that day and the overwritten time string.
  * If you choose to overwrite that day, you must do so completely.
  */
