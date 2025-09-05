@@ -88,6 +88,11 @@ export function setUpTimingTest(
         getFileContent("html/concepts/113-tests.html")
       );
     },
+    serverDate: DateTime.fromObject({
+      year: 2024,
+      month: 9,
+      day: 9,
+    }) as DateTime<true>, // this was the date when the test page was scraped
   });
 }
 

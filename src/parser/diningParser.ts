@@ -40,7 +40,9 @@ export default class DiningParser {
 
     for (const builder of locationBuilders) {
       await builder.populateDetailedInfo(
-        this.timeSlotOverwrites[builder.getConceptId() ?? -1] ?? []
+        builder.getConceptId() !== undefined
+          ? this.timeSlotOverwrites[builder.getConceptId()!]
+          : undefined
       );
       builder.setSoup(soups);
       builder.setSpecials(specials);

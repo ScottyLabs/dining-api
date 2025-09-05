@@ -38,6 +38,11 @@ export default class ParsedTimeForDate extends ParsedTimeBase {
   }
 }
 
+/**
+ * Throws error when failed
+ * @param monthStr
+ * @returns
+ */
 export function convertMonthStringToEnum(monthStr: string): MonthOfTheYear {
   const normalizedMonth = monthStr.trim().toLowerCase();
   switch (normalizedMonth) {

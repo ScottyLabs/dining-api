@@ -1,17 +1,4 @@
-import { DayOfTheWeek, ITimeSlot, ITimeRange } from "types";
-
-export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
-  const weekdays: DayOfTheWeek[] = [
-    DayOfTheWeek.SUNDAY,
-    DayOfTheWeek.MONDAY,
-    DayOfTheWeek.TUESDAY,
-    DayOfTheWeek.WEDNESDAY,
-    DayOfTheWeek.THURSDAY,
-    DayOfTheWeek.FRIDAY,
-    DayOfTheWeek.SATURDAY,
-  ]; // ordered by time
-  return weekdays[(weekdays.indexOf(day) + 1) % 7];
-}
+import { ITimeSlot, ITimeRange } from "types";
 
 export function getMinutesSinceStartOfSunday(timeSlot: ITimeSlot) {
   return timeSlot.day * (24 * 60) + timeSlot.hour * 60 + timeSlot.minute;
@@ -31,7 +18,7 @@ export function compareTimeSlots(timeSlot1: ITimeSlot, timeSlot2: ITimeSlot) {
 
 export function sortAndMergeTimeRanges(timeRanges: ITimeRange[]) {
   const MINUTES_IN_A_WEEK = 60 * 24 * 7;
-  const unwrappedTimeRanges = timeRanges
+  const unwrappedTimeRanges = [...timeRanges]
     .flatMap((rng) => {
       if (compareTimeSlots(rng.start, rng.end) > 0) {
         // unwrap the wrapped interval
@@ -46,6 +33,7 @@ export function sortAndMergeTimeRanges(timeRanges: ITimeRange[]) {
     .sort((range1, range2) => compareTimeSlots(range1.start, range2.start));
   const mergedRanges: ITimeRange[] = [];
 
+  // merge overlapping ranges
   for (const timeRange of unwrappedTimeRanges) {
     const lastTimeRange = mergedRanges.length
       ? mergedRanges[mergedRanges.length - 1]

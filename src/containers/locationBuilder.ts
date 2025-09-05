@@ -1,7 +1,7 @@
 import { getHTMLResponse } from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
-import { getTimeRangesFromString } from "./timeBuilder";
+import { getAllTimeSlotsFromSchedule } from "./timeBuilder";
 import {
   ICoordinate,
   ILocation,
@@ -9,7 +9,6 @@ import {
   ISpecial,
   ITimeRange,
 } from "../types";
-import { sortAndMergeTimeRanges } from "utils/timeUtils";
 import { ITimeOverwrites } from "overwrites/timeOverwrites";
 
 /**
@@ -78,7 +77,7 @@ export default class LocationBuilder {
     return { lat: parseFloat(latitude), lng: parseFloat(longitude) };
   }
 
-  async populateDetailedInfo(timeSlotOverwrites: ITimeOverwrites) {
+  async populateDetailedInfo(timeSlotOverwrites: ITimeOverwrites = {}) {
     const conceptURL = this.getConceptLink();
     if (!conceptURL) return;
 
@@ -97,10 +96,10 @@ export default class LocationBuilder {
     }
 
     const nextSevenDays = $("ul.schedule").find("li").toArray();
-    this.times = sortAndMergeTimeRanges(
-      nextSevenDays.flatMap((rowHTML) =>
-        getTimeRangesFromString(rowHTML, serverDate, timeSlotOverwrites)
-      )
+    this.times = getAllTimeSlotsFromSchedule(
+      nextSevenDays,
+      serverDate.year,
+      timeSlotOverwrites
     );
   }
   getConceptLink() {

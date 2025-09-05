@@ -4,7 +4,10 @@ async function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 export async function notifySlack(message: string) {
-  if (env.IN_TEST_MODE) return;
+  if (env.IN_TEST_MODE) {
+    console.log("would've notified slack with message", message);
+    return;
+  }
   console.log("Sending message to slack:", message);
   try {
     await axios.post(

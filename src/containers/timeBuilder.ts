@@ -1,166 +1,126 @@
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 
-import { getNextDay } from "../utils/timeUtils";
+import { sortAndMergeTimeRanges } from "../utils/timeUtils";
 import { IParsedTimeRange } from "./time/parsedTime";
-import { IParsedTimeDate } from "./time/parsedTimeForDate";
-import { DayOfTheWeek, ITimeRange, TimeInfoType } from "types";
+import { convertMonthStringToEnum } from "./time/parsedTimeForDate";
+import { ITimeRange, TimeInfoType } from "types";
 import { parseToken } from "utils/parseTimeToken";
 import { notifySlack } from "utils/slack";
 import { DateTime } from "luxon";
 import { ITimeOverwrites } from "overwrites/timeOverwrites";
-
-interface ITimeRowAttributes {
-  day?: DayOfTheWeek;
-  date?: IParsedTimeDate;
-  /** Multiple times in the same day (ex. https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/180) */
-  times?: IParsedTimeRange[];
-  closed?: boolean;
-  twentyFour?: boolean;
-}
-/**
- *
- * @param rowString ex. Monday, September 09,  7:30 AM - 10:00 AM, 11:00 AM - 2:00 PM, 4:30 PM - 8:30 PM
- * @param timeScraped Server time when rowHTML was obtained. we'll use this to derive the year for the row entry (and use that to check for relevant overrides)
- */
-export function getTimeRangesFromString(
-  rowHTML: Element,
-  timeScraped: DateTime<true>,
-  overwrites: ITimeOverwrites
-) {
-  let timeRowInfo: ITimeRowAttributes = getTimeAttributesFromRow(rowHTML);
-  if (timeRowInfo.date) {
-    const { date, month } = timeRowInfo.date;
-
-    let twoDigitYear = timeScraped.year % 100;
-    if (
-      month < timeScraped.month ||
-      (month === timeScraped.month && date < timeScraped.day)
-    ) {
-      // we are in the next year if the row date is before `timeScraped` (note: this requires `timeScraped` to be accurate and in the correct timezone, EST)
-      twoDigitYear++;
-    }
-
-    const overrideEntry = overwrites[`${month}/${date}/${twoDigitYear}`];
-    if (overrideEntry !== undefined) {
-      timeRowInfo = getTimeAttributesFromRow(rowHTML, overrideEntry); // yes, we are reparsing the string again, but we need a first pass to get the date
-    }
-  }
-
-  timeRowInfo = resolveAttributeConflicts(timeRowInfo);
-  return getTimeRangesFromTimeRow(timeRowInfo);
-}
+import ParsedTimeForDayOfWeek from "./time/parsedTimeForDay";
 
 /**
  *
- * @param rowHTML
- * @param timeSlotOverrides ex. [7:00 AM - 3:00 PM, 4:00 PM - 6:00 PM] (the string should be formatted exactly how the dining site formats the string)
- * Whatever is put here completely overrides the original time slot values.
+ * @param schedule
+ * @param currentYear Current year, XXXX
  * @returns
  */
-function getTimeAttributesFromRow(
-  rowHTML: Element,
-  timeSlotOverrides?: string[]
+export function getAllTimeSlotsFromSchedule(
+  schedule: Element[],
+  currentYear: number,
+  scheduleOverwrites: ITimeOverwrites
 ) {
-  return getTimeInfoWithRawAttributes(
-    tokenizeTimeRow(rowHTML, timeSlotOverrides)
-  );
+  const allTimeSlots: ITimeRange[] = [];
+  let prevMonth = -1;
+  for (const rowHTML of schedule) {
+    const $ = load(rowHTML);
+    try {
+      const [date, timeSlotsForThatDay] = $.text()
+        .replaceAll("\n", "")
+        .replace(/\s\s+/g, " ")
+        .split(/,(.*)/); // splits only on first comma
+      const [dayOfWeek, month, day] = date.trim().split(" ");
+      if (
+        dayOfWeek === undefined ||
+        month === undefined ||
+        day === undefined ||
+        date === undefined ||
+        timeSlotsForThatDay === undefined
+      )
+        continue;
+      const parsedMonth = convertMonthStringToEnum(month);
+      const parsedDay = parseInt(day);
+      const parsedDayOfWeek = new ParsedTimeForDayOfWeek(dayOfWeek).parse()
+        .value;
+      if (parsedMonth < prevMonth) {
+        // new year
+        currentYear++;
+      }
+      prevMonth = parsedMonth;
+
+      const rowFullDateString = `${parsedMonth}/${parsedDay}/${currentYear}`;
+      const rowDate = DateTime.fromFormat(rowFullDateString, "M/d/y");
+
+      if (!rowDate.isValid) {
+        notifySlack(
+          `<!channel> Cannot parse date ${rowFullDateString}, derived from ${$.text()}`
+        );
+        continue;
+      }
+      const parsedTimeSlots = parseTimeSlots(
+        scheduleOverwrites[rowFullDateString] ??
+          timeSlotsForThatDay.split(/[,;]/).map((slot) => slot.trim())
+      );
+      const parsedTimeSlotsWithDateInfo = augmentAndEditTimeRangesWithDateInfo(
+        parsedTimeSlots,
+        parsedDayOfWeek // we could use rowDate.weekday % 7, but that would break a good number of tests that did not rely on serverDate to get the weekday...
+      );
+      allTimeSlots.push(...parsedTimeSlotsWithDateInfo);
+    } catch (e) {
+      notifySlack(
+        `<!channel> Failed to parse row ${$.text()} ${e} ${(e as any).stack}`
+      );
+    }
+  }
+  return sortAndMergeTimeRanges(allTimeSlots);
 }
+/**
+ *
+ * @param timeString The actual time slots (ex. '10:30 AM - 8:00 PM' in the string 'Tuesday September 09,  10:30 AM - 8:00 PM')
+ * @returns
+ */
+function parseTimeSlots(timeSlotStrings: string[]) {
+  const timeRanges: IParsedTimeRange[] = [];
 
-function tokenizeTimeRow(rowHTML: Element, timeSlotOverrides?: string[]) {
-  const $ = load(rowHTML);
-  let day = $("strong").text();
-  const dataStr = $.text().replace(/\s\s+/g, " ").replace(day, "").trim();
-  let [date, time] = dataStr.split(/,(.+)/);
-  if (date === undefined || time === undefined) return [];
-
-  day = (day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()).trim();
-  date = (date.charAt(0).toUpperCase() + date.slice(1).toLowerCase()).trim();
-  time = time.toUpperCase().trim();
-  const timeSlots =
-    timeSlotOverrides ?? time.split(/[,;]/).map((slot) => slot.trim());
-  return [day, date, ...timeSlots];
-}
-
-function getTimeInfoWithRawAttributes(tokens: string[]) {
-  const timeInfo: ITimeRowAttributes = {};
-
-  for (const token of tokens) {
+  for (const token of timeSlotStrings) {
     try {
       const { type: timeInfoType, value } = parseToken(token);
       switch (timeInfoType) {
-        case TimeInfoType.DAY:
-          timeInfo.day = value;
-          break;
-        case TimeInfoType.DATE:
-          timeInfo.date = value;
-          break;
         case TimeInfoType.TIME:
-          if (timeInfo.times !== undefined) {
-            timeInfo.times.push(value);
-          } else {
-            timeInfo.times = [value];
-          }
-          break;
-        case TimeInfoType.CLOSED:
-          timeInfo.closed = true;
+          timeRanges.push(value);
           break;
         case TimeInfoType.TWENTYFOURHOURS:
-          timeInfo.twentyFour = true;
-          break;
+          timeRanges.push({
+            start: { hour: 0, minute: 0 },
+            end: { hour: 23, minute: 59 },
+          });
       }
     } catch (err: any) {
       notifySlack(
-        `<!channel> Failed to parse token \`${token}\` from list of tokens \`${tokens}\`\n${err.stack}`
+        `<!channel> Failed to parse token \`${token}\` from time slot \`${timeSlotStrings.join(
+          "|"
+        )}\`\n${err.stack}`
       );
       continue;
     }
   }
-  return timeInfo;
+  return timeRanges;
 }
 
-function resolveAttributeConflicts(
-  input: ITimeRowAttributes
-): ITimeRowAttributes {
-  if (input.closed) {
-    return {
-      day: input.day,
-      date: input.date,
-      closed: input.closed,
-    };
-  }
-  if (input.twentyFour) {
-    return {
-      day: input.day,
-      date: input.date,
-      times: [{ start: { hour: 0, minute: 0 }, end: { hour: 23, minute: 59 } }],
-    };
-  }
-  if (input.times && input.times.length > 0) {
-    return {
-      day: input.day,
-      date: input.date,
-      times: input.times,
-    };
-  }
-  return {
-    day: input.day,
-    date: input.date,
-    times: [],
-  };
-}
-
-function getTimeRangesFromTimeRow(time: ITimeRowAttributes) {
-  if (time.day === undefined) {
-    notifySlack(
-      `<!channel> Cannot convert time attribute: ${JSON.stringify(
-        time
-      )} since day is not set`
-    );
-    return [];
-  }
+/**
+ *
+ * @param timeRanges
+ * @param day (0-6, with Sunday being 0)
+ * @returns
+ */
+function augmentAndEditTimeRangesWithDateInfo(
+  timeRanges: IParsedTimeRange[],
+  day: number
+) {
   const allRanges: ITimeRange[] = [];
-  for (const range of time.times ?? []) {
+  for (const range of timeRanges) {
     rollBack12AmEndTime(range); // not sure why this was added, but it doesn't hurt I guess (I suppose the only case this actively helps is if the time string is 12:00 AM - 12:00 AM)
     const shouldSpillToNextDay =
       range.start.hour * 60 + range.start.minute >
@@ -168,12 +128,12 @@ function getTimeRangesFromTimeRow(time: ITimeRowAttributes) {
 
     allRanges.push({
       start: {
-        day: time.day,
+        day: day,
         hour: range.start.hour,
         minute: range.start.minute,
       },
       end: {
-        day: shouldSpillToNextDay ? getNextDay(time.day) : time.day,
+        day: shouldSpillToNextDay ? (day + 1) % 7 : day,
         hour: range.end.hour,
         minute: range.end.minute,
       },

@@ -18,7 +18,10 @@ export interface ISpecial {
 }
 
 export interface ITimeSlot {
-  day: DayOfTheWeek;
+  /**
+   * 0 - 6 where 0 = Sunday
+   */
+  day: number;
   hour: number;
   minute: number;
 }
@@ -34,16 +37,6 @@ export interface ICoordinate {
 
 export interface ILocationCoordinateOverwrites {
   [conceptId: string]: ICoordinate;
-}
-
-export enum DayOfTheWeek {
-  SUNDAY = 0,
-  MONDAY = 1,
-  TUESDAY = 2,
-  WEDNESDAY = 3,
-  THURSDAY = 4,
-  FRIDAY = 5,
-  SATURDAY = 6,
 }
 
 export enum MonthOfTheYear {
@@ -62,8 +55,6 @@ export enum MonthOfTheYear {
 }
 
 export enum TimeInfoType {
-  DAY = "DAY",
-  DATE = "DATE",
   TIME = "TIME",
   CLOSED = "CLOSED",
   TWENTYFOURHOURS = "TWENTYFOURHOURS",

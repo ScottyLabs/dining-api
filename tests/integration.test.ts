@@ -1,4 +1,3 @@
-import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
 import DiningParser from "../src/parser/diningParser";
 
 import { expectedLocationData } from "./expectedData";
@@ -28,9 +27,143 @@ test("the whole thing, including locationOverwrites", async () => {
       ["92", "110", "113", "175", "108", "168"].includes(conceptId) // note that location 168 does not have a location overwrite and thus uses the one provided on the page
         ? `html/concepts/${conceptId}.html`
         : "html/blank.html",
+    serverDate: DateTime.fromObject({
+      year: 2024,
+      month: 8,
+      day: 5,
+    }) as DateTime<true>,
   });
   const parser = new DiningParser({
-    locationCoordinateOverwrites: locationCoordinateOverwrites,
+    locationCoordinateOverwrites: {
+      "136": {
+        lat: 40.44497677044086,
+        lng: -79.94526274161514,
+      },
+      "134": {
+        lat: 40.44496677039454,
+        lng: -79.94543510284873,
+      },
+      "127": {
+        lat: 40.44296,
+        lng: -79.941815,
+      },
+      "175": {
+        lat: 40.44492728615915,
+        lng: -79.94544766519252,
+      },
+      "185": {
+        lat: 40.44494190940949,
+        lng: -79.94547335554091,
+      },
+      "154": {
+        lat: 40.44493626367144,
+        lng: -79.94534102575214,
+      },
+      "173": {
+        lat: 40.44490020783157,
+        lng: -79.94540910407714,
+      },
+      "192": {
+        lat: 40.44494958989201,
+        lng: -79.94541940780638,
+      },
+      "155": {
+        lat: 40.44269873724883,
+        lng: -79.94664155857618,
+      },
+      "82": {
+        lat: 40.44260716039899,
+        lng: -79.93995513782087,
+      },
+      "98": {
+        lat: 40.44245836757329,
+        lng: -79.94002835619484,
+      },
+      "178": {
+        lat: 40.44265640089745,
+        lng: -79.94021168805847,
+      },
+      "114": {
+        lat: 40.44253705946464,
+        lng: -79.9400539411368,
+      },
+      "95": {
+        lat: 40.44110394047497,
+        lng: -79.94341681666283,
+      },
+      "103": {
+        lat: 40.44294406631636,
+        lng: -79.9421613966706,
+      },
+      "91": {
+        lat: 40.44306965961788,
+        lng: -79.94207835253889,
+      },
+      "174": {
+        lat: 40.44336219896886,
+        lng: -79.94196740444092,
+      },
+      "113": {
+        lat: 40.44392022644891,
+        lng: -79.94220130436851,
+      },
+      "108": {
+        lat: 40.44313373573427,
+        lng: -79.94252833667237,
+      },
+      "138": {
+        lat: 40.44319390927541,
+        lng: -79.9420529542194,
+      },
+      "184": {
+        lat: 40.4432203633545,
+        lng: -79.94203823851873,
+      },
+      "193": {
+        lat: 40.44326107687846,
+        lng: -79.94202626834755,
+      },
+      "88": {
+        lat: 40.44322866937478,
+        lng: -79.94252749706692,
+      },
+      "148": {
+        lat: 40.44618769931711,
+        lng: -79.95093385349946,
+      },
+      "110": {
+        lat: 40.44326419955131,
+        lng: -79.94551330831828,
+      },
+      "84": {
+        lat: 40.44161664158368,
+        lng: -79.94285872206078,
+      },
+      "188": {
+        lat: 40.44538605085632,
+        lng: -79.9430188095375,
+      },
+      "190": {
+        lat: 40.44541493684331,
+        lng: -79.94298366401661,
+      },
+      "115": {
+        lat: 40.44347617300122,
+        lng: -79.94480928001676,
+      },
+      "92": {
+        lat: 40.44144439971656,
+        lng: -79.94195512801193,
+      },
+      "94": {
+        lat: 40.44259053115122,
+        lng: -79.94597744494271,
+      },
+      "180": {
+        lat: 40.44414285761781,
+        lng: -79.93888579754876,
+      },
+    },
   });
   const parsedLocationData = await parser.process();
   expect(parsedLocationData).toStrictEqual(expectedLocationData);
@@ -44,6 +177,11 @@ test("specials for The Exchange", async () => {
       ["92", "110", "113", "175", "108"].includes(conceptId)
         ? `html/concepts/${conceptId}.html`
         : "html/blank.html",
+    serverDate: DateTime.fromObject({
+      year: 2024,
+      month: 8,
+      day: 5,
+    }) as DateTime<true>,
   });
   const parser = new DiningParser();
   expect((await parser.process()).map((data) => data.todaysSpecials)).toEqual(
@@ -70,7 +208,13 @@ test("specials for The Exchange", async () => {
 test(
   "parser throws on repeated axios error",
   async () => {
-    mockAxiosGETMethodWithFilePaths({});
+    mockAxiosGETMethodWithFilePaths({
+      serverDate: DateTime.fromObject({
+        year: 2024,
+        month: 8,
+        day: 5,
+      }) as DateTime<true>,
+    });
     const parser = new DiningParser();
 
     await expect(async () => {
@@ -424,7 +568,7 @@ describe("test time overwrites", () => {
     const diningParser = new DiningParser({
       timeSlotOverwrites: {
         113: {
-          "8/23/25": ["CLOSED"],
+          "8/23/2025": ["CLOSED"],
         },
       },
     });
@@ -456,7 +600,7 @@ describe("test time overwrites", () => {
     const diningParser = new DiningParser({
       timeSlotOverwrites: {
         113: {
-          "8/23/25": ["2:00 AM - 3:00 AM"],
+          "8/23/2025": ["2:00 AM - 3:00 AM"],
         },
       },
     });
@@ -489,13 +633,13 @@ describe("test time overwrites", () => {
     const diningParser = new DiningParser({
       timeSlotOverwrites: {
         113: {
-          "8/22/25": ["2:00 AM - 3:00 AM"],
-          "8/23/25": ["2:00 AM - 3:00 AM"],
-          "8/24/25": ["2:00 AM - 3:00 AM"],
-          "8/25/25": ["2:00 AM - 3:00 AM"],
-          "8/26/25": ["2:00 AM - 3:00 AM"],
-          "8/27/25": ["2:00 AM - 3:00 AM"],
-          "8/28/25": ["2:00 AM - 3:00 AM"],
+          "8/22/2025": ["2:00 AM - 3:00 AM"],
+          "8/23/2025": ["2:00 AM - 3:00 AM"],
+          "8/24/2025": ["2:00 AM - 3:00 AM"],
+          "8/25/2025": ["2:00 AM - 3:00 AM"],
+          "8/26/2025": ["2:00 AM - 3:00 AM"],
+          "8/27/2025": ["2:00 AM - 3:00 AM"],
+          "8/28/2025": ["2:00 AM - 3:00 AM"],
         },
       },
     });
@@ -528,7 +672,7 @@ describe("test time overwrites", () => {
     const diningParser = new DiningParser({
       timeSlotOverwrites: {
         113: {
-          "8/23/25": ["11:00 AM - 10:00 AM"],
+          "8/23/2025": ["11:00 AM - 10:00 AM"],
         },
       },
     });
@@ -560,14 +704,14 @@ describe("test time overwrites", () => {
     const diningParser = new DiningParser({
       timeSlotOverwrites: {
         113: {
-          "8/23/25": ["2:00 AM - 10:00 AM"],
-          "12/30/25": ["2:00 AM - 10:00 AM"],
-          "12/31/25": ["2:00 AM - 10:00 AM"],
-          "1/1/26": ["2:00 AM - 10:00 AM"], // typing this date just gave me an existential crisis. Thanks a lot.
-          "1/2/26": ["2:00 AM - 10:00 AM"],
-          "1/3/26": ["2:00 AM - 10:00 AM"],
-          "1/4/26": ["2:00 AM - 10:00 AM"],
-          "1/5/26": ["2:00 AM - 10:00 AM"],
+          "8/23/2025": ["2:00 AM - 10:00 AM"],
+          "12/30/2025": ["2:00 AM - 10:00 AM"],
+          "12/31/2025": ["2:00 AM - 10:00 AM"],
+          "1/1/2026": ["2:00 AM - 10:00 AM"], // typing this date just gave me an existential crisis. Thanks a lot.
+          "1/2/2026": ["2:00 AM - 10:00 AM"],
+          "1/3/2026": ["2:00 AM - 10:00 AM"],
+          "1/4/2026": ["2:00 AM - 10:00 AM"],
+          "1/5/2026": ["2:00 AM - 10:00 AM"],
         },
       },
     });
