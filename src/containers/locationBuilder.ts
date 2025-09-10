@@ -124,9 +124,6 @@ export default class LocationBuilder {
       );
       // All fetches were good - yet we have missing data. This is a problem.
     }
-    if (this.conceptId === 179) {
-      this.times = []; // capital grains quick override
-    }
 
     return {
       conceptId: this.conceptId,
