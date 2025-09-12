@@ -40,6 +40,8 @@ Note: To add new dependencies, use `bun add dependency-name`. To remove dependen
 Build: `docker build -f Dockerfile . -t dining`
 Run the server: `docker run -p 127.0.0.1:5010:5010 dining`
 Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash -p 127.0.0.1:5010:5010 dining`
+Close dockerfile: `docker-compose down --volumes`
+Open dockerfile: `docker-compose up --build`
 
 ## Under the hood
 

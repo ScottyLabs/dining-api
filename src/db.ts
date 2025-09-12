@@ -9,14 +9,14 @@ import { ILocation } from 'types';
 let pool: Pool | null = null;
 
 function getPool(): Pool {
-  if (pool === null) {
-    pool = new Pool({
-      connectionString: env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }, // Required by Railway
-    });
+    if (pool === null) {
+      pool = new Pool({
+        connectionString: env.DATABASE_URL,
+        ssl: false, 
+      });
+    }
+    return pool;
   }
-  return pool;
-}
 
 function getDb() {
   return drizzle(getPool(), { schema: { emails, dashboardChanges } });
@@ -52,10 +52,10 @@ export async function getChanges(): Promise<ILocation[]> {
     return result.map((row) => ({
       conceptId: row.conceptid,
       name: row.name,
-      shortDescription: row.shortdescription || undefined,
+      shortDescription: row.shortdescription,
       description: row.description,
       url: `https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/${row.conceptid}`,
-      menu: row.menu || undefined,
+      menu: row.menu,
       location: "Unknown", 
       coordinates: undefined,
       acceptsOnlineOrders: row.accepts_online_orders,

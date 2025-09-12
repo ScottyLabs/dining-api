@@ -16,10 +16,4 @@ export const dashboardChanges = pgTable('dashboard_changes', {
   times: jsonb('times').$type<ITimeRange[]>().notNull(),
   menu: text('menu').notNull(),
   accepts_online_orders: boolean('accepts_online_orders').notNull(),
-});
-
-// Type exports for use in other files
-export type Email = typeof emails.$inferSelect;
-export type NewEmail = typeof emails.$inferInsert;
-export type DashboardChange = typeof dashboardChanges.$inferSelect;
-export type NewDashboardChange = typeof dashboardChanges.$inferInsert; 
+}); 
