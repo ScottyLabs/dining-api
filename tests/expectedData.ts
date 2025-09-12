@@ -67,7 +67,7 @@ export const expectedLocationData = [
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/95",
     location: "",
     menu: undefined,
-    coordinates: { lat: 40.44110394047497, lng: -79.94341681666283 },
+    coordinates: { lat: 40.44239859745149, lng: -79.93978739035869 },
     acceptsOnlineOrders: false,
     times: [],
     todaysSpecials: undefined,
@@ -700,7 +700,7 @@ export const expectedLocationData = [
     menu: "https://web.archive.org/web/20240721001349/https://apps.studentaffairs.cmu.edu/dining/dashboard_images/Production/menus/92/menu-exchange-2024-25-v2.pdf",
 
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/168",
-    coordinates: { lat: 401.441354, lng: -791.942125 },
+    coordinates: { lat: 40.44283900428467, lng: -79.94133909281383 },
     acceptsOnlineOrders: false,
     times: [
       {
