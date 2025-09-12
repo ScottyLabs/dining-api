@@ -129,6 +129,14 @@ const locationCoordinateOverwrites: ILocationCoordinateOverwrites = {
     lat: 40.44414285761781,
     lng: -79.93888579754876,
   },
+  "202": {
+    lat: 40.44253638019975,
+    lng: -79.94032253558025,
+  },
+  "168": {
+    lat: 40.44283900428467,
+    lng: -79.94133909281383,
+  },
 };
 
 export default locationCoordinateOverwrites;
