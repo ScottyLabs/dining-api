@@ -5,7 +5,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "es6",
     "skipLibCheck": true,
-    "types": ["bun-types", "jest", "node"],
+    "types": ["jest", "node"],
 
     /* Bundler mode */
     "rootDir": ".",

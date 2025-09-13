@@ -1,12 +1,8 @@
 # Dining API
 
-> [!IMPORTANT]  
-> Make sure `bun` is on the latest version! (Earlier versions are rather buggy) Run `bun upgrade` to update.
-
 This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://apis.scottylabs.org/dining/).
 
-To build and deploy the service, you'll need [Bun](https://bun.sh),
-which you should install beforehand.
+To build and deploy the service, you'll need pnpm, which you should install beforehand.
 
 Then, clone this repository to your computer by running
 
@@ -27,13 +23,12 @@ If you already have the node_modules folder or package-lock.json from previous v
 Now install the API's dependencies by 'cd'-ing into the root of the repository and running:
 
 ```
-bun install
+pnpm install
 ```
 
-Then, you can run the server with `bun dev` and it should work! You can also use
-`bun run dev` since `bun dev` is its shorthand version.
+Then, you can run the server with `pnpm dev` and it should work!
 
-Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
+Note: To add new dependencies, use `pnpm install dependency-name`. To remove dependencies, use `pnpm remove dependency-name`.
 
 ## Testing the Dockerfile
 
@@ -47,4 +42,4 @@ We get the entire list of locations from `DINING_URL`, fetch location specifics 
 
 ## Before submitting a PR
 
-- Make sure all tests pass with `bun run test` or `bun run test --watch` for watch mode. (NOTE! `bun test` does something different and does NOT work!)
+- Make sure all tests pass with `pnpm run test` or `pnpm run test --watch` for watch mode.
