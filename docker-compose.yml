@@ -19,7 +19,7 @@ services:
       timeout: 5s
       retries: 10
 
-  api:
+  server:
     build: .
     container_name: dining-api-server
     ports:

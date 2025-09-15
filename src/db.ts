@@ -1,22 +1,22 @@
 // db.ts
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
-import 'dotenv/config';
-import { env } from 'env';
-import { emails, dashboardChanges } from './schema';
-import { ILocation } from 'types';
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import "dotenv/config";
+import { env } from "env";
+import { emails, dashboardChanges } from "./schema";
+import { ILocation } from "types";
 
 let pool: Pool | null = null;
 
 function getPool(): Pool {
-    if (pool === null) {
-      pool = new Pool({
-        connectionString: env.DATABASE_URL,
-        ssl: false, 
-      });
-    }
-    return pool;
+  if (pool === null) {
+    pool = new Pool({
+      connectionString: env.DATABASE_URL,
+      ssl: false,
+    });
   }
+  return pool;
+}
 
 function getDb() {
   return drizzle(getPool(), { schema: { emails, dashboardChanges } });
@@ -24,11 +24,13 @@ function getDb() {
 
 export async function getEmails(): Promise<{ name: string; email: string }[]> {
   const db = getDb();
-  const result = await db.select({
-    name: emails.name,
-    email: emails.email,
-  }).from(emails);
-  
+  const result = await db
+    .select({
+      name: emails.name,
+      email: emails.email,
+    })
+    .from(emails);
+
   // Remove 'mailto:' if present
   return result.map((row) => ({
     name: row.name,
@@ -36,10 +38,10 @@ export async function getEmails(): Promise<{ name: string; email: string }[]> {
   }));
 }
 
- 
 export async function getChanges(): Promise<ILocation[]> {
-    const db = getDb();
-    const result = await db.select({
+  const db = getDb();
+  const result = await db
+    .select({
       conceptid: dashboardChanges.conceptid,
       name: dashboardChanges.name,
       description: dashboardChanges.description,
@@ -47,21 +49,22 @@ export async function getChanges(): Promise<ILocation[]> {
       times: dashboardChanges.times,
       menu: dashboardChanges.menu,
       accepts_online_orders: dashboardChanges.accepts_online_orders,
-    }).from(dashboardChanges);
-    
-    return result.map((row) => ({
-      conceptId: row.conceptid,
-      name: row.name,
-      shortDescription: row.shortdescription,
-      description: row.description,
-      url: `https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/${row.conceptid}`,
-      menu: row.menu,
-      location: "Unknown", 
-      coordinates: undefined,
-      acceptsOnlineOrders: row.accepts_online_orders,
-      times: row.times,
-      todaysSpecials: undefined,
-      todaysSoups: undefined,
-    }));
-  }
- 
+    })
+    .from(dashboardChanges)
+    .catch(() => []);
+
+  return result.map((row) => ({
+    conceptId: row.conceptid,
+    name: row.name,
+    shortDescription: row.shortdescription,
+    description: row.description,
+    url: `https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/${row.conceptid}`,
+    menu: row.menu,
+    location: "Unknown",
+    coordinates: undefined,
+    acceptsOnlineOrders: row.accepts_online_orders,
+    times: row.times,
+    todaysSpecials: undefined,
+    todaysSoups: undefined,
+  }));
+}

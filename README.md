@@ -30,18 +30,17 @@ Now install the API's dependencies by 'cd'-ing into the root of the repository a
 bun install
 ```
 
-Then, you can run the server with `bun dev` and it should work! You can also use
-`bun run dev` since `bun dev` is its shorthand version.
+To start a local instance of the database used by the dining api, run `docker-compose up --build -d postgres`
+
+Then, you can run the server with `bun dev` (or `bun run dev`) and it should work!
 
 Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
 
-## Testing the Dockerfile
+## Testing the production build of the backend
 
-Build: `docker build -f Dockerfile . -t dining`
-Run the server: `docker run -p 127.0.0.1:5010:5010 dining`
-Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash -p 127.0.0.1:5010:5010 dining`
-Close dockerfile: `docker-compose down --volumes`
-Open dockerfile: `docker-compose up --build`
+Build and run db + api: `docker-compose up --build`
+Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash  dining-api-server`
+Close dockerfile + delete volumes: `docker-compose down --volumes`
 
 ## Under the hood
 
