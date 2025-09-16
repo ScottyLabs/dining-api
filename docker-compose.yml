@@ -9,10 +9,9 @@ services:
       POSTGRES_PASSWORD: donotuseinproduction
       POSTGRES_DB: dining_api
     ports:
-      - "127.0.0.1:5433:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ${VOL_SRC}:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -20,18 +19,19 @@ services:
       retries: 10
 
   server:
-    build: .
+    build: 
+      dockerfile: Dockerfile.pnpm.simple
     container_name: dining-api-server
     ports:
       - "5010:5010"
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgresql://postgres:donotuseinproduction@postgres:5432/dining_api
+      - DATABASE_URL=postgresql://postgres:donotuseinproduction@dining-api-db:5432/dining_api
     depends_on:
       postgres:
         condition: service_healthy
     restart: unless-stopped
-
 volumes:
   postgres_data:
+  postgres_dev_data:

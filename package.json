@@ -4,17 +4,16 @@
   "description": "Carnegie Mellon University Dining API",
   "main": "server.ts",
   "scripts": {
-    "test": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ DATABASE_URL=/ jest --coverage",
-    "test-watch": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ jest --watch",
     "dev": "dotenv -- tsx watch src/server.ts",
-    "start": "NODE_ENV=production dotenv -- node dist/server.js",
     "build": "rollup -c",
+    "start": "NODE_ENV=production node dist/server.js",
+    "test": "dotenv -e .env.test -- jest --coverage",
+    "run-prod": "VOL_SRC=postgres_data docker-compose up --build",
+    "db:start": "VOL_SRC=postgres_dev_data docker-compose up -d postgres --build",
+    "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
-    "db:up": "docker-compose up -d",
-    "db:down": "docker-compose down",
-    "dev:local": "docker-compose up -d && dotenv -- tsx watch src/server.ts"
+    "db:studio": "drizzle-kit studio"
   },
   "repository": {
     "type": "git",

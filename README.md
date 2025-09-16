@@ -3,7 +3,7 @@
 > [!IMPORTANT]  
 > Make sure `bun` is on the latest version! (Earlier versions are rather buggy) Run `bun upgrade` to update.
 
-This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://apis.scottylabs.org/dining/).
+This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://dining.apis.scottylabs.org/).
 
 To build and deploy the service, you'll need [Bun](https://bun.sh),
 which you should install beforehand.
@@ -30,15 +30,20 @@ Now install the API's dependencies by 'cd'-ing into the root of the repository a
 bun install
 ```
 
-To start a local instance of the database used by the dining api, run `docker-compose up --build -d postgres`
-
-Then, you can run the server with `bun dev` (or `bun run dev`) and it should work!
+Start your local database with `db:start` and then start the server with `bun dev` (or `bun run dev`) and it should work, assuming you have the correct env variables. (To see the contents of the database, I recommend using DBeaver. You can also run `bun db:studio` to start up drizzle studio)
 
 Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
 
-## Testing the production build of the backend
+## Database schema changes (important!)
 
-Build and run db + api: `docker-compose up --build`
+When you make changes to the database schema, be sure to run `bun db:push` to keep your local db in sync.
+
+Before merging your PR, be sure to run `bun db:generate` to generate a migration file, which will then be automatically applied to the staging and production databases when deployed.
+
+To test if the migration files work, you can run `bun run-prod`, which will spin up a production version of the server and a postgres database mounted on a new volume. The server is created using the same Dockerfile used in our Railway deployments, so if it works locally, it (probably) works in production as well.
+
+## Extra docker commands
+
 Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash  dining-api-server`
 Close dockerfile + delete volumes: `docker-compose down --volumes`
 

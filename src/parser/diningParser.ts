@@ -3,8 +3,6 @@ import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
 import { ILocation, ISpecial } from "types";
-import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
-import { getChanges } from "../db";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -24,22 +22,12 @@ export default class DiningParser {
     const locationBuilders =
       await this.initializeLocationBuildersFromMainPage();
 
-    const overrides = await getChanges();
-
     const [specials, soups] = await this.fetchSpecials();
 
     for (const builder of locationBuilders) {
       await builder.populateDetailedInfo();
       builder.setSoup(soups);
       builder.setSpecials(specials);
-      builder.overwriteLocationCoordinates(locationCoordinateOverwrites);
-
-      const override = overrides.find(
-        (o) => o.conceptId === builder.getConceptId()
-      );
-      if (override) {
-        builder.applyOverride(override);
-      }
     }
 
     return locationBuilders.map((builder) => builder.build());

@@ -6,12 +6,13 @@ import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
 import { getDiffsBetweenLocationData } from "utils/diff";
-import { getEmails } from "./db";
-import { getChanges } from "./db";
 import LocationMerger from "utils/locationMerger";
+import { getEmails, getOverrides } from "db/query";
 
 let cachedLocations: ILocation[] = [];
-
+function getCachedLocations() {
+  return applyOverrides(cachedLocations);
+}
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
@@ -46,6 +47,17 @@ async function reload(): Promise<void> {
   }
 }
 
+async function applyOverrides(locations: ILocation[]): Promise<ILocation[]> {
+  const overrides = await getOverrides();
+  return locations.map((location) => {
+    const overrideData = overrides[location.conceptId];
+    if (overrideData === undefined) return location;
+    return {
+      ...location,
+      ...overrideData,
+    };
+  });
+}
 export const app = new Elysia({ adapter: node() }); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
@@ -65,10 +77,10 @@ app.get("/", () => {
   return "ScottyLabs Dining API";
 });
 
-app.get("/locations", () => ({ locations: cachedLocations }));
+app.get("/locations", async () => ({ locations: await getCachedLocations() }));
 
-app.get("/location/:name", ({ params: { name } }) => {
-  const filteredLocation = cachedLocations.filter((location) => {
+app.get("/location/:name", async ({ params: { name } }) => {
+  const filteredLocation = (await getCachedLocations()).filter((location) => {
     return location.name?.toLowerCase().includes(name.toLowerCase());
   });
   return {
@@ -76,29 +88,32 @@ app.get("/location/:name", ({ params: { name } }) => {
   };
 });
 
-app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
-  const result = cachedLocations.filter((el) => {
-    let returning = false;
-    el.times.forEach((element) => {
-      const startMins =
-        element.start.day * 1440 +
-        element.start.hour * 60 +
-        element.start.minute;
-      const endMins =
-        element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
-      const currentMins =
-        parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
-      if (currentMins >= startMins && currentMins < endMins) {
-        returning = true;
-      }
+app.get(
+  "/locations/time/:day/:hour/:min",
+  async ({ params: { day, hour, min } }) => {
+    const result = (await getCachedLocations()).filter((el) => {
+      let returning = false;
+      el.times.forEach((element) => {
+        const startMins =
+          element.start.day * 1440 +
+          element.start.hour * 60 +
+          element.start.minute;
+        const endMins =
+          element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
+        const currentMins =
+          parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
+        if (currentMins >= startMins && currentMins < endMins) {
+          returning = true;
+        }
+      });
+      return returning;
     });
-    return returning;
-  });
-  return { locations: result };
-});
+    return { locations: result };
+  }
+);
 
 app.get("/api/emails", getEmails);
-app.get("/api/changes", getChanges);
+app.get("/api/changes", getOverrides);
 
 app.post(
   "/api/sendSlackMessage",

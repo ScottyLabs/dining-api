@@ -2,13 +2,7 @@ import { getHTMLResponse } from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 import { getTimeRangesFromString } from "./timeBuilder";
-import {
-  ICoordinate,
-  ILocation,
-  ILocationCoordinateOverwrites,
-  ISpecial,
-  ITimeRange,
-} from "../types";
+import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
 import { sortAndMergeTimeRanges } from "utils/timeUtils";
 
 /**
@@ -39,15 +33,6 @@ export default class LocationBuilder {
     this.conceptId = conceptId !== undefined ? parseInt(conceptId) : undefined;
 
     this.shortDescription = load(card)("div.description").text().trim();
-  }
-
-  overwriteLocationCoordinates(overwrites: ILocationCoordinateOverwrites) {
-    if (
-      this.conceptId !== undefined &&
-      overwrites[this.conceptId] !== undefined
-    ) {
-      this.coordinates = overwrites[this.conceptId];
-    }
   }
 
   setSoup(soupList: Record<string, ISpecial[]>) {
@@ -139,18 +124,5 @@ export default class LocationBuilder {
       todaysSpecials: this.specials,
       todaysSoups: this.soups,
     };
-  }
-
-  applyOverride(override: ILocation) {
-    // Only apply if conceptId matches (optional guard)
-    if (this.conceptId !== override.conceptId && override.conceptId !== undefined) return;
-    if (override.name !== null && override.name !== undefined && override.name !== "") this.name = override.name;
-    if (override.description !== null && override.description !== undefined && override.description !== "") this.description = override.description;
-    if (override.shortDescription !== null && override.shortDescription !== undefined)
-      this.shortDescription = override.shortDescription;
-    if (override.times !== null && override.times !== undefined) this.times = override.times;
-    if (override.menu !== null && override.menu !== undefined) this.menu = override.menu;
-    if (override.acceptsOnlineOrders !== null && override.acceptsOnlineOrders !== undefined)
-      this.acceptsOnlineOrders = override.acceptsOnlineOrders;
   }
 }
