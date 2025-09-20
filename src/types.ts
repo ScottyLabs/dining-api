@@ -4,6 +4,7 @@ export interface ILocation {
   shortDescription?: string;
   description: string;
   url: string;
+  grubhubUrl?: string;
   menu?: string;
   location: string;
   coordinates?: ICoordinate;
@@ -34,6 +35,10 @@ export interface ICoordinate {
 
 export interface ILocationCoordinateOverwrites {
   [conceptId: string]: ICoordinate;
+}
+
+export interface IGrubhubLinkOverwrites {
+  [conceptId: string]: string;
 }
 
 export enum DayOfTheWeek {
