@@ -118,7 +118,7 @@ app.get("/api/changes", async () => await getOverrides());
 app.post(
   "/api/sendSlackMessage",
   async ({ body: { message } }) => {
-    await notifySlack(`From web: ${message}`);
+    await notifySlack(message, env.SLACK_FRONTEND_WEBHOOK_URL);
   },
   {
     body: t.Object({

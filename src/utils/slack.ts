@@ -3,12 +3,21 @@ import { env } from "env";
 async function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-export async function notifySlack(message: string) {
+/**
+ *
+ * @param message
+ * @param slackUrl By default it assumes that the message is for the backend slack channel
+ * @returns
+ */
+export async function notifySlack(
+  message: string,
+  slackUrl: string = env.SLACK_BACKEND_WEBHOOK_URL
+) {
   if (env.IN_TEST_MODE) return;
   console.log("Sending message to slack:", message);
   try {
     await axios.post(
-      env.SLACK_WEBHOOK_URL,
+      slackUrl,
       { text: `\`[${env.SLACK_MESSAGE_PREFIX}]\` ${message}` },
       {
         headers: {
@@ -28,7 +37,7 @@ export async function notifySlack(message: string) {
       if (error.status === 429) {
         // rate limited (we still want to send the message eventually)
         await wait(30 * 1000);
-        await notifySlack(message);
+        await notifySlack(message, slackUrl);
       }
     }
   }
