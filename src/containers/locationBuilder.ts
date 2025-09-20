@@ -2,13 +2,7 @@ import { getHTMLResponse } from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 import { getTimeRangesFromString } from "./timeBuilder";
-import {
-  ICoordinate,
-  ILocation,
-  ILocationCoordinateOverwrites,
-  ISpecial,
-  ITimeRange,
-} from "../types";
+import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
 import { sortAndMergeTimeRanges } from "utils/timeUtils";
 
 /**
@@ -39,15 +33,6 @@ export default class LocationBuilder {
     this.conceptId = conceptId !== undefined ? parseInt(conceptId) : undefined;
 
     this.shortDescription = load(card)("div.description").text().trim();
-  }
-
-  overwriteLocationCoordinates(overwrites: ILocationCoordinateOverwrites) {
-    if (
-      this.conceptId !== undefined &&
-      overwrites[this.conceptId] !== undefined
-    ) {
-      this.coordinates = overwrites[this.conceptId];
-    }
   }
 
   setSoup(soupList: Record<string, ISpecial[]>) {
