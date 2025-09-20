@@ -20,7 +20,7 @@ services:
 
   server:
     build: 
-      dockerfile: Dockerfile.pnpm.simple
+      dockerfile: Dockerfile.pnpm
     container_name: dining-api-server
     ports:
       - "5010:5010"

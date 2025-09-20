@@ -113,7 +113,7 @@ app.get(
 );
 
 app.get("/api/emails", getEmails);
-app.get("/api/changes", getOverrides);
+app.get("/api/changes", async () => await getOverrides());
 
 app.post(
   "/api/sendSlackMessage",

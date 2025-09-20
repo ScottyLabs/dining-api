@@ -1,9 +1,0 @@
-# for starting up the dining api (used both in local dev and railway builds)
-FROM oven/bun:latest
-
-WORKDIR /runtime
-COPY . .
-RUN bun install
-RUN bun run build
-EXPOSE 5010
-CMD ["./run-bun.sh"]
