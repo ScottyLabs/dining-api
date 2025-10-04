@@ -46,7 +46,6 @@ export default class DiningParser {
       );
       builder.setSoup(soups);
       builder.setSpecials(specials);
-      builder.overwriteLocationCoordinates(this.locationCoordinateOverwrites);
     }
 
     return locationBuilders.map((builder) => builder.build());

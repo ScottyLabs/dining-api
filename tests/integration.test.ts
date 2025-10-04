@@ -1,5 +1,4 @@
 import DiningParser from "../src/parser/diningParser";
-
 import { expectedLocationData } from "./expectedData";
 import { mockAxiosGETMethodWithFilePaths } from "./mockAxios";
 import {
@@ -17,7 +16,7 @@ import {
 import { DateTime } from "luxon";
 
 jest.mock("axios");
-
+test("ok", () => {});
 test("the whole thing, including locationOverwrites", async () => {
   mockAxiosGETMethodWithFilePaths({
     conceptListFilePath: "html/listconcepts.html",

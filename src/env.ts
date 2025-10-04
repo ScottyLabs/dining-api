@@ -5,7 +5,8 @@ const envSchema = z.object({
   NUMBER_OF_SCRAPES: z.coerce.number().default(10),
   INTER_SCRAPE_WAIT_INTERVAL: z.coerce.number().default(5000),
   RELOAD_WAIT_INTERVAL: z.coerce.number().default(1000 * 60 * 30), // 30 min
-  SLACK_WEBHOOK_URL: z.string(),
+  SLACK_BACKEND_WEBHOOK_URL: z.string(),
+  SLACK_FRONTEND_WEBHOOK_URL: z.string(),
   AXIOS_RETRY_INTERVAL_MS: z.coerce.number().default(1000),
   /** Special flag when running automated tests */
   IN_TEST_MODE: z.stringbool().default(false),

@@ -2,13 +2,7 @@ import { getHTMLResponse } from "utils/requestUtils";
 import { load } from "cheerio";
 import type { Element } from "domhandler";
 import { getAllTimeSlotsFromSchedule } from "./timeBuilder";
-import {
-  ICoordinate,
-  ILocation,
-  ILocationCoordinateOverwrites,
-  ISpecial,
-  ITimeRange,
-} from "../types";
+import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
 import { ITimeOverwrites } from "overwrites/timeOverwrites";
 
 /**
@@ -39,15 +33,6 @@ export default class LocationBuilder {
     this.conceptId = conceptId !== undefined ? parseInt(conceptId) : undefined;
 
     this.shortDescription = load(card)("div.description").text().trim();
-  }
-
-  overwriteLocationCoordinates(overwrites: ILocationCoordinateOverwrites) {
-    if (
-      this.conceptId !== undefined &&
-      overwrites[this.conceptId] !== undefined
-    ) {
-      this.coordinates = overwrites[this.conceptId];
-    }
   }
 
   setSoup(soupList: Record<string, ISpecial[]>) {
@@ -125,6 +110,9 @@ export default class LocationBuilder {
         "Didn't finish configuring location before building metadata!"
       );
       // All fetches were good - yet we have missing data. This is a problem.
+    }
+    if (this.conceptId === 179) {
+      this.times = []; // capital grains quick override
     }
 
     return {
