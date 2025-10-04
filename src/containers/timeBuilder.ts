@@ -1,5 +1,4 @@
-import { load } from "cheerio";
-import type { Element } from "domhandler";
+import { Element, load } from "cheerio";
 
 import { sortAndMergeTimeRanges } from "../utils/timeUtils";
 import { IParsedTimeRange } from "./time/parsedTime";

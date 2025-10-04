@@ -1,6 +1,5 @@
 import { getHTMLResponse } from "utils/requestUtils";
-import { load } from "cheerio";
-import type { Element } from "domhandler";
+import { Element, load } from "cheerio";
 import { getAllTimeSlotsFromSchedule } from "./timeBuilder";
 import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
 import { ITimeOverwrites } from "overwrites/timeOverwrites";
