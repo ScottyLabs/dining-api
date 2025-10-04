@@ -4,6 +4,7 @@ import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
 import { ILocation, ISpecial } from "types";
 import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
+import { buildOffCampusLocations } from "offCampusLocations";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -32,7 +33,16 @@ export default class DiningParser {
       builder.overwriteLocationCoordinates(locationCoordinateOverwrites);
     }
 
-    return locationBuilders.map((builder) => builder.build());
+    const builtLocations = locationBuilders.map((builder) => builder.build());
+
+    console.log("Dining parse getting off campus");
+    const offCampusLocations = await buildOffCampusLocations();
+    //console.log([...builtLocations, ...offCampusLocations]);
+    if (process.env.IN_TEST_MODE === "true") {
+      return builtLocations;
+    }
+    console.log(builtLocations);
+    return [...builtLocations, ...offCampusLocations];
   }
 
   private async initializeLocationBuildersFromMainPage(): Promise<

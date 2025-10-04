@@ -12,6 +12,7 @@ const envSchema = z.object({
   IN_TEST_MODE: z.stringbool().default(false),
   SLACK_MESSAGE_PREFIX: z.string().default("local-dev"),
   DATABASE_URL: z.string(),
+  GOOGLE_PLACES_API_KEY: z.string(),
 });
 console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);

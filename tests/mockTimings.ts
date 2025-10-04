@@ -29,6 +29,7 @@ export async function queryParserAndAssertTimingsCorrect(
 ) {
   const parser = new DiningParser();
   const result = await parser.process();
+  console.log("dining parser result length " + result.length);
   expect(result.length).toBe(1);
   expect(result[0].times).toStrictEqual(
     times.map((time) => {
