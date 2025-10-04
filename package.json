@@ -44,6 +44,7 @@
     "@babel/preset-typescript": "^7.24.7",
     "@rollup/plugin-typescript": "^12.1.4",
     "@types/jest": "^29.5.14",
+    "@types/luxon": "^3.7.1",
     "@types/node": "^24.0.14",
     "@types/pg": "^8.15.5",
     "babel-jest": "^29.7.0",
