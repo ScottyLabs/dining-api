@@ -4,7 +4,6 @@ import type { Element } from "domhandler";
 import { getTimeRangesFromString } from "./timeBuilder";
 import {
   ICoordinate,
-  IGrubhubLinkOverwrites,
   ILocation,
   ILocationCoordinateOverwrites,
   ISpecial,
@@ -52,16 +51,11 @@ export default class LocationBuilder {
     }
   }
 
-  overwriteGithubUrl(overwrites: IGrubhubLinkOverwrites) {
-    if (
-      this.conceptId !== undefined &&
-      overwrites[this.conceptId] !== undefined
-    ) {
-      this.grubhubUrl = overwrites[this.conceptId];
+  setGrubhubUrl(grubhubUrls: Record<string, string>) {
+    if (this.conceptId && grubhubUrls[this.conceptId] !== undefined) {
+      this.grubhubUrl = grubhubUrls[this.conceptId];
     }
   }
-
-
   setSoup(soupList: Record<string, ISpecial[]>) {
     if (
       this.conceptId !== undefined &&

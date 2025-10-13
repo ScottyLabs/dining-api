@@ -13,6 +13,29 @@ export interface ILocation {
   todaysSpecials?: ISpecial[];
   todaysSoups?: ISpecial[];
 }
+export interface IGrubhubData {
+  object: {
+    data: {
+      content: {
+        entity: {
+          name: string;
+          address: {
+            street_address: string;
+            address_locality: string;
+          };
+          restaurant_id: string;
+        };
+      }[];
+    };
+  };
+}
+
+export interface IGrubhubAuthResponse {
+  session_handle: {
+    access_token: string;
+  };
+}
+
 export interface ISpecial {
   title: string;
   description: string;
@@ -37,7 +60,7 @@ export interface ILocationCoordinateOverwrites {
   [conceptId: string]: ICoordinate;
 }
 
-export interface IGrubhubLinkOverwrites {
+export interface IGrubhubLinkIds {
   [conceptId: string]: string;
 }
 
