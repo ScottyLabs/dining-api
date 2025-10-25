@@ -11,14 +11,14 @@ export async function getHTMLResponse(
   retriesLeft = 4
 ): Promise<string> {
   try {
-    if (!env.IN_TEST_MODE) console.log(`Scraping ${url}`);
+    // if (!env.IN_TEST_MODE) console.log(`Scraping ${url}`);
     const response = await axios.get(url.toString());
-    if (!env.IN_TEST_MODE)
-      console.log({
-        message: `Scraped ${url}`,
-        html: response.data,
-        url: url.toString(),
-      });
+    // if (!env.IN_TEST_MODE)
+    //   console.log({
+    //     message: `Scraped ${url}`,
+    //     html: response.data,
+    //     url: url.toString(),
+    //   });
 
     return response.data;
   } catch (err: any) {

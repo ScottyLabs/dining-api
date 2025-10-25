@@ -19,12 +19,20 @@ export default class GrubhubUrlBuilder {
     const restaurantData = await this.fetchRestaurantData(accessToken);
     const deepLinks = this.parseAndBuildLinks(restaurantData);
 
+    console.log("--- GRUBHUB DEEPLINKS ---");
+    console.table(deepLinks);
+
+    // 
+
     const conceptToDeepLinks: Record<string, string> = {};
     Object.entries(grubhubLinkIds).map(([concept_id, rest_id]) => {
       conceptToDeepLinks[concept_id] = deepLinks[rest_id];
     });
 
-    return deepLinks;
+    console.log("--- GRUBHUB DEEPLINKS ---");
+    console.table(conceptToDeepLinks);
+
+    return conceptToDeepLinks;
   }
 
   private async refreshToken(): Promise<string> {
@@ -82,7 +90,7 @@ export default class GrubhubUrlBuilder {
       const localitySlug = this.slugify(entity.address.address_locality);
 
       const fullLink = `${urlPrefix}${nameSlug}-${addrSlug}-${localitySlug}/${entity.restaurant_id}`;
-      
+
       links[keyId] = fullLink;
     }
     
