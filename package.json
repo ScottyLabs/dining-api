@@ -8,7 +8,9 @@
     "test-watch": "AXIOS_RETRY_INTERVAL_MS=0 IN_TEST_MODE=true SLACK_WEBHOOK_URL=/ SLACK_BACKEND_WEBHOOK_URL=/ SLACK_FRONTEND_WEBHOOK_URL=/ jest --watch",
     "dev": "dotenv -- tsx watch src/server.ts",
     "start": "NODE_ENV=production dotenv -- node dist/server.js",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "repository": {
     "type": "git",
