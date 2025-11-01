@@ -4,6 +4,7 @@ import type { Element } from "domhandler";
 import { getTimeRangesFromString } from "./timeBuilder";
 import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
 import { sortAndMergeTimeRanges } from "utils/timeUtils";
+import assert from "assert";
 
 /**
  * For building the location data structure
@@ -19,6 +20,7 @@ export default class LocationBuilder {
   private url?: string;
   private location?: string;
   private menu?: string;
+  private image: URL;
   private coordinates?: ICoordinate;
   private acceptsOnlineOrders?: boolean;
   private times?: ITimeRange[];
@@ -71,6 +73,11 @@ export default class LocationBuilder {
     this.description = $("div.description p").text().trim();
     this.menu = $("div.navItems > a#getMenu").attr("href");
     this.location = $("div.location a").text().trim();
+
+    const conceptImageUrl = $(".conceptImage").children("img").first().prop("src");
+    assert(conceptImageUrl != undefined, `concept ${this.url} did not have a Concept Image!`)
+    this.image = new URL(conceptImageUrl);
+
     this.acceptsOnlineOrders =
       $("div.navItems.orderOnline").toArray().length > 0;
 
@@ -121,6 +128,7 @@ export default class LocationBuilder {
       url: this.url,
       location: this.location,
       menu: this.menu,
+      image: this.image,
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
       times: this.times,
