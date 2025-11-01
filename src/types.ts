@@ -5,6 +5,7 @@ export interface ILocation {
   description: string;
   url: string;
   menu?: string;
+  image: URL;
   location: string;
   coordinates?: ICoordinate;
   acceptsOnlineOrders: boolean;
