@@ -8,7 +8,6 @@ import {
   ISpecial,
   IFullTimeRange,
 } from "../types";
-import { ITimeOverwrites } from "overwrites/timeOverwrites";
 
 /**
  * For building the location data structure
