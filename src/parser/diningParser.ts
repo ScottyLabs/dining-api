@@ -2,8 +2,7 @@ import { getHTMLResponse } from "../utils/requestUtils";
 import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
-import { ILocation, ILocationCoordinateOverwrites, ISpecial } from "types";
-import { IAllTimeOverwrites } from "overwrites/timeOverwrites";
+import { ILocation, ISpecial } from "types";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -16,21 +15,6 @@ export default class DiningParser {
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Specials";
   static readonly DINING_SOUPS_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
-  locationCoordinateOverwrites: ILocationCoordinateOverwrites = {};
-  timeSlotOverwrites: IAllTimeOverwrites = {};
-
-  constructor(overwrites?: {
-    locationCoordinateOverwrites?: ILocationCoordinateOverwrites;
-    timeSlotOverwrites?: IAllTimeOverwrites;
-  }) {
-    if (overwrites?.locationCoordinateOverwrites !== undefined) {
-      this.locationCoordinateOverwrites =
-        overwrites.locationCoordinateOverwrites;
-    }
-    if (overwrites?.timeSlotOverwrites !== undefined) {
-      this.timeSlotOverwrites = overwrites.timeSlotOverwrites;
-    }
-  }
 
   async process(): Promise<ILocation[]> {
     const locationBuilders =
@@ -39,11 +23,7 @@ export default class DiningParser {
     const [specials, soups] = await this.fetchSpecials();
 
     for (const builder of locationBuilders) {
-      await builder.populateDetailedInfo(
-        builder.getConceptId() !== undefined
-          ? this.timeSlotOverwrites[builder.getConceptId()!]
-          : undefined
-      );
+      await builder.populateDetailedInfo();
       builder.setSoup(soups);
       builder.setSpecials(specials);
     }

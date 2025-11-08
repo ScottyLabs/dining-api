@@ -1,4 +1,4 @@
-import LocationMerger from "../src/utils/locationMerger";
+import ScrapeResultMerger from "../src/utils/locationMerger";
 const locationA = {
   conceptId: 3,
   name: "Location Name",
@@ -42,7 +42,7 @@ const expectArrayEquivalence = <T>(actual: T[], expected: T[]) => {
 };
 describe("merging", () => {
   test("", () => {
-    const merger = new LocationMerger();
+    const merger = new ScrapeResultMerger();
     merger.addLocation(locationA);
     merger.addLocation(locationAA);
     merger.addLocation(locationAAA);
@@ -54,7 +54,7 @@ describe("merging", () => {
     ]);
   });
   test("highly necessary test", () => {
-    const merger = new LocationMerger();
+    const merger = new ScrapeResultMerger();
     merger.addLocation(locationA);
     merger.addLocation(locationAA);
     merger.addLocation(locationAAA);

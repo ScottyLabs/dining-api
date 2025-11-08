@@ -5,24 +5,22 @@ import { ILocation } from "types";
 import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
+import ScrapeResultMerger from "utils/locationMerger";
+import { getGeneralOverrides } from "db/overrides";
+import { addLocationDataToDb } from "db/updateLocation";
+import { deprecatedNotice } from "deprecationNotice";
 import { getDiffsBetweenLocationData } from "utils/diff";
-import LocationMerger from "utils/locationMerger";
-import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
-import { timeSlotOverwrites } from "overwrites/timeOverwrites";
-import { getEmails, getOverrides } from "db/query";
+import { getEmails } from "db/emails";
+import { getAllLocations } from "db/getLocations";
 
+/** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
-function getCachedLocations() {
-  return applyOverrides(cachedLocations);
-}
 async function reload(): Promise<void> {
+  return;
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
-  const parser = new DiningParser({
-    locationCoordinateOverwrites,
-    timeSlotOverwrites,
-  });
-  const locationMerger = new LocationMerger();
+  const parser = new DiningParser();
+  const locationMerger = new ScrapeResultMerger();
 
   for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
     // Wait a bit before starting the next round of scrapes.
@@ -49,20 +47,13 @@ async function reload(): Promise<void> {
         await notifySlack(diff);
       }
     }
+
+    await Promise.all(
+      finalLocations.map((location) => addLocationDataToDb(location))
+    );
   }
 }
 
-async function applyOverrides(locations: ILocation[]): Promise<ILocation[]> {
-  const overrides = await getOverrides();
-  return locations.map((location) => {
-    const overrideData = overrides[location.conceptId];
-    if (overrideData === undefined) return location;
-    return {
-      ...location,
-      ...overrideData,
-    };
-  });
-}
 export const app = new Elysia({ adapter: node() }); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
@@ -81,44 +72,11 @@ app.use(cors());
 app.get("/", () => {
   return "ScottyLabs Dining API";
 });
-
-app.get("/locations", async () => ({ locations: await getCachedLocations() }));
-
-app.get("/location/:name", async ({ params: { name } }) => {
-  const filteredLocation = (await getCachedLocations()).filter((location) => {
-    return location.name?.toLowerCase().includes(name.toLowerCase());
-  });
-  return {
-    locations: filteredLocation,
-  };
-});
-
-app.get(
-  "/locations/time/:day/:hour/:min",
-  async ({ params: { day, hour, min } }) => {
-    const result = (await getCachedLocations()).filter((el) => {
-      let returning = false;
-      el.times.forEach((element) => {
-        const startMins =
-          element.start.day * 1440 +
-          element.start.hour * 60 +
-          element.start.minute;
-        const endMins =
-          element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
-        const currentMins =
-          parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
-        if (currentMins >= startMins && currentMins < endMins) {
-          returning = true;
-        }
-      });
-      return returning;
-    });
-    return { locations: result };
-  }
+app.get("/api/v2/locations", async () =>
+  JSON.stringify(await getAllLocations(), null, 4)
 );
-
 app.get("/api/emails", getEmails);
-app.get("/api/changes", async () => await getOverrides());
+app.get("/api/changes", async () => await getGeneralOverrides());
 
 app.post(
   "/api/sendSlackMessage",
@@ -150,3 +108,40 @@ reload()
     await notifySlack(`*Error caught*\n${er.stack}`);
     process.exit(1);
   });
+
+// DEPRECATED
+
+app.get("/locations", async () => ({ locations: deprecatedNotice }));
+
+app.get("/location/:name", async ({ params: { name } }) => {
+  const filteredLocation = deprecatedNotice.filter((location) => {
+    return location.name?.toLowerCase().includes(name.toLowerCase());
+  });
+  return {
+    locations: filteredLocation,
+  };
+});
+
+app.get(
+  "/locations/time/:day/:hour/:min",
+  async ({ params: { day, hour, min } }) => {
+    const result = deprecatedNotice.filter((el) => {
+      let returning = false;
+      el.times.forEach((element) => {
+        const startMins =
+          element.start.day * 1440 +
+          element.start.hour * 60 +
+          element.start.minute;
+        const endMins =
+          element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
+        const currentMins =
+          parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
+        if (currentMins >= startMins && currentMins < endMins) {
+          returning = true;
+        }
+      });
+      return returning;
+    });
+    return { locations: result };
+  }
+);

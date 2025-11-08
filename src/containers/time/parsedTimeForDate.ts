@@ -19,8 +19,8 @@ export default class ParsedTimeForDate extends ParsedTimeBase {
     if (tokens.length < 2) {
       throw new Error(`Invalid date: ${this.input}`);
     }
-    const month = convertMonthStringToEnum(tokens[0]);
-    const date = parseInt(tokens[1]);
+    const month = convertMonthStringToEnum(tokens[0]!);
+    const date = parseInt(tokens[1]!);
 
     if (!Number.isInteger(date)) {
       throw new Error(`Invalid date: ${this.input}`);

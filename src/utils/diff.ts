@@ -88,7 +88,7 @@ function getArrayDiffs(prevArray: any[], newArray: any[], path: string) {
       if (prevFreqCnt[key] === undefined) {
         diffs.push(
           `inserted value at ${path} ${
-            newFreqCnt[key] > 1 ? newFreqCnt[key] + " times" : ""
+            newFreqCnt[key]! > 1 ? newFreqCnt[key] + " times" : ""
           }: ${key}`
         );
       } else if (newFreqCnt[key] === undefined) {

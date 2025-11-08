@@ -1,6 +1,6 @@
 import { ILocation } from "types";
 
-export default class LocationMerger {
+export default class ScrapeResultMerger {
   majorityDict: Partial<
     Record<
       number,

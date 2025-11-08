@@ -23,15 +23,15 @@ export default class ParsedTime extends ParsedTimeBase {
     if (tokens.length !== 3) {
       throw new Error(`Invalid time ${timeStr}`);
     }
-    const hour = parseInt(tokens[0]);
+    const hour = parseInt(tokens[0]!);
     if (!Number.isInteger(hour) || hour > 12 || hour < 1) {
       throw new Error(`Invalid time ${timeStr}`);
     }
-    const minute = parseInt(tokens[1]);
+    const minute = parseInt(tokens[1]!);
     if (!Number.isInteger(minute) || minute > 59 || minute < 0) {
       throw new Error(`Invalid time ${timeStr}`);
     }
-    if (!["am", "pm"].includes(tokens[2])) {
+    if (!["am", "pm"].includes(tokens[2]!)) {
       throw new Error(`Invalid time ${timeStr}`);
     }
     if (tokens[2] === "am") {
@@ -52,8 +52,8 @@ export default class ParsedTime extends ParsedTimeBase {
     if (tokens.length !== 2) {
       throw new Error(`Invalid time range: ${this.input}`);
     }
-    const start = this.parseTime(tokens[0]);
-    const end = this.parseTime(tokens[1]);
+    const start = this.parseTime(tokens[0]!);
+    const end = this.parseTime(tokens[1]!);
     this.value = {
       start,
       end,

@@ -1,7 +1,13 @@
 import { getHTMLResponse } from "utils/requestUtils";
 import { Element, load } from "cheerio";
 import { getAllTimeSlotsFromSchedule } from "./timeBuilder";
-import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
+import {
+  ICoordinate,
+  IDate,
+  ILocation,
+  ISpecial,
+  IFullTimeRange,
+} from "../types";
 import { ITimeOverwrites } from "overwrites/timeOverwrites";
 
 /**
@@ -20,7 +26,8 @@ export default class LocationBuilder {
   private menu?: string;
   private coordinates?: ICoordinate;
   private acceptsOnlineOrders?: boolean;
-  private times?: ITimeRange[];
+  private times?: IFullTimeRange[];
+  private earliestDayFound?: IDate;
   private specials?: ISpecial[];
   private soups?: ISpecial[];
 
@@ -47,7 +54,7 @@ export default class LocationBuilder {
       this.specials = specialList[this.conceptId];
     }
   }
-  setTimes(times: ITimeRange[]) {
+  setTimes(times: IFullTimeRange[]) {
     if (this.conceptId && times !== undefined) {
       this.times = times;
     }
@@ -61,7 +68,7 @@ export default class LocationBuilder {
     return { lat: parseFloat(latitude), lng: parseFloat(longitude) };
   }
 
-  async populateDetailedInfo(timeSlotOverwrites: ITimeOverwrites = {}) {
+  async populateDetailedInfo() {
     const conceptURL = this.getConceptLink();
     if (!conceptURL) return;
 
@@ -80,11 +87,12 @@ export default class LocationBuilder {
     }
 
     const nextSevenDays = $("ul.schedule").find("li").toArray();
-    this.times = getAllTimeSlotsFromSchedule(
+    const { times, earliestDay } = getAllTimeSlotsFromSchedule(
       nextSevenDays,
-      serverDate.year,
-      timeSlotOverwrites
+      serverDate.year
     );
+    this.times = times;
+    this.earliestDayFound = earliestDay;
   }
   getConceptLink() {
     if (this.conceptId === undefined) return undefined;
@@ -103,15 +111,13 @@ export default class LocationBuilder {
       this.url === undefined ||
       this.location === undefined ||
       this.conceptId === undefined ||
-      this.name === undefined
+      this.name === undefined ||
+      this.earliestDayFound === undefined
     ) {
       throw Error(
         "Didn't finish configuring location before building metadata!"
       );
       // All fetches were good - yet we have missing data. This is a problem.
-    }
-    if (this.conceptId === 179) {
-      this.times = []; // capital grains quick override
     }
 
     return {
@@ -125,6 +131,7 @@ export default class LocationBuilder {
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
       times: this.times,
+      earliestDayFound: this.earliestDayFound,
       todaysSpecials: this.specials,
       todaysSoups: this.soups,
     };

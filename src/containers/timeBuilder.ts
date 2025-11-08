@@ -1,14 +1,11 @@
 import { Element, load } from "cheerio";
 
-import { sortAndMergeTimeRanges } from "../utils/timeUtils";
 import { IParsedTimeRange } from "./time/parsedTime";
 import { convertMonthStringToEnum } from "./time/parsedTimeForDate";
-import { ITimeRange, TimeInfoType } from "types";
+import { IDate, IFullTimeRange, TimeInfoType } from "types";
 import { parseToken } from "utils/parseTimeToken";
 import { notifySlack } from "utils/slack";
 import { DateTime } from "luxon";
-import { ITimeOverwrites } from "overwrites/timeOverwrites";
-import ParsedTimeForDayOfWeek from "./time/parsedTimeForDay";
 
 /**
  *
@@ -18,11 +15,11 @@ import ParsedTimeForDayOfWeek from "./time/parsedTimeForDay";
  */
 export function getAllTimeSlotsFromSchedule(
   schedule: Element[],
-  currentYear: number,
-  scheduleOverwrites: ITimeOverwrites
+  currentYear: number
 ) {
-  const allTimeSlots: ITimeRange[] = [];
+  const allTimeSlots: IFullTimeRange[] = [];
   let prevMonth = -1;
+  let firstDay: IDate | undefined;
   for (const rowHTML of schedule) {
     const $ = load(rowHTML);
     try {
@@ -30,7 +27,7 @@ export function getAllTimeSlotsFromSchedule(
         .replaceAll("\n", "")
         .replace(/\s\s+/g, " ")
         .split(/,(.*)/); // splits only on first comma
-      const [dayOfWeek, month, day] = date.trim().split(" ");
+      const [dayOfWeek, month, day] = date?.trim().split(" ") ?? [];
       if (
         dayOfWeek === undefined ||
         month === undefined ||
@@ -41,8 +38,7 @@ export function getAllTimeSlotsFromSchedule(
         continue;
       const parsedMonth = convertMonthStringToEnum(month);
       const parsedDay = parseInt(day);
-      const parsedDayOfWeek = new ParsedTimeForDayOfWeek(dayOfWeek).parse()
-        .value;
+
       if (parsedMonth < prevMonth) {
         // new year
         currentYear++;
@@ -58,32 +54,42 @@ export function getAllTimeSlotsFromSchedule(
         );
         continue;
       }
-      const parsedTimeSlots = parseTimeSlots(
-        scheduleOverwrites[rowFullDateString] ??
-          timeSlotsForThatDay.split(/[,;]/).map((slot) => slot.trim())
-      );
+      const parsedTimeSlots = parseTimeSlots(timeSlotsForThatDay);
       const parsedTimeSlotsWithDateInfo = augmentAndEditTimeRangesWithDateInfo(
         parsedTimeSlots,
-        parsedDayOfWeek // we could use rowDate.weekday % 7, but that would break a good number of tests that did not rely on serverDate to get the weekday...
+        rowDate.day,
+        rowDate.month,
+        rowDate.year
       );
+
       allTimeSlots.push(...parsedTimeSlotsWithDateInfo);
+      if (firstDay === undefined)
+        firstDay = {
+          year: rowDate.year,
+          month: rowDate.month,
+          day: rowDate.day,
+        };
     } catch (e) {
       notifySlack(
         `<!channel> Failed to parse row ${$.text()} ${e} ${(e as any).stack}`
       );
     }
   }
-  return sortAndMergeTimeRanges(allTimeSlots);
+  if (firstDay === undefined)
+    throw new Error(`None of the rows in ${schedule} were parsable!`);
+  return { times: allTimeSlots, earliestDay: firstDay };
 }
 /**
  *
  * @param timeString The actual time slots (ex. '10:30 AM - 8:00 PM' in the string 'Tuesday September 09,  10:30 AM - 8:00 PM')
  * @returns
  */
-function parseTimeSlots(timeSlotStrings: string[]) {
+export function parseTimeSlots(timeSlotStrings: string) {
   const timeRanges: IParsedTimeRange[] = [];
 
-  for (const token of timeSlotStrings) {
+  for (const token of timeSlotStrings
+    .split(/[,;]/)
+    .map((slot) => slot.trim())) {
     try {
       const { type: timeInfoType, value } = parseToken(token);
       switch (timeInfoType) {
@@ -98,9 +104,7 @@ function parseTimeSlots(timeSlotStrings: string[]) {
       }
     } catch (err: any) {
       notifySlack(
-        `<!channel> Failed to parse token \`${token}\` from time slot \`${timeSlotStrings.join(
-          "|"
-        )}\`\n${err.stack}`
+        `<!channel> Failed to parse token \`${token}\` from time slot \`${timeSlotStrings}\`\n${err.stack}`
       );
       continue;
     }
@@ -114,28 +118,22 @@ function parseTimeSlots(timeSlotStrings: string[]) {
  * @param day (0-6, with Sunday being 0)
  * @returns
  */
-function augmentAndEditTimeRangesWithDateInfo(
+export function augmentAndEditTimeRangesWithDateInfo(
   timeRanges: IParsedTimeRange[],
-  day: number
+  day: number,
+  month: number,
+  year: number
 ) {
-  const allRanges: ITimeRange[] = [];
+  const allRanges: IFullTimeRange[] = [];
   for (const range of timeRanges) {
     rollBack12AmEndTime(range); // not sure why this was added, but it doesn't hurt I guess (I suppose the only case this actively helps is if the time string is 12:00 AM - 12:00 AM)
-    const shouldSpillToNextDay =
-      range.start.hour * 60 + range.start.minute >
-      range.end.hour * 60 + range.end.minute;
 
     allRanges.push({
-      start: {
-        day: day,
-        hour: range.start.hour,
-        minute: range.start.minute,
-      },
-      end: {
-        day: shouldSpillToNextDay ? (day + 1) % 7 : day,
-        hour: range.end.hour,
-        minute: range.end.minute,
-      },
+      year: year,
+      month: month,
+      day: day,
+      startMinutesFromMidnight: range.start.hour * 60 + range.start.minute,
+      endMinutesFromMidnight: range.end.hour * 60 + range.end.minute,
     });
   }
   return allRanges;

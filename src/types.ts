@@ -1,3 +1,11 @@
+import { DateTime } from "luxon";
+export interface IDate {
+  year: number;
+  /** 1-12 */
+  month: number;
+  /** 1-31 */
+  day: number;
+}
 export interface ILocation {
   conceptId: number;
   name: string;
@@ -8,7 +16,9 @@ export interface ILocation {
   location: string;
   coordinates?: ICoordinate;
   acceptsOnlineOrders: boolean;
-  times: ITimeRange[];
+  times: IFullTimeRange[];
+  /** useful when figuring out which db entries to overwrite */
+  earliestDayFound: IDate;
   todaysSpecials?: ISpecial[];
   todaysSoups?: ISpecial[];
 }
@@ -17,18 +27,13 @@ export interface ISpecial {
   description: string;
 }
 
-export interface ITimeSlot {
-  /**
-   * 0 - 6 where 0 = Sunday
-   */
+export interface IFullTimeRange {
+  year: number;
+  month: number;
   day: number;
-  hour: number;
-  minute: number;
-}
-
-export interface ITimeRange {
-  start: ITimeSlot;
-  end: ITimeSlot;
+  startMinutesFromMidnight: number;
+  /** Can be less than start if the time slot wraps around to the next day (eg. 2 PM - 2 AM) */
+  endMinutesFromMidnight: number;
 }
 export interface ICoordinate {
   lat: number;
