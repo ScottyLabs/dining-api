@@ -117,12 +117,13 @@ export async function getAllLocations() {
   ).map(([id, data]) => {
     return {
       ...data,
-      times: mergeTimeIntervals(data.times).map(
-        (time) =>
-          `${new Date(time.start).toLocaleString()}-${new Date(
-            time.end
-          ).toLocaleString()}`
-      ),
+      times: mergeTimeIntervals(data.times),
+      // .map(
+      //   (time) =>
+      //     `${new Date(time.start).toLocaleString()}-${new Date(
+      //       time.end
+      //     ).toLocaleString()}`
+      // ),
     };
   });
   return locationsWithMergedTimes;
