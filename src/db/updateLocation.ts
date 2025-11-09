@@ -3,6 +3,7 @@ import { db } from "./db";
 import {
   conceptIdToInternalIdTable,
   locationDataTable,
+  specialsTable,
   timesTable,
 } from "./schema";
 import { and, eq, gte, sql } from "drizzle-orm";
@@ -18,6 +19,7 @@ async function getInternalId(externalId: string) {
 
 export async function addLocationDataToDb(location: ILocation) {
   const internalId = await getInternalId(location.conceptId.toString());
+
   const locationDbEntry: typeof locationDataTable.$inferInsert = {
     id: internalId,
     name: location.name,
@@ -36,22 +38,50 @@ export async function addLocationDataToDb(location: ILocation) {
     .values(locationDbEntry)
     .onConflictDoUpdate({ target: locationDataTable.id, set: locationDbEntry });
 
-  // remove rows from whenever the scrape started from (aka remove entries corresponding to the last 7 days)
-  await db
-    .delete(timesTable)
-    .where(
-      and(
-        eq(timesTable.locationId, internalId),
+  if (location.earliestDayToOverride !== undefined) {
+    const earliestDaySQLString = `${location.earliestDayToOverride.year}-${pad(
+      location.earliestDayToOverride.month
+    )}-${pad(location.earliestDayToOverride.day)})`;
+    // add specials
+    await db
+      .delete(locationDataTable)
+      .where(
         and(
-          gte(
-            timesTable.date,
-            `${location.earliestDayFound.year}-${pad(
-              location.earliestDayFound.month
-            )}-${pad(location.earliestDayFound.day)})`
-          )
+          eq(specialsTable.locationId, internalId),
+          eq(specialsTable.date, earliestDaySQLString)
         )
-      )
-    );
+      );
+    const specials = [
+      ...(location.todaysSpecials?.map((sp) => ({
+        ...sp,
+        type: "special" as const,
+      })) ?? []),
+      ...(location.todaysSoups?.map((sp) => ({
+        ...sp,
+        type: "soup" as const,
+      })) ?? []),
+    ];
+    if (specials.length)
+      await db.insert(specialsTable).values(
+        specials.map((special) => ({
+          date: earliestDaySQLString,
+          locationId: internalId,
+          name: special.title,
+          description: special.description,
+          type: special.type,
+        }))
+      );
+
+    // remove rows from whenever the scrape started from (aka remove entries corresponding to the last 7 days)
+    await db
+      .delete(timesTable)
+      .where(
+        and(
+          eq(timesTable.locationId, internalId),
+          and(gte(timesTable.date, earliestDaySQLString))
+        )
+      );
+  }
   if (location.times.length) {
     await db.insert(timesTable).values(
       location.times.map((time) => ({
@@ -63,7 +93,7 @@ export async function addLocationDataToDb(location: ILocation) {
     );
   }
 
-  // in case this entry isn't there
+  // in case the conceptId->internalId mapping entry isn't there
   await db
     .insert(conceptIdToInternalIdTable)
     .values({

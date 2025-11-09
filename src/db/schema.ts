@@ -8,6 +8,7 @@ import {
   date,
   primaryKey,
   index,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import { IFullTimeRange } from "../types";
 
@@ -84,3 +85,17 @@ export const timeOverwritesTable = pgTable(
   },
   (table) => [primaryKey({ columns: [table.locationId, table.date] })]
 );
+export const specialType = pgEnum("specialType", ["special", "soup"]);
+
+export const specialsTable = pgTable("specials", {
+  id: integer().notNull().generatedAlwaysAsIdentity().primaryKey(),
+  locationId: text("location_id")
+    .references(() => locationDataTable.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  name: text().notNull(),
+  description: text().notNull(),
+  date: date().notNull(),
+  type: specialType().notNull(),
+});

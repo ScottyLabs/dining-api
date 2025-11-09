@@ -9,7 +9,7 @@ import ScrapeResultMerger from "utils/locationMerger";
 import { addLocationDataToDb } from "db/updateLocation";
 import { deprecatedNotice } from "deprecationNotice";
 import { getDiffsBetweenLocationData } from "utils/diff";
-import { getEmails } from "db/emails";
+import { getEmails } from "db/dbQueryUtils";
 import { getAllLocations } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
 

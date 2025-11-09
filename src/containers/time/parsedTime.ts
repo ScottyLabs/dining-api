@@ -5,6 +5,7 @@ interface Time {
   minute: number;
 }
 
+/** what you get after parsing a time string like `2:00 AM - 3:00 AM, 4:00 PM - 2:00 AM` (do note that end can be < start) */
 export interface IParsedTimeRange {
   start: Time;
   end: Time;

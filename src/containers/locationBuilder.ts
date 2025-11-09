@@ -110,8 +110,7 @@ export default class LocationBuilder {
       this.url === undefined ||
       this.location === undefined ||
       this.conceptId === undefined ||
-      this.name === undefined ||
-      this.earliestDayFound === undefined
+      this.name === undefined
     ) {
       throw Error(
         "Didn't finish configuring location before building metadata!"
@@ -130,7 +129,7 @@ export default class LocationBuilder {
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
       times: this.times,
-      earliestDayFound: this.earliestDayFound,
+      earliestDayToOverride: this.earliestDayFound,
       todaysSpecials: this.specials,
       todaysSoups: this.soups,
     };

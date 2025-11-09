@@ -17,8 +17,8 @@ export interface ILocation {
   coordinates?: ICoordinate;
   acceptsOnlineOrders: boolean;
   times: IFullTimeRange[];
-  /** useful when figuring out which db entries to overwrite */
-  earliestDayFound: IDate;
+  /** useful when figuring out which db time entries to overwrite. Can be undefined if no time data was properly scraped */
+  earliestDayToOverride?: IDate;
   todaysSpecials?: ISpecial[];
   todaysSoups?: ISpecial[];
 }
