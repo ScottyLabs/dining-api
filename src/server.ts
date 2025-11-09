@@ -6,12 +6,12 @@ import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
 import ScrapeResultMerger from "utils/locationMerger";
-import { getGeneralOverrides } from "db/overrides";
 import { addLocationDataToDb } from "db/updateLocation";
 import { deprecatedNotice } from "deprecationNotice";
 import { getDiffsBetweenLocationData } from "utils/diff";
 import { getEmails } from "db/emails";
 import { getAllLocations } from "db/getLocations";
+import { openapi } from "@elysiajs/openapi";
 
 /** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
@@ -54,7 +54,7 @@ async function reload(): Promise<void> {
   }
 }
 
-export const app = new Elysia({ adapter: node() }); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
+export const app = new Elysia({ adapter: node() }).use(openapi()); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
   if (code === "NOT_FOUND") {
@@ -68,15 +68,20 @@ app.onError(({ error, path, code }) => {
   }
 });
 app.use(cors());
+app.onAfterHandle(({ response }) => {
+  if (typeof response === "object") {
+    // pretty print this
+    return new Response(JSON.stringify(response, null, 4), {
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+    }); // we can actually set proper content-type headers this way
+  }
+});
 
 app.get("/", () => {
   return "ScottyLabs Dining API";
 });
-app.get("/api/v2/locations", async () =>
-  JSON.stringify(await getAllLocations(), null, 4)
-);
+app.get("/api/v2/locations", getAllLocations);
 app.get("/api/emails", getEmails);
-app.get("/api/changes", async () => await getGeneralOverrides());
 
 app.post(
   "/api/sendSlackMessage",

@@ -74,12 +74,17 @@ export async function getAllLocations() {
 
   // get general location override data
   const overrides = (await db.select().from(overwritesTable)).reduce<
-    Record<string, RequiredProperty<typeof overwritesTable.$inferSelect>>
+    Record<
+      string,
+      Omit<RequiredProperty<typeof overwritesTable.$inferSelect>, "locationId"> // exclude locationId field, since that's our internal id
+    >
   >(
     (acc, overwrite) => ({
       ...acc,
       [overwrite.locationId]: Object.fromEntries(
-        Object.entries(overwrite).filter(([_, v]) => v !== null)
+        Object.entries(overwrite).filter(([key, v]) => {
+          return key !== "locationId" && v !== null;
+        })
       ) as RequiredProperty<typeof overwritesTable.$inferSelect>,
     }),
     {}
