@@ -3,14 +3,12 @@ import {
   text,
   integer,
   boolean,
-  jsonb,
   decimal,
   date,
   primaryKey,
   index,
   pgEnum,
 } from "drizzle-orm/pg-core";
-import { IFullTimeRange } from "../types";
 
 export const emailTable = pgTable("emails", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),

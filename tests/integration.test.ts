@@ -11,7 +11,6 @@ import {
   Fri,
   Sat,
   Sun,
-  setUpArbitraryTest,
 } from "./mockTimings";
 import { DateTime } from "luxon";
 

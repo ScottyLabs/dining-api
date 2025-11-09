@@ -16,19 +16,19 @@ export default class LocationBuilder {
   static readonly CONCEPT_BASE_LINK =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/";
 
-  private conceptId?: number;
-  private name?: string;
-  private shortDescription?: string;
-  private description?: string;
-  private url?: string;
-  private location?: string;
-  private menu?: string;
-  private coordinates?: ICoordinate;
-  private acceptsOnlineOrders?: boolean;
-  private times?: IFullTimeRange[];
-  private earliestDayFound?: IDate;
-  private specials?: ISpecial[];
-  private soups?: ISpecial[];
+  private conceptId: number | undefined;
+  private name: string | undefined;
+  private shortDescription: string | undefined;
+  private description: string | undefined;
+  private url: string | undefined;
+  private location: string | undefined;
+  private menu: string | undefined;
+  private coordinates: ICoordinate | undefined;
+  private acceptsOnlineOrders: boolean | undefined;
+  private times: IFullTimeRange[] | undefined;
+  private earliestDayFound: IDate | undefined;
+  private specials: ISpecial[] | undefined;
+  private soups: ISpecial[] | undefined;
 
   constructor(card: Element) {
     const link = load(card)("h3.name.detailsLink");

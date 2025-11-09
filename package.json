@@ -8,6 +8,7 @@
     "build": "rollup -c",
     "start": "NODE_ENV=production node dist/server.js",
     "test": "dotenv -e .env.test -- jest --coverage",
+    "typecheck": "tsc",
     "run-prod": "VOL_SRC=postgres_data docker-compose up --build",
     "db:start": "VOL_SRC=postgres_dev_data docker-compose up -d postgres --build",
     "db:push": "drizzle-kit push",

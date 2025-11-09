@@ -43,7 +43,3 @@ interface ICoordinate {
   lat: number;
   lng: number;
 }
-
-interface ILocationCoordinateOverwrites {
-  [conceptId: string]: ICoordinate;
-}

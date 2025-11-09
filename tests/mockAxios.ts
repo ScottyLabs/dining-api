@@ -22,10 +22,10 @@ export function mockAxiosGETMethod({
   conceptHTML,
   serverDate,
 }: {
-  conceptListHTML?: string;
-  specialsHTML?: string;
-  soupsHTML?: string;
-  conceptHTML?: (id: string) => string | undefined;
+  conceptListHTML?: string | undefined;
+  specialsHTML?: string | undefined;
+  soupsHTML?: string | undefined;
+  conceptHTML?: ((id: string) => string | undefined) | undefined;
   serverDate: DateTime<true>;
 }) {
   (axios.get as jest.Mock).mockImplementation(async (url: string) => {
@@ -41,7 +41,7 @@ export function mockAxiosGETMethod({
     if (url === SPECIALS_URL && specialsHTML !== undefined) return specialsHTML;
     if (url === SOUPS_URL && soupsHTML !== undefined) return soupsHTML;
     if (url.startsWith(LOCATION_URL_PREFIX) && conceptHTML !== undefined)
-      return conceptHTML(last(url.split("/")));
+      return conceptHTML(last(url.split("/"))!);
     throw new Error(`url ${url} not found!`);
   };
 }

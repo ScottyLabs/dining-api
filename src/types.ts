@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 export interface IDate {
   year: number;
   /** 1-12 */
@@ -9,18 +8,18 @@ export interface IDate {
 export interface ILocation {
   conceptId: number;
   name: string;
-  shortDescription?: string;
+  shortDescription: string | undefined;
   description: string;
   url: string;
-  menu?: string;
+  menu: string | undefined;
   location: string;
-  coordinates?: ICoordinate;
+  coordinates: ICoordinate | undefined;
   acceptsOnlineOrders: boolean;
   times: IFullTimeRange[];
   /** useful when figuring out which db time entries to overwrite. Can be undefined if no time data was properly scraped */
-  earliestDayToOverride?: IDate;
-  todaysSpecials?: ISpecial[];
-  todaysSoups?: ISpecial[];
+  earliestDayToOverride: IDate | undefined;
+  todaysSpecials: ISpecial[] | undefined;
+  todaysSoups: ISpecial[] | undefined;
 }
 export interface ISpecial {
   title: string;

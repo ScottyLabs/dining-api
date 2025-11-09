@@ -6,7 +6,7 @@ import {
   specialsTable,
   timesTable,
 } from "./schema";
-import { and, eq, gte, sql } from "drizzle-orm";
+import { and, eq, gte } from "drizzle-orm";
 import { pad } from "utils/timeUtils";
 async function getInternalId(externalId: string) {
   let [idMapping] = await db
