@@ -4,7 +4,7 @@ type T = { [key: string]: T } | T[] | string | number | undefined;
 export function getObjDiffs(
   prevObject: T,
   newObject: T,
-  path: string = "~" // ~uwu senpai
+  path: string = "~"
 ): string[] {
   let diffs: string[] = [];
   if (typeof prevObject === "object" && typeof newObject === "object") {

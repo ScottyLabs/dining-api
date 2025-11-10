@@ -12,6 +12,7 @@ import { getDiffsBetweenLocationData } from "utils/diff";
 import { getEmails } from "db/dbQueryUtils";
 import { getAllLocations } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
+import { initDB } from "db/db";
 
 /** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
@@ -101,6 +102,7 @@ setInterval(() => {
   );
 }, env.RELOAD_WAIT_INTERVAL);
 
+initDB(env.DATABASE_URL);
 // Initial load and start the server
 reload()
   .then(() => {

@@ -10,7 +10,7 @@ import {
 
 import { db } from "./db";
 import { notifySlack } from "utils/slack";
-import { eq, gte } from "drizzle-orm";
+import { and, eq, gte } from "drizzle-orm";
 import { parseTimeSlots } from "containers/timeBuilder";
 import { IParsedTimeRange } from "containers/time/parsedTime";
 
@@ -64,9 +64,13 @@ export async function getLocationIdToDataMap(timeSearchCutoffStr: string) {
       conceptIdToInternalIdTable,
       eq(locationDataTable.id, conceptIdToInternalIdTable.internalId)
     )
-    .leftJoin(timesTable, eq(locationDataTable.id, timesTable.locationId))
-    .where(gte(timesTable.date, timeSearchCutoffStr));
-
+    .leftJoin(
+      timesTable,
+      and(
+        eq(locationDataTable.id, timesTable.locationId),
+        gte(timesTable.date, timeSearchCutoffStr)
+      )
+    );
   return locationData.reduce<
     Record<
       string,

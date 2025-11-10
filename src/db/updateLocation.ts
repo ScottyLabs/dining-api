@@ -36,7 +36,10 @@ export async function addLocationDataToDb(location: ILocation) {
   await db
     .insert(locationDataTable)
     .values(locationDbEntry)
-    .onConflictDoUpdate({ target: locationDataTable.id, set: locationDbEntry });
+    .onConflictDoUpdate({
+      target: locationDataTable.id,
+      set: locationDbEntry,
+    });
 
   if (location.earliestDayToOverride !== undefined) {
     const earliestDaySQLString = `${location.earliestDayToOverride.year}-${pad(
