@@ -1,5 +1,6 @@
 import { ILocation } from "types";
 import ScrapeResultMerger from "../src/utils/locationMerger";
+import { DeeplyAllowMatchers } from "vitest";
 const locationA: ILocation = {
   conceptId: 3,
   name: "Location Name",
@@ -61,7 +62,10 @@ const locationB: ILocation = {
   todaysSpecials: undefined,
 };
 // https://stackoverflow.com/questions/40135684/is-there-an-array-equality-match-function-that-ignores-element-position-in-jest
-const expectArrayEquivalence = <T>(actual: T[], expected: T[]) => {
+const expectArrayEquivalence = <M>(
+  actual: DeeplyAllowMatchers<M>[],
+  expected: DeeplyAllowMatchers<M>[]
+) => {
   expect(actual).toEqual(expect.arrayContaining(expected));
   expect(expected).toEqual(expect.arrayContaining(actual));
 };

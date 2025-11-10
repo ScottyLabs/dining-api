@@ -2,7 +2,7 @@ import { Client } from "pg";
 import { StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import { initPgClient } from "./postgresClient";
 
-describe.only("Redis", () => {
+describe("Redis", () => {
   let container: StartedPostgreSqlContainer;
   let pgClient: Client;
 
