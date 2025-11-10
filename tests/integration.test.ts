@@ -14,7 +14,7 @@ import {
 } from "./mockTimings";
 import { DateTime } from "luxon";
 
-jest.mock("axios");
+vi.mock("axios");
 test("ok", () => {});
 test("the whole thing, including locationOverwrites", async () => {
   mockAxiosGETMethodWithFilePaths({

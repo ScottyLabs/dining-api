@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { getFileContent, last } from "./utils";
 import axios from "axios";
+import { Mock } from "vitest";
 
 const ALL_LOCATIONS_URL =
   "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts";
@@ -28,7 +29,7 @@ export function mockAxiosGETMethod({
   conceptHTML?: ((id: string) => string | undefined) | undefined;
   serverDate: DateTime<true>;
 }) {
-  (axios.get as jest.Mock).mockImplementation(async (url: string) => {
+  (axios.get as Mock).mockImplementation(async (url: string) => {
     return {
       data: getHTML(url),
       headers: { date: serverDate.toRFC2822() },
