@@ -20,7 +20,7 @@ describe("Redis", () => {
       .start();
 
     initDB(container.getConnectionUri());
-  });
+  }, 120 * 1000); // 2 minutes for startup
 
   afterEach(async () => {
     _disconnectPoolConnection();

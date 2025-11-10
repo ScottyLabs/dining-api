@@ -31,7 +31,7 @@ Start your local database with `pnpm db:start` and then start the server with `p
 
 ## Database schema changes (important!)
 
-When you make changes to the database schema, be sure to run `pnpm db:push` to keep your local db in sync.
+When you make changes to the database schema, be sure to run `pnpm db:push` to keep your local db in sync. (You should do this before running tests as well!)
 
 Before merging your PR, be sure to run `pnpm db:generate` to generate a migration file, which will then be automatically applied to the staging and production databases when deployed.
 
