@@ -41,13 +41,13 @@ export async function addLocationDataToDb(location: ILocation) {
       set: locationDbEntry,
     });
 
-  if (location.earliestDayToOverride !== undefined) {
-    const earliestDaySQLString = `${location.earliestDayToOverride.year}-${pad(
-      location.earliestDayToOverride.month
-    )}-${pad(location.earliestDayToOverride.day)})`;
+  if (location.today !== undefined) {
+    const earliestDaySQLString = `${location.today.year}-${pad(
+      location.today.month
+    )}-${pad(location.today.day)})`;
     // add specials
     await db
-      .delete(locationDataTable)
+      .delete(specialsTable)
       .where(
         and(
           eq(specialsTable.locationId, internalId),
@@ -84,16 +84,16 @@ export async function addLocationDataToDb(location: ILocation) {
           and(gte(timesTable.date, earliestDaySQLString))
         )
       );
-  }
-  if (location.times.length) {
-    await db.insert(timesTable).values(
-      location.times.map((time) => ({
-        locationId: internalId,
-        date: `${time.year}-${pad(time.month)}-${pad(time.day)}`,
-        startTime: time.startMinutesFromMidnight,
-        endTime: time.endMinutesFromMidnight,
-      }))
-    );
+    if (location.times.length) {
+      await db.insert(timesTable).values(
+        location.times.map((time) => ({
+          locationId: internalId,
+          date: `${time.year}-${pad(time.month)}-${pad(time.day)}`,
+          startTime: time.startMinutesFromMidnight,
+          endTime: time.endMinutesFromMidnight,
+        }))
+      );
+    }
   }
 
   // in case the conceptId->internalId mapping entry isn't there

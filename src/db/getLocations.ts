@@ -9,8 +9,7 @@ import { DateTime } from "luxon";
 import { pad, remapAndMergeTimeIntervals } from "utils/timeUtils";
 import { IParsedTimeRange } from "containers/time/parsedTime";
 
-export async function getAllLocations() {
-  const today = DateTime.now();
+export async function getAllLocations(today: DateTime) {
   const timeSearchCutoff = today.minus({ days: 1 }); // 1 days worth of data before today
   const timeSearchCutoffStr = `${timeSearchCutoff.year}-${pad(
     timeSearchCutoff.month
@@ -38,8 +37,8 @@ export async function getAllLocations() {
         //       time.end
         //     ).toLocaleString()}`
         // ),
-        todaysSoups: specials[id]?.soups,
-        todaysSpecials: specials[id]?.specials,
+        todaysSoups: specials[id]?.soups ?? [],
+        todaysSpecials: specials[id]?.specials ?? [],
       };
     }
   );

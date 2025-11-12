@@ -13,6 +13,7 @@ import { getEmails } from "db/dbQueryUtils";
 import { getAllLocations } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
 import { initDB } from "db/db";
+import { DateTime } from "luxon";
 
 /** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
@@ -81,7 +82,7 @@ app.onAfterHandle(({ response }) => {
 app.get("/", () => {
   return "ScottyLabs Dining API";
 });
-app.get("/api/v2/locations", getAllLocations);
+app.get("/api/v2/locations", async () => await getAllLocations(DateTime.now()));
 app.get("/api/emails", getEmails);
 
 app.post(

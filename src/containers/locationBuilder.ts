@@ -129,7 +129,7 @@ export default class LocationBuilder {
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
       times: this.times,
-      earliestDayToOverride: this.earliestDayFound,
+      today: this.earliestDayFound,
       todaysSpecials: this.specials,
       todaysSoups: this.soups,
     };

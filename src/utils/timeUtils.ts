@@ -34,14 +34,13 @@ export function pad(n: number) {
 export function remapAndMergeTimeIntervals(timeRanges: ITimeRangeInternal[]) {
   const timeStampedIntervals = timeRanges.map((rng) => {
     const date = DateTime.fromISO(rng.date, { zone: "America/New_York" });
+    const startDate = date.set({ minute: rng.startMinutesSinceMidnight });
+    const endDate = date.set({ minute: rng.endMinutesSinceMidnight }).plus({
+      days: rng.endMinutesSinceMidnight < rng.startMinutesSinceMidnight ? 1 : 0,
+    }); // account for wrap-around
     return {
-      start: date.toMillis() + rng.startMinutesSinceMidnight * 1000 * 60,
-      end:
-        date.toMillis() +
-        rng.endMinutesSinceMidnight * 1000 * 60 +
-        (rng.endMinutesSinceMidnight < rng.startMinutesSinceMidnight
-          ? 24 * 60 * 60 * 1000
-          : 0), // this specific slot wraps around - so we'll add a day to the end
+      start: startDate.toMillis(),
+      end: endDate.toMillis(),
     };
   });
   return mergeTimeRanges(timeStampedIntervals, 60 * 1000); // merge gaps of at most 1 min

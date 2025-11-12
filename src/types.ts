@@ -15,9 +15,10 @@ export interface ILocation {
   location: string;
   coordinates: ICoordinate | undefined;
   acceptsOnlineOrders: boolean;
+  /** Assuming these times fall after today */
   times: IFullTimeRange[];
   /** useful when figuring out which db time entries to overwrite. Can be undefined if no time data was properly scraped */
-  earliestDayToOverride: IDate | undefined;
+  today: IDate | undefined;
   todaysSpecials: ISpecial[] | undefined;
   todaysSoups: ISpecial[] | undefined;
 }
