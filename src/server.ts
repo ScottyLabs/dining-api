@@ -18,7 +18,6 @@ import { QueryUtils } from "db/dbQueryUtils";
 /** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
 async function reload(): Promise<void> {
-  return;
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
   const parser = new DiningParser();
@@ -105,19 +104,13 @@ setInterval(() => {
     (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
   );
 }, env.RELOAD_WAIT_INTERVAL);
+reload().catch(
+  (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+);
 
-// Initial load and start the server
-reload()
-  .then(() => {
-    app.listen(env.PORT, ({ hostname, port }) => {
-      notifySlack(`Dining API is running at ${hostname}:${port}`);
-    });
-  })
-  .catch(async (er) => {
-    await notifySlack("<!channel> Dining API startup failed!!");
-    await notifySlack(`*Error caught*\n${er.stack}`);
-    process.exit(1);
-  });
+app.listen(env.PORT, ({ hostname, port }) => {
+  notifySlack(`Dining API is running at ${hostname}:${port}`);
+});
 
 // DEPRECATED
 
