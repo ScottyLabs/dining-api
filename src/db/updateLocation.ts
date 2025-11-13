@@ -40,76 +40,77 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
     coordinateLng: location.coordinates?.lng,
     acceptsOnlineOrders: location.acceptsOnlineOrders,
   };
+  await db.transaction(async (tx) => {
+    await tx
+      .insert(locationDataTable)
+      .values(locationDbEntry)
+      .onConflictDoUpdate({
+        target: locationDataTable.id,
+        set: locationDbEntry,
+      });
 
-  await db
-    .insert(locationDataTable)
-    .values(locationDbEntry)
-    .onConflictDoUpdate({
-      target: locationDataTable.id,
-      set: locationDbEntry,
-    });
+    const todayAsSQLString = `${location.today.year}-${pad(
+      location.today.month
+    )}-${pad(location.today.day)})`;
+    // add specials
+    await tx
+      .delete(specialsTable)
+      .where(
+        and(
+          eq(specialsTable.locationId, internalId),
+          eq(specialsTable.date, todayAsSQLString)
+        )
+      );
+    const specials = [
+      ...(location.todaysSpecials?.map((sp) => ({
+        ...sp,
+        type: "special" as const,
+      })) ?? []),
+      ...(location.todaysSoups?.map((sp) => ({
+        ...sp,
+        type: "soup" as const,
+      })) ?? []),
+    ];
+    if (specials.length)
+      await tx.insert(specialsTable).values(
+        specials.map((special) => ({
+          date: todayAsSQLString,
+          locationId: internalId,
+          name: special.title,
+          description: special.description,
+          type: special.type,
+        }))
+      );
 
-  const todayAsSQLString = `${location.today.year}-${pad(
-    location.today.month
-  )}-${pad(location.today.day)})`;
-  // add specials
-  await db
-    .delete(specialsTable)
-    .where(
-      and(
-        eq(specialsTable.locationId, internalId),
-        eq(specialsTable.date, todayAsSQLString)
-      )
-    );
-  const specials = [
-    ...(location.todaysSpecials?.map((sp) => ({
-      ...sp,
-      type: "special" as const,
-    })) ?? []),
-    ...(location.todaysSoups?.map((sp) => ({
-      ...sp,
-      type: "soup" as const,
-    })) ?? []),
-  ];
-  if (specials.length)
-    await db.insert(specialsTable).values(
-      specials.map((special) => ({
-        date: todayAsSQLString,
-        locationId: internalId,
-        name: special.title,
-        description: special.description,
-        type: special.type,
-      }))
-    );
+    // remove rows from whenever the scrape started from (aka remove entries corresponding to the last 7 days)
+    await tx
+      .delete(timesTable)
+      .where(
+        and(
+          eq(timesTable.locationId, internalId),
+          and(gte(timesTable.date, todayAsSQLString))
+        )
+      );
+    if (location.times.length) {
+      await tx.insert(timesTable).values(
+        location.times.map((time) => ({
+          locationId: internalId,
+          date: `${time.year}-${pad(time.month)}-${pad(time.day)}`,
+          startTime: time.startMinutesFromMidnight,
+          endTime: time.endMinutesFromMidnight,
+        }))
+      );
+    }
 
-  // remove rows from whenever the scrape started from (aka remove entries corresponding to the last 7 days)
-  await db
-    .delete(timesTable)
-    .where(
-      and(
-        eq(timesTable.locationId, internalId),
-        and(gte(timesTable.date, todayAsSQLString))
-      )
-    );
-  if (location.times.length) {
-    await db.insert(timesTable).values(
-      location.times.map((time) => ({
-        locationId: internalId,
-        date: `${time.year}-${pad(time.month)}-${pad(time.day)}`,
-        startTime: time.startMinutesFromMidnight,
-        endTime: time.endMinutesFromMidnight,
-      }))
-    );
-  }
-
-  // in case the conceptId->internalId mapping entry isn't there
-  await db
-    .insert(conceptIdToInternalIdTable)
-    .values({
-      internalId: internalId,
-      externalId: location.conceptId.toString(),
-    })
-    .onConflictDoNothing({ target: conceptIdToInternalIdTable.externalId });
+    // in case the conceptId->internalId mapping entry isn't there
+    await tx
+      .insert(conceptIdToInternalIdTable)
+      .values({
+        internalId: internalId,
+        externalId: location.conceptId.toString(),
+      })
+      .onConflictDoNothing({ target: conceptIdToInternalIdTable.externalId });
+  });
   return internalId;
 }
 /**
