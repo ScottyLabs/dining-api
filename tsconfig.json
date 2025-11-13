@@ -5,7 +5,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "es6",
     "skipLibCheck": true,
-    "types": ["jest", "node"],
+    "types": ["node", "vitest/globals"],
 
     /* Bundler mode */
     "rootDir": ".",
@@ -24,7 +24,9 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true, // this should honestly be the default, since you're not guaranteed to get a value when you key into an object
+    "exactOptionalPropertyTypes": true // | undefined needs to be explicit
   },
   "include": ["src", "tests"]
 }

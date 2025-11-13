@@ -1,7 +1,7 @@
 import { getObjDiffs } from "../src/utils/diff";
 
-jest.mock("../src/utils/slack", () => {
-  return { notifySlack: jest.fn((str: string) => console.log(str)) };
+vi.mock("../src/utils/slack", () => {
+  return { notifySlack: vi.fn((str: string) => console.log(str)) };
 });
 
 describe("test diff checking", () => {

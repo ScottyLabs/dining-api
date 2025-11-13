@@ -4,7 +4,7 @@ type T = { [key: string]: T } | T[] | string | number | undefined;
 export function getObjDiffs(
   prevObject: T,
   newObject: T,
-  path: string = "~" // ~uwu senpai
+  path: string = "~"
 ): string[] {
   let diffs: string[] = [];
   if (typeof prevObject === "object" && typeof newObject === "object") {
@@ -88,7 +88,7 @@ function getArrayDiffs(prevArray: any[], newArray: any[], path: string) {
       if (prevFreqCnt[key] === undefined) {
         diffs.push(
           `inserted value at ${path} ${
-            newFreqCnt[key] > 1 ? newFreqCnt[key] + " times" : ""
+            newFreqCnt[key]! > 1 ? newFreqCnt[key] + " times" : ""
           }: ${key}`
         );
       } else if (newFreqCnt[key] === undefined) {

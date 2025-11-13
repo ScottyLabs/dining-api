@@ -1,5 +1,7 @@
+import { DateTime } from "luxon";
 import { getFileContent, last } from "./utils";
 import axios from "axios";
+import { Mock } from "vitest";
 
 const ALL_LOCATIONS_URL =
   "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/?page=listConcepts";
@@ -19,14 +21,19 @@ export function mockAxiosGETMethod({
   specialsHTML,
   soupsHTML,
   conceptHTML,
+  serverDate,
 }: {
-  conceptListHTML?: string;
-  specialsHTML?: string;
-  soupsHTML?: string;
-  conceptHTML?: (id: string) => string | undefined;
+  conceptListHTML?: string | undefined;
+  specialsHTML?: string | undefined;
+  soupsHTML?: string | undefined;
+  conceptHTML?: ((id: string) => string | undefined) | undefined;
+  serverDate: DateTime<true>;
 }) {
-  (axios.get as jest.Mock).mockImplementation(async (url: string) => {
-    return { data: getHTML(url) };
+  (axios.get as Mock).mockImplementation(async (url: string) => {
+    return {
+      data: getHTML(url),
+      headers: { date: serverDate.toRFC2822() },
+    };
   });
 
   const getHTML = (url: string) => {
@@ -35,7 +42,7 @@ export function mockAxiosGETMethod({
     if (url === SPECIALS_URL && specialsHTML !== undefined) return specialsHTML;
     if (url === SOUPS_URL && soupsHTML !== undefined) return soupsHTML;
     if (url.startsWith(LOCATION_URL_PREFIX) && conceptHTML !== undefined)
-      return conceptHTML(last(url.split("/")));
+      return conceptHTML(last(url.split("/"))!);
     throw new Error(`url ${url} not found!`);
   };
 }
@@ -48,11 +55,13 @@ export function mockAxiosGETMethodWithFilePaths({
   specialsFilePath,
   soupsFilePath,
   getConceptFilePath,
+  serverDate,
 }: {
   conceptListFilePath?: string;
   specialsFilePath?: string;
   soupsFilePath?: string;
   getConceptFilePath?: (conceptId: string) => string;
+  serverDate: DateTime<true>;
 }) {
   mockAxiosGETMethod({
     conceptListHTML: getFileContent(conceptListFilePath),
@@ -62,5 +71,6 @@ export function mockAxiosGETMethodWithFilePaths({
       getConceptFilePath
         ? getFileContent(getConceptFilePath(conceptId))
         : undefined,
+    serverDate,
   });
 }

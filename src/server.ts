@@ -5,19 +5,23 @@ import { ILocation } from "types";
 import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
+import ScrapeResultMerger from "utils/locationMerger";
+import { addLocationDataToDb } from "db/updateLocation";
+import { deprecatedNotice } from "deprecationNotice";
 import { getDiffsBetweenLocationData } from "utils/diff";
-import LocationMerger from "utils/locationMerger";
-import { getEmails, getOverrides } from "db/query";
+import { getAllLocationsFromDB } from "db/getLocations";
+import { openapi } from "@elysiajs/openapi";
+import { initDBConnection } from "db/db";
+import { DateTime } from "luxon";
+import { QueryUtils } from "db/dbQueryUtils";
 
+/** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
-function getCachedLocations() {
-  return applyOverrides(cachedLocations);
-}
 async function reload(): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
   const parser = new DiningParser();
-  const locationMerger = new LocationMerger();
+  const locationMerger = new ScrapeResultMerger();
 
   for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
     // Wait a bit before starting the next round of scrapes.
@@ -44,21 +48,14 @@ async function reload(): Promise<void> {
         await notifySlack(diff);
       }
     }
+
+    await Promise.all(
+      finalLocations.map((location) => addLocationDataToDb(db, location))
+    );
   }
 }
-
-async function applyOverrides(locations: ILocation[]): Promise<ILocation[]> {
-  const overrides = await getOverrides();
-  return locations.map((location) => {
-    const overrideData = overrides[location.conceptId];
-    if (overrideData === undefined) return location;
-    return {
-      ...location,
-      ...overrideData,
-    };
-  });
-}
-export const app = new Elysia({ adapter: node() }); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
+const [pool, db] = initDBConnection(env.DATABASE_URL);
+export const app = new Elysia({ adapter: node() }).use(openapi()); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
   if (code === "NOT_FOUND") {
@@ -72,15 +69,55 @@ app.onError(({ error, path, code }) => {
   }
 });
 app.use(cors());
+app.onAfterHandle(({ response }) => {
+  if (typeof response === "object") {
+    // pretty print this
+    return new Response(JSON.stringify(response, null, 4), {
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+    }); // we can actually set proper content-type headers this way
+  }
+});
 
 app.get("/", () => {
   return "ScottyLabs Dining API";
 });
+app.get(
+  "/api/v2/locations",
+  async () => await getAllLocationsFromDB(db, DateTime.now())
+);
+app.get("/api/emails", async () => await new QueryUtils(db).getEmails());
 
-app.get("/locations", async () => ({ locations: await getCachedLocations() }));
+app.post(
+  "/api/sendSlackMessage",
+  async ({ body: { message } }) => {
+    await notifySlack(message, env.SLACK_FRONTEND_WEBHOOK_URL);
+  },
+  {
+    body: t.Object({
+      message: t.String(),
+    }),
+  }
+);
+
+setInterval(() => {
+  reload().catch(
+    (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+  );
+}, env.RELOAD_WAIT_INTERVAL);
+reload().catch(
+  (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+);
+
+app.listen(env.PORT, ({ hostname, port }) => {
+  notifySlack(`Dining API is running at ${hostname}:${port}`);
+});
+
+// DEPRECATED
+
+app.get("/locations", async () => ({ locations: deprecatedNotice }));
 
 app.get("/location/:name", async ({ params: { name } }) => {
-  const filteredLocation = (await getCachedLocations()).filter((location) => {
+  const filteredLocation = deprecatedNotice.filter((location) => {
     return location.name?.toLowerCase().includes(name.toLowerCase());
   });
   return {
@@ -91,7 +128,7 @@ app.get("/location/:name", async ({ params: { name } }) => {
 app.get(
   "/locations/time/:day/:hour/:min",
   async ({ params: { day, hour, min } }) => {
-    const result = (await getCachedLocations()).filter((el) => {
+    const result = deprecatedNotice.filter((el) => {
       let returning = false;
       el.times.forEach((element) => {
         const startMins =
@@ -111,37 +148,3 @@ app.get(
     return { locations: result };
   }
 );
-
-app.get("/api/emails", getEmails);
-app.get("/api/changes", async () => await getOverrides());
-
-app.post(
-  "/api/sendSlackMessage",
-  async ({ body: { message } }) => {
-    await notifySlack(message, env.SLACK_FRONTEND_WEBHOOK_URL);
-  },
-  {
-    body: t.Object({
-      message: t.String(),
-    }),
-  }
-);
-
-setInterval(() => {
-  reload().catch(
-    (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
-  );
-}, env.RELOAD_WAIT_INTERVAL);
-
-// Initial load and start the server
-reload()
-  .then(() => {
-    app.listen(env.PORT, ({ hostname, port }) => {
-      notifySlack(`Dining API is running at ${hostname}:${port}`);
-    });
-  })
-  .catch(async (er) => {
-    await notifySlack("<!channel> Dining API startup failed!!");
-    await notifySlack(`*Error caught*\n${er.stack}`);
-    process.exit(1);
-  });
