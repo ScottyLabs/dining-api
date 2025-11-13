@@ -69,10 +69,6 @@ export class QueryUtils {
       .select()
       .from(locationDataTable)
       .leftJoin(
-        conceptIdToInternalIdTable,
-        eq(locationDataTable.id, conceptIdToInternalIdTable.internalId)
-      )
-      .leftJoin(
         timesTable,
         and(
           eq(locationDataTable.id, timesTable.locationId),
@@ -82,17 +78,14 @@ export class QueryUtils {
     return locationData.reduce<
       Record<
         string,
-        | Omit<typeof locationDataTable.$inferSelect, "id"> & {
-            id: number;
-          } & {
+        | typeof locationDataTable.$inferSelect & {
             times: ITimeRangeInternal[];
           }
       >
-    >((acc, { location_data, location_times, concept_id_to_internal_id }) => {
+    >((acc, { location_data, location_times }) => {
       if (!acc[location_data.id]) {
         acc[location_data.id] = {
           ...location_data,
-          id: parseInt(concept_id_to_internal_id?.externalId ?? "-1"),
           times: [],
         };
       }

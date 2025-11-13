@@ -4,13 +4,15 @@ import {
 } from "@testcontainers/postgresql";
 import { DBType, initDBConnection } from "db/db";
 import { addLocationDataToDb } from "db/updateLocation";
-import { getAllLocations } from "db/getLocations";
+import { getAllLocationsFromDB } from "db/getLocations";
 import { DateTime } from "luxon";
 import { ILocation } from "types";
 import { test as baseTest } from "vitest";
 import { Pool } from "pg";
 
 const wait = (ms: number) => new Promise((re) => setTimeout(re, ms));
+
+/** Something that you can get from DiningParser */
 const locationIn: ILocation = {
   name: "dbTest",
   acceptsOnlineOrders: false,
@@ -30,8 +32,10 @@ const locationIn: ILocation = {
   todaysSoups: [],
   todaysSpecials: [],
 };
+
+/** What getAllLocations() returns when `locationIn` has been added to the db */
 const locationOut = {
-  id: 1,
+  id: "TODO",
   name: "dbTest",
   shortDescription: "hi",
   description: "description",
@@ -46,13 +50,13 @@ const locationOut = {
   todaysSpecials: [],
 };
 const dbTest = baseTest.extend<{
-  db: {
+  ctx: {
     db: DBType;
     container: StartedPostgreSqlContainer;
     pool: Pool;
   };
 }>({
-  db: async ({}, use) => {
+  ctx: async ({}, use) => {
     const container = await new PostgreSqlContainer("postgres:17.5")
       .withCopyDirectoriesToContainer([
         {
@@ -66,89 +70,27 @@ const dbTest = baseTest.extend<{
   },
 });
 
-dbTest.afterEach(({ db }) => {
-  db.pool.end();
-  db.container.stop();
+dbTest.afterEach(({ ctx }) => {
+  ctx.pool.end();
+  ctx.container.stop();
 });
+
 describe("DB", () => {
-  dbTest.concurrent("works on basic insertion", async ({ db: { db } }) => {
-    await addLocationDataToDb(db, locationIn);
-    const dbResult = await getAllLocations(db, DateTime.now());
-    expect(dbResult).toEqual([locationOut]);
+  dbTest.concurrent("works on basic insertion", async ({ ctx: { db } }) => {
+    const id = await addLocationDataToDb(db, locationIn);
+    const dbResult = await getAllLocationsFromDB(db, DateTime.now());
+    expect(dbResult).toEqual([{ ...locationOut, id }]);
   });
   dbTest.concurrent(
     "properly resets state on every new dbTest",
-    async ({ db: { db } }) => {
-      expect(await getAllLocations(db, DateTime.now())).toEqual([]);
+    async ({ ctx: { db } }) => {
+      expect(await getAllLocationsFromDB(db, DateTime.now())).toEqual([]);
     }
   );
-  dbTest.concurrent("works on insertion with times", async ({ db: { db } }) => {
-    await addLocationDataToDb(db, {
-      ...locationIn,
-      today: {
-        year: 2025,
-        month: 1,
-        day: 1,
-      },
-      times: [
-        {
-          day: 1,
-          month: 1,
-          year: 2025,
-          startMinutesFromMidnight: 5 * 60,
-          endMinutesFromMidnight: 12 * 60,
-        },
-        {
-          day: 1,
-          month: 1,
-          year: 2025,
-          startMinutesFromMidnight: 5 * 60,
-          endMinutesFromMidnight: 12 * 60,
-        },
-        {
-          day: 1,
-          month: 1,
-          year: 2025,
-          startMinutesFromMidnight: 14 * 60,
-          endMinutesFromMidnight: 2 * 60,
-        },
-        {
-          day: 7,
-          month: 7,
-          year: 2025,
-          startMinutesFromMidnight: 14 * 60,
-          endMinutesFromMidnight: 2 * 60,
-        },
-      ],
-    });
-    const dbResult = await getAllLocations(
-      db,
-      DateTime.fromObject({ year: 2025, month: 1, day: 2 })
-    );
-    expect(dbResult).toEqual([
-      {
-        ...locationOut,
-        times: [
-          {
-            start: 1735725600000,
-            end: 1735750800000,
-          },
-          {
-            start: 1735758000000,
-            end: 1735801200000,
-          },
-          {
-            start: 1751911200000,
-            end: 1751954400000,
-          },
-        ],
-      },
-    ]);
-  });
   dbTest.concurrent(
-    "works on insertion with times (tests search window)",
-    async ({ db: { db } }) => {
-      await addLocationDataToDb(db, {
+    "works on insertion with times",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
         ...locationIn,
         today: {
           year: 2025,
@@ -156,63 +98,105 @@ describe("DB", () => {
           day: 1,
         },
         times: [
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 5 * 60,
-            endMinutesFromMidnight: 12 * 60,
-          },
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 5 * 60,
-            endMinutesFromMidnight: 12 * 60,
-          },
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 14 * 60,
-            endMinutesFromMidnight: 2 * 60,
-          },
+          parseTime("1/1/25", "5:00 am", "12:00 pm"),
+          parseTime("1/1/25", "5:00 am", "12:00 pm"),
+          parseTime("1/1/25", "2:00 pm", "2:00 am"),
+          parseTime("7/7/25", "2:00 pm", "2:00 am"),
         ],
       });
-      const dbResult = await getAllLocations(
+      const dbResult = await getAllLocationsFromDB(db, parseDate("1/2/25"));
+      expect(dbResult).toEqual([
+        {
+          ...locationOut,
+          id: id,
+          times: [
+            {
+              start: 1735725600000,
+              end: 1735750800000,
+            },
+            {
+              start: 1735758000000,
+              end: 1735801200000,
+            },
+            {
+              start: 1751911200000,
+              end: 1751954400000,
+            },
+          ],
+        },
+      ]);
+    }
+  );
+  dbTest.concurrent(
+    "works on insertion with times (tests search window)",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
+        ...locationIn,
+        today: {
+          year: 2025,
+          month: 1,
+          day: 1,
+        },
+        times: [
+          parseTime("1/1/25", "5:00 am", "12:00 pm"),
+          parseTime("1/1/25", "5:00 am", "12:00 pm"),
+          parseTime("1/1/25", "2:00 pm", "2:00 am"),
+        ],
+      });
+      const dbResult = await getAllLocationsFromDB(
         db,
-        DateTime.fromObject({ year: 2025, month: 1, day: 3 }) // 2 days after latest time
+        parseDate("1/3/25") // 2 days after latest time
       );
       expect(dbResult).toEqual([
         {
           ...locationOut,
+          id: id,
+
           times: [],
         },
       ]);
     }
   );
   dbTest.concurrent(
-    "works on insertion with times (DST - start 2AM -> 3AM) (3/9/25)",
-    async ({ db: { db } }) => {
-      await addLocationDataToDb(db, {
+    "works on insertion with times (tests search window)",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
         ...locationIn,
+        today: {
+          year: 2025,
+          month: 1,
+          day: 1,
+        },
         times: [
-          {
-            day: 9,
-            month: 3,
-            year: 2025,
-            startMinutesFromMidnight: 5 * 60,
-            endMinutesFromMidnight: 12 * 60,
-          },
+          parseTime("1/1/25", "5:00 am", "12:00 pm"),
+          parseTime("2/1/25", "5:00 am", "12:00 pm"),
         ],
       });
-      const dbResult = await getAllLocations(
+      const dbResult = await getAllLocationsFromDB(
         db,
-        DateTime.fromObject({ year: 2025, month: 1, day: 3 }) // 2 days after latest time
+        parseDate("1/3/25") // 2 days after latest time
       );
       expect(dbResult).toEqual([
         {
           ...locationOut,
+          id: id,
+          times: [{ start: 1738404000000, end: 1738429200000 }],
+        },
+      ]);
+    }
+  );
+  dbTest.concurrent(
+    "works on insertion with times (DST - start 2AM -> 3AM) (3/9/25)",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
+        ...locationIn,
+        times: [parseTime("3/9/25", "5:00 am", "12:00 pm")],
+      });
+      const dbResult = await getAllLocationsFromDB(db, parseDate("1/3/25"));
+      expect(dbResult).toEqual([
+        {
+          ...locationOut,
+          id: id,
           times: [
             {
               start: 1741510800000,
@@ -224,32 +208,44 @@ describe("DB", () => {
     }
   );
   dbTest.concurrent(
-    "works on insertion with times (DST - end 2AM -> 1AM) (3/9/25) [if a place closes at 2 AM, we assume it's the second 2AM (I mean, the first 2AM technically doesn't exist...)",
-    async ({ db: { db } }) => {
-      await addLocationDataToDb(db, {
+    "works on insertion with times (DST - start 2AM -> 3AM) (3/9/25)",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
+        ...locationIn,
+        times: [parseTime("3/9/25", "2:30 am", "12:00 pm")], // 2:30 technically doesn't exist on that day
+      });
+      const dbResult = await getAllLocationsFromDB(db, parseDate("1/3/25"));
+      expect(dbResult).toEqual([
+        {
+          ...locationOut,
+          id: id,
+          times: [
+            {
+              start: 1741505400000, // 3:30 AM... this is certainly some behavior...
+              end: 1741536000000,
+            },
+          ],
+        },
+      ]);
+    }
+  );
+  dbTest.concurrent(
+    "works on insertion with times (DST - end 2AM -> 1AM) (11/2/25) [if a place closes at 2 AM, we assume it's the second 2AM (I mean, the first 2AM technically doesn't exist...)",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
         ...locationIn,
         today: {
           year: 2025,
           month: 1,
           day: 1,
         },
-        times: [
-          {
-            day: 1,
-            month: 11,
-            year: 2025,
-            startMinutesFromMidnight: 7 * 60,
-            endMinutesFromMidnight: 2 * 60,
-          },
-        ],
+        times: [parseTime("11/1/25", "7:00 am", "2:00 am")],
       });
-      const dbResult = await getAllLocations(
-        db,
-        DateTime.fromObject({ year: 2025, month: 1, day: 3 })
-      );
+      const dbResult = await getAllLocationsFromDB(db, parseDate("1/3/25"));
       expect(dbResult).toEqual([
         {
           ...locationOut,
+          id: id,
           times: [
             {
               start: 1761994800000,
@@ -261,32 +257,22 @@ describe("DB", () => {
     }
   );
   dbTest.concurrent(
-    "works on insertion with times (DST - end 2AM -> 1AM) (3/9/25) [if a place closes at 1:30 AM, we assume dbTest's the first 1:30 AM and not the second]",
-    async ({ db: { db } }) => {
-      await addLocationDataToDb(db, {
+    "works on insertion with times (DST - end 2AM -> 1AM) (11/2/25) [if a place closes at 1:30 AM, we assume dbTest's the first 1:30 AM and not the second]",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
         ...locationIn,
         today: {
           year: 2025,
           month: 1,
           day: 1,
         },
-        times: [
-          {
-            day: 1,
-            month: 11,
-            year: 2025,
-            startMinutesFromMidnight: 7 * 60,
-            endMinutesFromMidnight: 1.5 * 60,
-          },
-        ],
+        times: [parseTime("11/1/25", "7:00 am", "1:30 am")],
       });
-      const dbResult = await getAllLocations(
-        db,
-        DateTime.fromObject({ year: 2025, month: 1, day: 3 })
-      );
+      const dbResult = await getAllLocationsFromDB(db, parseDate("1/3/25"));
       expect(dbResult).toEqual([
         {
           ...locationOut,
+          id: id,
           times: [
             {
               start: 1761994800000,
@@ -297,8 +283,8 @@ describe("DB", () => {
       ]);
     }
   );
-  dbTest.concurrent("works on specials", async ({ db: { db } }) => {
-    await addLocationDataToDb(db, {
+  dbTest.concurrent("works on specials", async ({ ctx: { db } }) => {
+    const id = await addLocationDataToDb(db, {
       ...locationIn,
       today: {
         year: 2025,
@@ -306,27 +292,8 @@ describe("DB", () => {
         day: 1,
       },
       times: [
-        {
-          day: 1,
-          month: 1,
-          year: 2025,
-          startMinutesFromMidnight: 5 * 60,
-          endMinutesFromMidnight: 12 * 60,
-        },
-        {
-          day: 1,
-          month: 1,
-          year: 2025,
-          startMinutesFromMidnight: 5 * 60,
-          endMinutesFromMidnight: 12 * 60,
-        },
-        {
-          day: 1,
-          month: 1,
-          year: 2025,
-          startMinutesFromMidnight: 14 * 60,
-          endMinutesFromMidnight: 2 * 60,
-        },
+        parseTime("1/1/25", "5:00 am", "12:00 pm"),
+        parseTime("1/1/25", "2:00 pm", "2:00am"),
       ],
       todaysSoups: [
         { title: "soup 1", description: "desc 1" },
@@ -337,13 +304,12 @@ describe("DB", () => {
         { title: "special 2", description: "desc 2" },
       ],
     });
-    const dbResult = await getAllLocations(
-      db,
-      DateTime.fromObject({ year: 2025, month: 1, day: 1 })
-    );
+    const dbResult = await getAllLocationsFromDB(db, parseDate("1/1/25"));
     expect(dbResult).toEqual([
       {
         ...locationOut,
+        id: id,
+
         times: [
           {
             start: 1735725600000,
@@ -379,8 +345,8 @@ describe("DB", () => {
   });
   dbTest.concurrent(
     "works on specials (overriding)",
-    async ({ db: { db } }) => {
-      await addLocationDataToDb(db, {
+    async ({ ctx: { db } }) => {
+      const id1 = await addLocationDataToDb(db, {
         ...locationIn,
         today: {
           year: 2025,
@@ -388,27 +354,8 @@ describe("DB", () => {
           day: 1,
         },
         times: [
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 5 * 60,
-            endMinutesFromMidnight: 12 * 60,
-          },
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 5 * 60,
-            endMinutesFromMidnight: 12 * 60,
-          },
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 14 * 60,
-            endMinutesFromMidnight: 2 * 60,
-          },
+          parseTime("1/1/25", "5:00 am", "12:00 pm"),
+          parseTime("1/1/25", "2:00 pm", "2:00 am"),
         ],
         todaysSoups: [
           { title: "soup 1", description: "desc 1" },
@@ -419,7 +366,7 @@ describe("DB", () => {
           { title: "special 2", description: "desc 2" },
         ],
       });
-      await addLocationDataToDb(db, {
+      const id2 = await addLocationDataToDb(db, {
         ...locationIn,
         today: {
           year: 2025,
@@ -427,27 +374,8 @@ describe("DB", () => {
           day: 1,
         },
         times: [
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 5 * 60,
-            endMinutesFromMidnight: 12 * 60,
-          },
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 5 * 60,
-            endMinutesFromMidnight: 12 * 60,
-          },
-          {
-            day: 1,
-            month: 1,
-            year: 2025,
-            startMinutesFromMidnight: 14 * 60,
-            endMinutesFromMidnight: 2 * 60,
-          },
+          parseTime("1/1/25", "5:00 am", "12:00 pm"),
+          parseTime("1/1/25", "2:00 pm", "2:00 am"),
         ],
         todaysSoups: [],
         todaysSpecials: [
@@ -455,13 +383,12 @@ describe("DB", () => {
           { title: "special 2", description: "desc 2" },
         ],
       });
-      const dbResult = await getAllLocations(
-        db,
-        DateTime.fromObject({ year: 2025, month: 1, day: 1 })
-      );
+      expect(id1).toEqual(id2);
+      const dbResult = await getAllLocationsFromDB(db, parseDate("1/1/25"));
       expect(dbResult).toEqual([
         {
           ...locationOut,
+          id: id1,
           times: [
             {
               start: 1735725600000,
@@ -487,4 +414,65 @@ describe("DB", () => {
       ]);
     }
   );
+  dbTest.concurrent("works on time overwrites", async ({ ctx: { db } }) => {
+    const id = await addLocationDataToDb(db, {
+      ...locationIn,
+      times: [
+        parseTime("1/1/25", "5:00 am", "5:00 pm"),
+        parseTime("1/2/25", "5:00 am", "5:00 pm"),
+        parseTime("1/3/25", "5:00 am", "5:00 pm"),
+        parseTime("1/4/25", "5:00 am", "5:00 pm"),
+        parseTime("1/5/25", "5:00 am", "5:00 pm"),
+      ],
+    });
+    // add the overwrite thing in twice
+  });
+  dbTest.concurrent("stub", async ({ ctx: { db } }) => {}); // just for reference
 });
+
+/**
+ *
+ * @param date in mm/dd/yy format
+ */
+function parseDate(date: string) {
+  const dateParsed = DateTime.fromFormat(date, "M/d/yy");
+  if (!dateParsed.isValid) throw new Error(`Invalid date string ${date}`);
+  return dateParsed;
+}
+/**
+ *
+ * @param time ex. 2:00 AM (2:00AM is also fine)
+ * @returns minutes since midnight for that time
+ */
+function _parseTime(time: string) {
+  const [_, hour, minute, ampm] = [
+    ...(/(\d*)\s*:\s*(\d*)\s*(AM|PM)/i.exec(time) ?? []),
+  ];
+  if (hour === undefined || minute === undefined || ampm === undefined)
+    throw new Error(`Malformed time ${time}`);
+  const hourNum = parseInt(hour);
+  const minuteNum = parseInt(minute);
+  if (isNaN(hourNum) || isNaN(minuteNum))
+    throw new Error(`Malformed time ${time}`);
+  const minutesSinceMidnight =
+    (hourNum % 12) * 60 +
+    minuteNum +
+    (ampm.toLowerCase() === "pm" ? 12 * 60 : 0);
+  return minutesSinceMidnight;
+}
+/**
+ *
+ * @param date ex. 2/3/25
+ * @param startTime ex. 2:00 AM
+ * @param endTime ex. 2:00 AM (can wrap to next day)
+ */
+function parseTime(date: string, startTime: string, endTime: string) {
+  const parsedDate = parseDate(date);
+  return {
+    year: parsedDate.year,
+    month: parsedDate.month,
+    day: parsedDate.day,
+    startMinutesFromMidnight: _parseTime(startTime),
+    endMinutesFromMidnight: _parseTime(endTime),
+  };
+}

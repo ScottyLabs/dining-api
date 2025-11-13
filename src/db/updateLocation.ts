@@ -4,10 +4,12 @@ import {
   conceptIdToInternalIdTable,
   locationDataTable,
   specialsTable,
+  timeOverwritesTable,
   timesTable,
 } from "./schema";
 import { and, eq, gte } from "drizzle-orm";
 import { pad } from "utils/timeUtils";
+import { DateTime } from "luxon";
 async function getInternalId(db: DBType, externalId: string) {
   let [idMapping] = await db
     .select()
@@ -17,6 +19,12 @@ async function getInternalId(db: DBType, externalId: string) {
   return idMapping?.internalId ?? crypto.randomUUID();
 }
 
+/**
+ *
+ * @param db
+ * @param location
+ * @returns the internal id of the location that was added
+ */
 export async function addLocationDataToDb(db: DBType, location: ILocation) {
   const internalId = await getInternalId(db, location.conceptId.toString());
 
@@ -102,4 +110,34 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
       externalId: location.conceptId.toString(),
     })
     .onConflictDoNothing({ target: conceptIdToInternalIdTable.externalId });
+  return internalId;
+}
+/**
+ *
+ * @param db
+ * @param locationId
+ * @param date
+ * @param timeStringOverride
+ * @returns if successful
+ */
+export async function addTimeOverride(
+  db: DBType,
+  locationId: string,
+  date: string,
+  timeStringOverride: string
+) {
+  const parsedDate = DateTime.fromFormat(date, "M/d/yy");
+  if (!parsedDate.isValid) {
+    return false;
+  }
+  const rowToInsert: typeof timeOverwritesTable.$inferInsert = {
+    date: parsedDate.toSQLDate(),
+    locationId: locationId,
+    timeString: timeStringOverride,
+  };
+  await db.insert(timeOverwritesTable).values(rowToInsert).onConflictDoUpdate({
+    target: timeOverwritesTable.locationId,
+    set: rowToInsert,
+  });
+  return true;
 }

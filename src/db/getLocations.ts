@@ -4,18 +4,22 @@ import { pad, remapAndMergeTimeIntervals } from "utils/timeUtils";
 import { IParsedTimeRange } from "containers/time/parsedTime";
 import { DBType } from "./db";
 
-export async function getAllLocations(db: DBType, today: DateTime) {
+/**
+ *
+ * @param db
+ * @param today this parameter is necessary so we can get today's specials and the open hours for the next 7 days, rather than returning everything we've stored in the db
+ * @returns
+ */
+export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
   const timeSearchCutoff = today.minus({ days: 1 }); // 1 days worth of data before today
-  const timeSearchCutoffStr = `${timeSearchCutoff.year}-${pad(
-    timeSearchCutoff.month
-  )}-${pad(timeSearchCutoff.day)}`;
+
   const DB = new QueryUtils(db);
-  const locationIdToData = await DB.getLocationIdToDataMap(timeSearchCutoffStr);
-  const specials = await DB.getSpecials(
-    `${today.year}/${pad(today.month)}/${pad(today.day)}`
+  const locationIdToData = await DB.getLocationIdToDataMap(
+    timeSearchCutoff.toSQLDate()
   );
+  const specials = await DB.getSpecials(today.toSQLDate());
   const generalOverrides = await DB.getGeneralOverrides();
-  const timeOverrides = await DB.getTimeOverrides(timeSearchCutoffStr);
+  const timeOverrides = await DB.getTimeOverrides(timeSearchCutoff.toSQLDate());
 
   // apply overrides, merge all time intervals, and add specials
   const finalLocationData = Object.entries(locationIdToData).map(

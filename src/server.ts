@@ -9,7 +9,7 @@ import ScrapeResultMerger from "utils/locationMerger";
 import { addLocationDataToDb } from "db/updateLocation";
 import { deprecatedNotice } from "deprecationNotice";
 import { getDiffsBetweenLocationData } from "utils/diff";
-import { getAllLocations } from "db/getLocations";
+import { getAllLocationsFromDB } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
 import { initDBConnection } from "db/db";
 import { DateTime } from "luxon";
@@ -84,7 +84,7 @@ app.get("/", () => {
 });
 app.get(
   "/api/v2/locations",
-  async () => await getAllLocations(db, DateTime.now())
+  async () => await getAllLocationsFromDB(db, DateTime.now())
 );
 app.get("/api/emails", async () => await new QueryUtils(db).getEmails());
 
