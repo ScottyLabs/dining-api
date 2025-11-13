@@ -110,16 +110,16 @@ describe("DB", () => {
           id: id,
           times: [
             {
-              start: 1735725600000,
-              end: 1735750800000,
+              start: timeToUnixTimestamp("1/1/25 5:00 AM"),
+              end: timeToUnixTimestamp("1/1/25 12:00 PM"),
             },
             {
-              start: 1735758000000,
-              end: 1735801200000,
+              start: timeToUnixTimestamp("1/1/25 2:00 PM"),
+              end: timeToUnixTimestamp("1/2/25 2:00 AM"),
             },
             {
-              start: 1751911200000,
-              end: 1751954400000,
+              start: timeToUnixTimestamp("7/7/25 2:00 PM"),
+              end: timeToUnixTimestamp("7/8/25 2:00 AM"),
             },
           ],
         },
@@ -179,7 +179,12 @@ describe("DB", () => {
         {
           ...locationOut,
           id: id,
-          times: [{ start: 1738404000000, end: 1738429200000 }],
+          times: [
+            {
+              start: timeToUnixTimestamp("2/1/25 5:00 AM"),
+              end: timeToUnixTimestamp("2/1/25 12:00 PM"),
+            },
+          ],
         },
       ]);
     }
@@ -198,8 +203,8 @@ describe("DB", () => {
           id: id,
           times: [
             {
-              start: 1741510800000,
-              end: 1741536000000,
+              start: timeToUnixTimestamp("3/9/25 5:00 AM"),
+              end: timeToUnixTimestamp("3/9/25 12:00 PM"),
             },
           ],
         },
@@ -220,8 +225,8 @@ describe("DB", () => {
           id: id,
           times: [
             {
-              start: 1741505400000, // 3:30 AM... this is certainly some behavior...
-              end: 1741536000000,
+              start: timeToUnixTimestamp("3/9/25 3:30 AM"), // 3:30 AM... this is certainly some behavior...
+              end: timeToUnixTimestamp("3/9/25 12:00 PM"),
             },
           ],
         },
@@ -247,8 +252,8 @@ describe("DB", () => {
           id: id,
           times: [
             {
-              start: 1761994800000,
-              end: 1762066800000, // the second 2AM
+              start: timeToUnixTimestamp("11/1/25 7:00 AM"),
+              end: timeToUnixTimestamp("11/2/25 2:00 AM"), // the second 2AM
             },
           ],
         },
@@ -274,8 +279,8 @@ describe("DB", () => {
           id: id,
           times: [
             {
-              start: 1761994800000,
-              end: 1762061400000, // the first 1:30 AM
+              start: timeToUnixTimestamp("11/1/25 7:00 AM"),
+              end: 1762061400000, // the first 1:30 AM EDT (timeToUnixTimestamp would give the second 1:30 AM EST due to DST fallback)
             },
           ],
         },
@@ -311,12 +316,12 @@ describe("DB", () => {
 
         times: [
           {
-            start: 1735725600000,
-            end: 1735750800000,
+            start: timeToUnixTimestamp("1/1/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/1/25 12:00 PM"),
           },
           {
-            start: 1735758000000,
-            end: 1735801200000,
+            start: timeToUnixTimestamp("1/1/25 2:00 PM"),
+            end: timeToUnixTimestamp("1/2/25 2:00 AM"),
           },
         ],
         todaysSoups: [
@@ -390,12 +395,12 @@ describe("DB", () => {
           id: id1,
           times: [
             {
-              start: 1735725600000,
-              end: 1735750800000,
+              start: timeToUnixTimestamp("1/1/25 5:00 AM"),
+              end: timeToUnixTimestamp("1/1/25 12:00 PM"),
             },
             {
-              start: 1735758000000,
-              end: 1735801200000,
+              start: timeToUnixTimestamp("1/1/25 2:00 PM"),
+              end: timeToUnixTimestamp("1/2/25 2:00 AM"),
             },
           ],
           todaysSoups: [],
