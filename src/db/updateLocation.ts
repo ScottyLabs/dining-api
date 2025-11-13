@@ -49,7 +49,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
       set: locationDbEntry,
     });
 
-  const earliestDaySQLString = `${location.today.year}-${pad(
+  const todayAsSQLString = `${location.today.year}-${pad(
     location.today.month
   )}-${pad(location.today.day)})`;
   // add specials
@@ -58,7 +58,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
     .where(
       and(
         eq(specialsTable.locationId, internalId),
-        eq(specialsTable.date, earliestDaySQLString)
+        eq(specialsTable.date, todayAsSQLString)
       )
     );
   const specials = [
@@ -74,7 +74,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
   if (specials.length)
     await db.insert(specialsTable).values(
       specials.map((special) => ({
-        date: earliestDaySQLString,
+        date: todayAsSQLString,
         locationId: internalId,
         name: special.title,
         description: special.description,
@@ -88,7 +88,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
     .where(
       and(
         eq(timesTable.locationId, internalId),
-        and(gte(timesTable.date, earliestDaySQLString))
+        and(gte(timesTable.date, todayAsSQLString))
       )
     );
   if (location.times.length) {
