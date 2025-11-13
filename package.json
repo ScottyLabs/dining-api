@@ -7,7 +7,7 @@
     "dev": "dotenv -- tsx watch src/server.ts",
     "build": "rollup -c",
     "start": "NODE_ENV=production node dist/server.js",
-    "test": "dotenv -e .env.test -- vitest",
+    "test": "dotenv -e .env.test -- vitest database.test.ts",
     "__comment": "add DEBUG=testcontainers* to the test command to get testcontainers debug output",
     "typecheck": "tsc",
     "run-prod": "VOL_SRC=postgres_data docker-compose up --build",

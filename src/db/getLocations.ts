@@ -1,26 +1,21 @@
-import {
-  getGeneralOverrides,
-  getLocationIdToDataMap,
-  getSpecials,
-  getTimeOverrides,
-  ITimeRangeInternal,
-} from "./dbQueryUtils";
+import { ITimeRangeInternal, QueryUtils } from "./dbQueryUtils";
 import { DateTime } from "luxon";
 import { pad, remapAndMergeTimeIntervals } from "utils/timeUtils";
 import { IParsedTimeRange } from "containers/time/parsedTime";
+import { DBType } from "./db";
 
-export async function getAllLocations(today: DateTime) {
+export async function getAllLocations(db: DBType, today: DateTime) {
   const timeSearchCutoff = today.minus({ days: 1 }); // 1 days worth of data before today
   const timeSearchCutoffStr = `${timeSearchCutoff.year}-${pad(
     timeSearchCutoff.month
   )}-${pad(timeSearchCutoff.day)}`;
-
-  const locationIdToData = await getLocationIdToDataMap(timeSearchCutoffStr);
-  const specials = await getSpecials(
+  const DB = new QueryUtils(db);
+  const locationIdToData = await DB.getLocationIdToDataMap(timeSearchCutoffStr);
+  const specials = await DB.getSpecials(
     `${today.year}/${pad(today.month)}/${pad(today.day)}`
   );
-  const generalOverrides = await getGeneralOverrides();
-  const timeOverrides = await getTimeOverrides(timeSearchCutoffStr);
+  const generalOverrides = await DB.getGeneralOverrides();
+  const timeOverrides = await DB.getTimeOverrides(timeSearchCutoffStr);
 
   // apply overrides, merge all time intervals, and add specials
   const finalLocationData = Object.entries(locationIdToData).map(

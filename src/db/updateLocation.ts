@@ -1,5 +1,5 @@
 import { ILocation } from "types";
-import { db } from "./db";
+import { DBType } from "./db";
 import {
   conceptIdToInternalIdTable,
   locationDataTable,
@@ -8,7 +8,7 @@ import {
 } from "./schema";
 import { and, eq, gte } from "drizzle-orm";
 import { pad } from "utils/timeUtils";
-async function getInternalId(externalId: string) {
+async function getInternalId(db: DBType, externalId: string) {
   let [idMapping] = await db
     .select()
     .from(conceptIdToInternalIdTable)
@@ -17,8 +17,8 @@ async function getInternalId(externalId: string) {
   return idMapping?.internalId ?? crypto.randomUUID();
 }
 
-export async function addLocationDataToDb(location: ILocation) {
-  const internalId = await getInternalId(location.conceptId.toString());
+export async function addLocationDataToDb(db: DBType, location: ILocation) {
+  const internalId = await getInternalId(db, location.conceptId.toString());
 
   const locationDbEntry: typeof locationDataTable.$inferInsert = {
     id: internalId,
@@ -41,59 +41,57 @@ export async function addLocationDataToDb(location: ILocation) {
       set: locationDbEntry,
     });
 
-  if (location.today !== undefined) {
-    const earliestDaySQLString = `${location.today.year}-${pad(
-      location.today.month
-    )}-${pad(location.today.day)})`;
-    // add specials
-    await db
-      .delete(specialsTable)
-      .where(
-        and(
-          eq(specialsTable.locationId, internalId),
-          eq(specialsTable.date, earliestDaySQLString)
-        )
-      );
-    const specials = [
-      ...(location.todaysSpecials?.map((sp) => ({
-        ...sp,
-        type: "special" as const,
-      })) ?? []),
-      ...(location.todaysSoups?.map((sp) => ({
-        ...sp,
-        type: "soup" as const,
-      })) ?? []),
-    ];
-    if (specials.length)
-      await db.insert(specialsTable).values(
-        specials.map((special) => ({
-          date: earliestDaySQLString,
-          locationId: internalId,
-          name: special.title,
-          description: special.description,
-          type: special.type,
-        }))
-      );
+  const earliestDaySQLString = `${location.today.year}-${pad(
+    location.today.month
+  )}-${pad(location.today.day)})`;
+  // add specials
+  await db
+    .delete(specialsTable)
+    .where(
+      and(
+        eq(specialsTable.locationId, internalId),
+        eq(specialsTable.date, earliestDaySQLString)
+      )
+    );
+  const specials = [
+    ...(location.todaysSpecials?.map((sp) => ({
+      ...sp,
+      type: "special" as const,
+    })) ?? []),
+    ...(location.todaysSoups?.map((sp) => ({
+      ...sp,
+      type: "soup" as const,
+    })) ?? []),
+  ];
+  if (specials.length)
+    await db.insert(specialsTable).values(
+      specials.map((special) => ({
+        date: earliestDaySQLString,
+        locationId: internalId,
+        name: special.title,
+        description: special.description,
+        type: special.type,
+      }))
+    );
 
-    // remove rows from whenever the scrape started from (aka remove entries corresponding to the last 7 days)
-    await db
-      .delete(timesTable)
-      .where(
-        and(
-          eq(timesTable.locationId, internalId),
-          and(gte(timesTable.date, earliestDaySQLString))
-        )
-      );
-    if (location.times.length) {
-      await db.insert(timesTable).values(
-        location.times.map((time) => ({
-          locationId: internalId,
-          date: `${time.year}-${pad(time.month)}-${pad(time.day)}`,
-          startTime: time.startMinutesFromMidnight,
-          endTime: time.endMinutesFromMidnight,
-        }))
-      );
-    }
+  // remove rows from whenever the scrape started from (aka remove entries corresponding to the last 7 days)
+  await db
+    .delete(timesTable)
+    .where(
+      and(
+        eq(timesTable.locationId, internalId),
+        and(gte(timesTable.date, earliestDaySQLString))
+      )
+    );
+  if (location.times.length) {
+    await db.insert(timesTable).values(
+      location.times.map((time) => ({
+        locationId: internalId,
+        date: `${time.year}-${pad(time.month)}-${pad(time.day)}`,
+        startTime: time.startMinutesFromMidnight,
+        endTime: time.endMinutesFromMidnight,
+      }))
+    );
   }
 
   // in case the conceptId->internalId mapping entry isn't there

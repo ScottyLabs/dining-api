@@ -9,11 +9,11 @@ import ScrapeResultMerger from "utils/locationMerger";
 import { addLocationDataToDb } from "db/updateLocation";
 import { deprecatedNotice } from "deprecationNotice";
 import { getDiffsBetweenLocationData } from "utils/diff";
-import { getEmails } from "db/dbQueryUtils";
 import { getAllLocations } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
-import { initDB } from "db/db";
+import { initDBConnection } from "db/db";
 import { DateTime } from "luxon";
+import { QueryUtils } from "db/dbQueryUtils";
 
 /** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
@@ -51,11 +51,11 @@ async function reload(): Promise<void> {
     }
 
     await Promise.all(
-      finalLocations.map((location) => addLocationDataToDb(location))
+      finalLocations.map((location) => addLocationDataToDb(db, location))
     );
   }
 }
-
+const [pool, db] = initDBConnection(env.DATABASE_URL);
 export const app = new Elysia({ adapter: node() }).use(openapi()); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
@@ -82,8 +82,11 @@ app.onAfterHandle(({ response }) => {
 app.get("/", () => {
   return "ScottyLabs Dining API";
 });
-app.get("/api/v2/locations", async () => await getAllLocations(DateTime.now()));
-app.get("/api/emails", getEmails);
+app.get(
+  "/api/v2/locations",
+  async () => await getAllLocations(db, DateTime.now())
+);
+app.get("/api/emails", async () => await new QueryUtils(db).getEmails());
 
 app.post(
   "/api/sendSlackMessage",
@@ -103,7 +106,6 @@ setInterval(() => {
   );
 }, env.RELOAD_WAIT_INTERVAL);
 
-initDB(env.DATABASE_URL);
 // Initial load and start the server
 reload()
   .then(() => {
