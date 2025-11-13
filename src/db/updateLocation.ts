@@ -135,9 +135,12 @@ export async function addTimeOverride(
     locationId: locationId,
     timeString: timeStringOverride,
   };
-  await db.insert(timeOverwritesTable).values(rowToInsert).onConflictDoUpdate({
-    target: timeOverwritesTable.locationId,
-    set: rowToInsert,
-  });
+  await db
+    .insert(timeOverwritesTable)
+    .values(rowToInsert)
+    .onConflictDoUpdate({
+      target: [timeOverwritesTable.locationId, timeOverwritesTable.date],
+      set: rowToInsert,
+    });
   return true;
 }

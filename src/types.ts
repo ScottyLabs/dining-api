@@ -17,7 +17,7 @@ export interface ILocation {
   acceptsOnlineOrders: boolean;
   /** Assuming these times fall after today */
   times: IFullTimeRange[];
-  /** useful when figuring out which db time entries to overwrite. Can be undefined if no time data was properly scraped */
+  /** used when figuring out which time entries to clear in the database. (we can't just look at `times` directly to figure that out, because it might as well be empty) */
   today: IDate;
   todaysSpecials: ISpecial[] | undefined;
   todaysSoups: ISpecial[] | undefined;

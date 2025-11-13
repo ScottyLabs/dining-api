@@ -3,14 +3,13 @@ import {
   StartedPostgreSqlContainer,
 } from "@testcontainers/postgresql";
 import { DBType, initDBConnection } from "db/db";
-import { addLocationDataToDb } from "db/updateLocation";
+import { addLocationDataToDb, addTimeOverride } from "db/updateLocation";
 import { getAllLocationsFromDB } from "db/getLocations";
 import { DateTime } from "luxon";
 import { ILocation } from "types";
 import { test as baseTest } from "vitest";
 import { Pool } from "pg";
-
-const wait = (ms: number) => new Promise((re) => setTimeout(re, ms));
+import { overwritesTable } from "db/schema";
 
 /** Something that you can get from DiningParser */
 const locationIn: ILocation = {
@@ -35,7 +34,7 @@ const locationIn: ILocation = {
 
 /** What getAllLocations() returns when `locationIn` has been added to the db */
 const locationOut = {
-  id: "TODO",
+  id: "DYNAMICALLY GENERATED, replace with real id",
   name: "dbTest",
   shortDescription: "hi",
   description: "description",
@@ -425,7 +424,134 @@ describe("DB", () => {
         parseTime("1/5/25", "5:00 am", "5:00 pm"),
       ],
     });
-    // add the overwrite thing in twice
+    const success1 = await addTimeOverride(
+      db,
+      id,
+      "1/1/25",
+      "2:00 AM - 3:00 PM"
+    );
+    const success2 = await addTimeOverride(
+      db,
+      id,
+      "1/1/25",
+      "3:00 AM - 4:00 PM"
+    ); // second one should overwrite the first one
+    expect(success1).toBe(true);
+    expect(success2).toBe(true);
+    expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+      {
+        ...locationOut,
+        id: id,
+        times: [
+          {
+            start: timeToUnixTimestamp("1/1/25 3:00 AM"),
+            end: timeToUnixTimestamp("1/1/25 4:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/2/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/2/25 5:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/3/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/3/25 5:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/4/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/4/25 5:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/5/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/5/25 5:00 PM"),
+          },
+        ],
+      },
+    ]);
+  });
+  dbTest.concurrent("malformed time overwrites", async ({ ctx: { db } }) => {
+    const id = await addLocationDataToDb(db, {
+      ...locationIn,
+      times: [
+        parseTime("1/1/25", "5:00 am", "5:00 pm"),
+        parseTime("1/2/25", "5:00 am", "5:00 pm"),
+        parseTime("1/3/25", "5:00 am", "5:00 pm"),
+        parseTime("1/4/25", "5:00 am", "5:00 pm"),
+        parseTime("1/5/25", "5:00 am", "5:00 pm"),
+      ],
+    });
+
+    const success = await addTimeOverride(db, id, "1/1/25", "moo");
+    expect(success).toBe(true);
+    expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+      {
+        ...locationOut,
+        id: id,
+        times: [
+          // 1/1/25 should be wiped because there is an overwrite -- it's just invalid
+          {
+            start: timeToUnixTimestamp("1/2/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/2/25 5:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/3/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/3/25 5:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/4/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/4/25 5:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/5/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/5/25 5:00 PM"),
+          },
+        ],
+      },
+    ]);
+  });
+  dbTest.concurrent("works on general overwrites", async ({ ctx: { db } }) => {
+    const id = await addLocationDataToDb(db, {
+      ...locationIn,
+      acceptsOnlineOrders: false,
+      menu: "bleh",
+    });
+    await db.insert(overwritesTable).values({
+      locationId: id,
+      acceptsOnlineOrders: true,
+      menu: "overwritten menu",
+    });
+
+    expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+      {
+        ...locationOut,
+        id: id,
+        acceptsOnlineOrders: true,
+        menu: "overwritten menu",
+      },
+    ]);
+  });
+  dbTest.concurrent("two locations", async ({ ctx: { db } }) => {
+    const id1 = await addLocationDataToDb(db, {
+      ...locationIn,
+      conceptId: 1,
+    });
+    const id2 = await addLocationDataToDb(db, {
+      ...locationIn,
+      conceptId: 2,
+    });
+    expect(id1).not.toEqual(id2);
+    const locationData = await getAllLocationsFromDB(db, parseDate("1/1/25"));
+    expect(locationData).toHaveLength(2);
+    expect(locationData).toEqual(
+      expect.arrayContaining([
+        {
+          ...locationOut,
+          id: id1,
+        },
+        {
+          ...locationOut,
+          id: id2,
+        },
+      ])
+    );
   });
   dbTest.concurrent("stub", async ({ ctx: { db } }) => {}); // just for reference
 });
@@ -476,3 +602,18 @@ function parseTime(date: string, startTime: string, endTime: string) {
     endMinutesFromMidnight: _parseTime(endTime),
   };
 }
+
+/**
+ *
+ * @param datetime
+ * @returns timestamp, when datetime is interpreted in EST
+ */
+function timeToUnixTimestamp(datetime: string) {
+  const parsedDate = DateTime.fromFormat(datetime, "M/d/yy h:mm a", {
+    zone: "America/New_York",
+  });
+  if (!parsedDate.isValid) throw new Error(`Malformed date string ${datetime}`);
+  return parsedDate.toMillis();
+}
+
+const wait = (ms: number) => new Promise((re) => setTimeout(re, ms));
