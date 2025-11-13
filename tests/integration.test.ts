@@ -1,5 +1,5 @@
 import DiningParser from "../src/parser/diningParser";
-import { expectedLocationData } from "./expectedData";
+import { expectedLocationData, expectedLocationData2 } from "./expectedData";
 import { mockAxiosGETMethodWithFilePaths } from "./mockAxios";
 import {
   setUpTimingTest,
@@ -11,12 +11,13 @@ import {
   Fri,
   Sat,
   Sun,
+  setUpArbitraryTest,
 } from "./mockTimings";
 import { DateTime } from "luxon";
 
 vi.mock("axios");
-test("ok", () => {});
-test("the whole thing, including locationOverwrites", async () => {
+
+test("the whole thing", async () => {
   mockAxiosGETMethodWithFilePaths({
     conceptListFilePath: "html/listconcepts.html",
     specialsFilePath: "html/specials.html",
@@ -24,7 +25,7 @@ test("the whole thing, including locationOverwrites", async () => {
     getConceptFilePath: (conceptId: string) =>
       ["92", "110", "113", "175", "108", "168"].includes(conceptId)
         ? `html/concepts/${conceptId}.html`
-        : "html/blank.html",
+        : "html/concepts/all-closed.html",
     serverDate: DateTime.fromObject({
       year: 2024,
       month: 8,
@@ -33,7 +34,27 @@ test("the whole thing, including locationOverwrites", async () => {
   });
   const parser = new DiningParser();
   const parsedLocationData = await parser.process();
+
   expect(parsedLocationData).toStrictEqual(expectedLocationData);
+});
+test("the whole thing, with per-page errors", async () => {
+  mockAxiosGETMethodWithFilePaths({
+    conceptListFilePath: "html/listconcepts.html",
+    specialsFilePath: "html/specials.html",
+    soupsFilePath: "html/soups.html",
+    getConceptFilePath: (conceptId: string) =>
+      ["92", "110", "113", "175", "108", "168"].includes(conceptId)
+        ? `html/concepts/${conceptId}.html`
+        : "html/concepts/error.html",
+    serverDate: DateTime.fromObject({
+      year: 2024,
+      month: 8,
+      day: 5,
+    }) as DateTime<true>,
+  });
+  const parser = new DiningParser();
+  const parsedLocationData = await parser.process();
+  expect(parsedLocationData).toStrictEqual(expectedLocationData2);
 });
 test("specials for The Exchange", async () => {
   mockAxiosGETMethodWithFilePaths({
@@ -43,7 +64,7 @@ test("specials for The Exchange", async () => {
     getConceptFilePath: (conceptId: string) =>
       ["92", "110", "113", "175", "108"].includes(conceptId)
         ? `html/concepts/${conceptId}.html`
-        : "html/blank.html",
+        : "html/concepts/error.html",
     serverDate: DateTime.fromObject({
       year: 2024,
       month: 8,
@@ -494,5 +515,33 @@ describe("time edge cases", () => {
       [Mon, 0, 0, 23, 59],
       [Mon, 2, 0, 3, 0],
     ]);
+  });
+});
+describe("new year parsing", () => {
+  test("new years", async () => {
+    setUpArbitraryTest(
+      [
+        ["Tuesday", "December 30", "7:00 AM - 9:00 PM"],
+        ["Wednesday", "December 31", "7:00 AM - 9:00 PM"],
+        ["Thursday", "January 1", "7:00 AM - 9:00 PM"],
+        ["Friday", "January 2", "7:00 AM - 9:00 PM"],
+        ["Saturday", "January 3", "7:00 AM - 9:00 PM"],
+        ["Sunday", "January 4", "7:00 AM - 9:00 PM"],
+        ["Monday", "January 5", "7:00 AM - 9:00 PM"],
+      ],
+      DateTime.fromObject({ year: 2025, month: 12, day: 30 })
+    );
+    await queryParserAndAssertTimingsCorrect(
+      [
+        [Sun, 7, 0, 21, 0],
+        [Mon, 7, 0, 21, 0],
+        [Tue, 7, 0, 21, 0],
+        [Wed, 7, 0, 21, 0],
+        [Thur, 7, 0, 21, 0],
+        [Fri, 7, 0, 21, 0],
+        [Sat, 7, 0, 21, 0],
+      ],
+      DateTime.fromObject({ year: 2025, month: 12, day: 30 })
+    );
   });
 });

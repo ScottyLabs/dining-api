@@ -18,7 +18,7 @@ export interface ILocation {
   /** Assuming these times fall after today */
   times: IFullTimeRange[];
   /** useful when figuring out which db time entries to overwrite. Can be undefined if no time data was properly scraped */
-  today: IDate | undefined;
+  today: IDate;
   todaysSpecials: ISpecial[] | undefined;
   todaysSoups: ISpecial[] | undefined;
 }

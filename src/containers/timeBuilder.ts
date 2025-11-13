@@ -75,6 +75,7 @@ export function getAllTimeSlotsFromSchedule(
       );
     }
   }
+  if (firstDay === undefined) throw new Error("No valid rows parsed!");
   return { times: allTimeSlots, earliestDay: firstDay };
 }
 /**

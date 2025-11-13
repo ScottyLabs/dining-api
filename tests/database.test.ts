@@ -6,7 +6,42 @@ import { _disconnectPoolConnection, initDB } from "db/db";
 import { addLocationDataToDb } from "db/updateLocation";
 import { getAllLocations } from "db/getLocations";
 import { DateTime } from "luxon";
+import { ILocation } from "types";
 const wait = (ms: number) => new Promise((re) => setTimeout(re, ms));
+const locationIn: ILocation = {
+  name: "test",
+  acceptsOnlineOrders: false,
+  conceptId: 1,
+  coordinates: { lat: 1, lng: 10 },
+  description: "description",
+  today: {
+    year: 2025,
+    month: 1,
+    day: 1,
+  },
+  times: [],
+  location: "location",
+  menu: "menu",
+  shortDescription: "hi",
+  url: "https://hi.com",
+  todaysSoups: [],
+  todaysSpecials: [],
+};
+const locationOut = {
+  id: 1,
+  name: "test",
+  shortDescription: "hi",
+  description: "description",
+  url: "https://hi.com",
+  menu: "menu",
+  location: "location",
+  coordinateLat: 1,
+  coordinateLng: 10,
+  acceptsOnlineOrders: false,
+  times: [],
+  todaysSoups: [],
+  todaysSpecials: [],
+};
 describe("Redis", () => {
   let container: StartedPostgreSqlContainer;
 
@@ -28,54 +63,16 @@ describe("Redis", () => {
   });
 
   it("works on basic insertion", async () => {
-    await addLocationDataToDb({
-      name: "test",
-      acceptsOnlineOrders: false,
-      conceptId: 1,
-      coordinates: { lat: 1, lng: 10 },
-      description: "description",
-      today: {
-        year: 2025,
-        month: 1,
-        day: 1,
-      },
-      times: [],
-      location: "location",
-      menu: "menu",
-      shortDescription: "hi",
-      url: "https://hi.com",
-      todaysSoups: [],
-      todaysSpecials: [],
-    });
+    await addLocationDataToDb(locationIn);
     const dbResult = await getAllLocations(DateTime.now());
-    expect(dbResult).toEqual([
-      {
-        id: 1,
-        name: "test",
-        shortDescription: "hi",
-        description: "description",
-        url: "https://hi.com",
-        menu: "menu",
-        location: "location",
-        coordinateLat: 1,
-        coordinateLng: 10,
-        acceptsOnlineOrders: false,
-        times: [],
-        todaysSoups: [],
-        todaysSpecials: [],
-      },
-    ]);
+    expect(dbResult).toEqual([locationOut]);
   });
   it("properly resets state on every new test", async () => {
     expect(await getAllLocations(DateTime.now())).toEqual([]);
   });
   it("works on insertion with times", async () => {
     await addLocationDataToDb({
-      name: "test",
-      acceptsOnlineOrders: false,
-      conceptId: 1,
-      coordinates: { lat: 1, lng: 10 },
-      description: "description",
+      ...locationIn,
       today: {
         year: 2025,
         month: 1,
@@ -111,28 +108,13 @@ describe("Redis", () => {
           endMinutesFromMidnight: 2 * 60,
         },
       ],
-      location: "location",
-      menu: "menu",
-      shortDescription: "hi",
-      url: "https://hi.com",
-      todaysSoups: [],
-      todaysSpecials: [],
     });
     const dbResult = await getAllLocations(
       DateTime.fromObject({ year: 2025, month: 1, day: 2 })
     );
     expect(dbResult).toEqual([
       {
-        id: 1,
-        name: "test",
-        shortDescription: "hi",
-        description: "description",
-        url: "https://hi.com",
-        menu: "menu",
-        location: "location",
-        coordinateLat: 1,
-        coordinateLng: 10,
-        acceptsOnlineOrders: false,
+        ...locationOut,
         times: [
           {
             start: 1735725600000,
@@ -147,8 +129,6 @@ describe("Redis", () => {
             end: 1751954400000,
           },
         ],
-        todaysSoups: [],
-        todaysSpecials: [],
       },
     ]);
   });

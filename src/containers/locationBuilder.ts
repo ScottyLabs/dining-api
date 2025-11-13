@@ -8,6 +8,7 @@ import {
   ISpecial,
   IFullTimeRange,
 } from "../types";
+import { notifySlack } from "utils/slack";
 
 /**
  * For building the location data structure
@@ -26,7 +27,7 @@ export default class LocationBuilder {
   private coordinates: ICoordinate | undefined;
   private acceptsOnlineOrders: boolean | undefined;
   private times: IFullTimeRange[] | undefined;
-  private earliestDayFound: IDate | undefined;
+  private today: IDate | undefined;
   private specials: ISpecial[] | undefined;
   private soups: ISpecial[] | undefined;
 
@@ -91,7 +92,7 @@ export default class LocationBuilder {
       serverDate.year
     );
     this.times = times;
-    this.earliestDayFound = earliestDay;
+    this.today = earliestDay;
   }
   getConceptLink() {
     if (this.conceptId === undefined) return undefined;
@@ -102,7 +103,7 @@ export default class LocationBuilder {
     return this.conceptId;
   }
 
-  build(): ILocation {
+  build(): ILocation | undefined {
     if (
       this.times === undefined ||
       this.acceptsOnlineOrders === undefined ||
@@ -110,11 +111,13 @@ export default class LocationBuilder {
       this.url === undefined ||
       this.location === undefined ||
       this.conceptId === undefined ||
-      this.name === undefined
+      this.name === undefined ||
+      this.today === undefined
     ) {
-      throw Error(
-        "Didn't finish configuring location before building metadata!"
+      notifySlack(
+        `<!channel> Didn't finish configuring location for ${this.conceptId} before building metadata!`
       );
+      return undefined;
       // All fetches were good - yet we have missing data. This is a problem.
     }
 
@@ -129,7 +132,7 @@ export default class LocationBuilder {
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
       times: this.times,
-      today: this.earliestDayFound,
+      today: this.today,
       todaysSpecials: this.specials,
       todaysSoups: this.soups,
     };

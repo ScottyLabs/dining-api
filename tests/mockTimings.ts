@@ -21,15 +21,13 @@ function _sort(a: IFullTimeRange, b: IFullTimeRange) {
 /**
  *
  * @param times [startDay,startHour,startMinute,endDay,endHour,endMinute][] (order matters for input! Sunday comes first)
- * @param parser In case you want to pass in a custom parser with overwrites or something. If nothing is passed in, a default parser is assumed
  * The only reason start and end are bundled into one array is because prettier will autoformat it to two lines otherwise
  */
 export async function queryParserAndAssertTimingsCorrect(
   times: [number, number, number, number, number][],
-  parser?: DiningParser
+  rootDay: DateTime = DateTime.fromObject({ year: 2024, month: 9, day: 9 }) // is the default for most of the tests
 ) {
-  const result = await (parser ?? new DiningParser()).process();
-  const rootDay = DateTime.fromObject({ year: 2024, month: 9, day: 9 });
+  const result = await new DiningParser().process();
   expect(result.length).toBe(1);
   expect(result[0]!.times.sort(_sort)).toStrictEqual(
     times
