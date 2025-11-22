@@ -698,7 +698,11 @@ function parseTime(date: string, startTime: string, endTime: string) {
  * @returns timestamp, when datetime is interpreted in EST
  */
 function timeToUnixTimestamp(datetime: string) {
-  return +new Date(datetime);
+  const parsedDate = DateTime.fromFormat(datetime, "M/d/yy h:mm a", {
+    zone: "America/New_York", // important! enforces timezone
+  });
+  if (!parsedDate.isValid) throw new Error(`Malformed date string ${datetime}`);
+  return parsedDate.toMillis();
 }
 
 const wait = (ms: number) => new Promise((re) => setTimeout(re, ms));
