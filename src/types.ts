@@ -17,7 +17,7 @@ export interface ILocation {
   acceptsOnlineOrders: boolean;
   /** Assuming these times fall after today */
   times: IFullTimeRange[];
-  /** used when figuring out which time entries to clear in the database. (we can't just look at `times` directly to figure that out, because it might as well be empty) */
+  /** used when figuring out which time entries to clear in the database. (we can't just look at `times` directly to figure that out, because it might as well be empty) (also, technically if this data is in the future, times won't be cleared properly. we hope that isn't the case though) */
   today: IDate;
   todaysSpecials: ISpecial[] | undefined;
   todaysSoups: ISpecial[] | undefined;

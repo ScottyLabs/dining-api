@@ -558,7 +558,91 @@ describe("DB", () => {
       ])
     );
   });
-  dbTest.concurrent("stub", async ({ ctx: { db } }) => {}); // just for reference
+  dbTest.concurrent(
+    "adding times for the next day",
+    async ({ ctx: { db } }) => {
+      const id1 = await addLocationDataToDb(db, {
+        ...locationIn,
+        today: {
+          year: 2025,
+          month: 1,
+          day: 1,
+        },
+        times: [
+          parseTime("1/1/25", "7:00 AM", "2:00 PM"),
+          parseTime("1/2/25", "7:00 AM", "2:00 PM"),
+          parseTime("1/3/25", "7:00 AM", "2:00 PM"),
+        ],
+      });
+      const id2 = await addLocationDataToDb(db, {
+        ...locationIn,
+        today: {
+          year: 2025,
+          month: 1,
+          day: 2,
+        },
+        times: [parseTime("1/3/25", "7:00 AM", "7:00 PM")],
+      });
+      expect(id1).toEqual(id2);
+      expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+        {
+          ...locationOut,
+          id: id1,
+          times: [
+            {
+              start: timeToUnixTimestamp("1/1/25 7:00 AM"),
+              end: timeToUnixTimestamp("1/1/25 2:00 PM"),
+            },
+            {
+              start: timeToUnixTimestamp("1/3/25 7:00 AM"),
+              end: timeToUnixTimestamp("1/3/25 7:00 PM"),
+            },
+          ],
+        },
+      ]);
+    }
+  );
+  dbTest.concurrent("time merging", async ({ ctx: { db } }) => {
+    const id = await addLocationDataToDb(db, {
+      ...locationIn,
+      today: {
+        year: 2025,
+        month: 1,
+        day: 1,
+      },
+      times: [
+        parseTime("1/1/25", "7:00 AM", "2:00 PM"),
+        parseTime("1/1/25", "2:00 AM", "12:00 PM"),
+        parseTime("1/1/25", "2:01 PM", "9:00 PM"),
+        parseTime("1/1/25", "9:00 PM", "11:59 PM"),
+        parseTime("1/2/25", "12:00 AM", "11:59 PM"),
+      ],
+    });
+
+    expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+      {
+        ...locationOut,
+        id: id,
+        times: [
+          {
+            start: timeToUnixTimestamp("1/1/25 2:00 AM"),
+            end: timeToUnixTimestamp("1/2/25 11:59 PM"),
+          },
+        ],
+      },
+    ]);
+  });
+  dbTest.concurrent.skip("stub", async ({ ctx: { db } }) => {
+    const id = await addLocationDataToDb(db, {
+      ...locationIn,
+    });
+
+    expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+      {
+        ...locationOut,
+      },
+    ]);
+  }); // just for reference
 });
 
 /**
@@ -614,11 +698,7 @@ function parseTime(date: string, startTime: string, endTime: string) {
  * @returns timestamp, when datetime is interpreted in EST
  */
 function timeToUnixTimestamp(datetime: string) {
-  const parsedDate = DateTime.fromFormat(datetime, "M/d/yy h:mm a", {
-    zone: "America/New_York",
-  });
-  if (!parsedDate.isValid) throw new Error(`Malformed date string ${datetime}`);
-  return parsedDate.toMillis();
+  return +new Date(datetime);
 }
 
 const wait = (ms: number) => new Promise((re) => setTimeout(re, ms));
