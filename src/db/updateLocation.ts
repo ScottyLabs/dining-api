@@ -51,7 +51,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
 
     const todayAsSQLString = `${location.today.year}-${pad(
       location.today.month
-    )}-${pad(location.today.day)})`;
+    )}-${pad(location.today.day)}`;
     // add specials
     await tx
       .delete(specialsTable)
