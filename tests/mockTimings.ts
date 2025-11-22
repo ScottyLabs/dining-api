@@ -43,6 +43,11 @@ export async function queryParserAndAssertTimingsCorrect(
       })
       .sort(_sort)
   );
+  expect(result[0]?.today).toEqual({
+    year: rootDay.year,
+    month: rootDay.month,
+    day: rootDay.day,
+  });
 }
 
 export function setUpTimingTest(timeRows: Record<number, string>) {
