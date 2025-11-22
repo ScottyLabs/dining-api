@@ -27,13 +27,13 @@ Now install the API's dependencies by 'cd'-ing into the root of the repository a
 pnpm install
 ```
 
-Start your local database with `pnpm db:start` and then start the server with `pnpm dev` and it should work, assuming you have the correct env variables. (To see the contents of the database, I recommend using DBeaver. You can also run `pnpm db:studio` to start up drizzle studio)
+Start your local database with `pnpm db:start`, `pnpm db:push` (if this is your first time) and then start the server with `pnpm dev` and it should work, assuming you have the correct env variables. (To see the contents of the database, I recommend using DBeaver. You can also run `pnpm db:studio` to start up drizzle studio)
 
 ## Database schema changes (important!)
 
 When you make changes to the database schema, be sure to run `pnpm db:push` to keep your local db in sync.
 
-Before merging your PR, be sure to run `pnpm db:generate` to generate a migration file, which will then be automatically applied to the staging and production databases when deployed.
+Before merging your PR, be sure to run `pnpm db:generate` to generate a migration file, which will then be automatically applied to the staging and production databases when deployed. (You should do this before running tests as well!)
 
 To test if the migration files work, you can run `pnpm run-prod`, which will spin up a production version of the server and a postgres database mounted on a new volume. The server is created using the same Dockerfile used in our Railway deployments, so if it works locally, it (probably) works in production as well.
 

@@ -1,7 +1,7 @@
-import { db } from "./db";
+import { DBType } from "./db";
 import { emailTable } from "./schema";
 
-export async function populateEmails() {
+export async function populateEmails(db: DBType) {
   await db.insert(emailTable).values([
     {
       email: "czech@un.org",

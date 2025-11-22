@@ -1,28 +1,10 @@
 import ParsedTime from "containers/time/parsedTime";
-import ParsedTimeForDate, {
-  convertMonthStringToEnum,
-} from "containers/time/parsedTimeForDate";
-import ParsedTimeForDay, {
-  convertDayStringToEnum,
-} from "containers/time/parsedTimeForDay";
+import { convertMonthStringToEnum } from "containers/time/parsedTimeForDate";
+import { convertDayStringToEnum } from "containers/time/parsedTimeForDay";
 import { TimeInfoType } from "types";
 
 export function parseToken(token: string) {
   token = token.trim().toLowerCase();
-  if (isDay(token)) {
-    return {
-      type: TimeInfoType.DAY,
-      value: new ParsedTimeForDay(token).parse().value,
-    } as const;
-  }
-
-  const testMonth = token.split(/\s/)[0];
-  if (isMonth(testMonth)) {
-    return {
-      type: TimeInfoType.DATE,
-      value: new ParsedTimeForDate(token).parse().value,
-    } as const;
-  }
   if (
     token === "24 hours" ||
     token === "24 hrs" ||

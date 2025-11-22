@@ -1,9 +1,14 @@
 import { getHTMLResponse } from "utils/requestUtils";
-import { load } from "cheerio";
-import type { Element } from "domhandler";
-import { getTimeRangesFromString } from "./timeBuilder";
-import { ICoordinate, ILocation, ISpecial, ITimeRange } from "../types";
-import { sortAndMergeTimeRanges } from "utils/timeUtils";
+import { Element, load } from "cheerio";
+import { getAllTimeSlotsFromSchedule } from "./timeBuilder";
+import {
+  ICoordinate,
+  IDate,
+  ILocation,
+  ISpecial,
+  IFullTimeRange,
+} from "../types";
+import { notifySlack } from "utils/slack";
 
 /**
  * For building the location data structure
@@ -12,18 +17,19 @@ export default class LocationBuilder {
   static readonly CONCEPT_BASE_LINK =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/";
 
-  private conceptId?: number;
-  private name?: string;
-  private shortDescription?: string;
-  private description?: string;
-  private url?: string;
-  private location?: string;
-  private menu?: string;
-  private coordinates?: ICoordinate;
-  private acceptsOnlineOrders?: boolean;
-  private times?: ITimeRange[];
-  private specials?: ISpecial[];
-  private soups?: ISpecial[];
+  private conceptId: number | undefined;
+  private name: string | undefined;
+  private shortDescription: string | undefined;
+  private description: string | undefined;
+  private url: string | undefined;
+  private location: string | undefined;
+  private menu: string | undefined;
+  private coordinates: ICoordinate | undefined;
+  private acceptsOnlineOrders: boolean | undefined;
+  private times: IFullTimeRange[] | undefined;
+  private today: IDate | undefined;
+  private specials: ISpecial[] | undefined;
+  private soups: ISpecial[] | undefined;
 
   constructor(card: Element) {
     const link = load(card)("h3.name.detailsLink");
@@ -48,7 +54,7 @@ export default class LocationBuilder {
       this.specials = specialList[this.conceptId];
     }
   }
-  setTimes(times: ITimeRange[]) {
+  setTimes(times: IFullTimeRange[]) {
     if (this.conceptId && times !== undefined) {
       this.times = times;
     }
@@ -66,7 +72,8 @@ export default class LocationBuilder {
     const conceptURL = this.getConceptLink();
     if (!conceptURL) return;
 
-    const $ = load(await getHTMLResponse(conceptURL));
+    const { body, serverDate } = await getHTMLResponse(conceptURL);
+    const $ = load(body);
     this.url = conceptURL.toString();
     this.description = $("div.description p").text().trim();
     this.menu = $("div.navItems > a#getMenu").attr("href");
@@ -80,9 +87,12 @@ export default class LocationBuilder {
     }
 
     const nextSevenDays = $("ul.schedule").find("li").toArray();
-    this.times = sortAndMergeTimeRanges(
-      nextSevenDays.flatMap((rowHTML) => getTimeRangesFromString(rowHTML))
+    const { times, earliestDay } = getAllTimeSlotsFromSchedule(
+      nextSevenDays,
+      serverDate.year
     );
+    this.times = times;
+    this.today = earliestDay;
   }
   getConceptLink() {
     if (this.conceptId === undefined) return undefined;
@@ -90,11 +100,10 @@ export default class LocationBuilder {
   }
 
   getConceptId() {
-    if (this.conceptId === undefined) return undefined;
     return this.conceptId;
   }
 
-  build(): ILocation {
+  build(): ILocation | undefined {
     if (
       this.times === undefined ||
       this.acceptsOnlineOrders === undefined ||
@@ -102,15 +111,14 @@ export default class LocationBuilder {
       this.url === undefined ||
       this.location === undefined ||
       this.conceptId === undefined ||
-      this.name === undefined
+      this.name === undefined ||
+      this.today === undefined
     ) {
-      throw Error(
-        "Didn't finish configuring location before building metadata!"
+      notifySlack(
+        `<!channel> Didn't finish configuring location for ${this.conceptId} before building metadata!`
       );
+      return undefined;
       // All fetches were good - yet we have missing data. This is a problem.
-    }
-    if (this.conceptId === 179) {
-      this.times = []; // capital grains quick override
     }
 
     return {
@@ -124,6 +132,7 @@ export default class LocationBuilder {
       coordinates: this.coordinates,
       acceptsOnlineOrders: this.acceptsOnlineOrders,
       times: this.times,
+      today: this.today,
       todaysSpecials: this.specials,
       todaysSoups: this.soups,
     };

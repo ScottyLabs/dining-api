@@ -1,5 +1,7 @@
-import LocationMerger from "../src/utils/locationMerger";
-const locationA = {
+import { ILocation } from "types";
+import ScrapeResultMerger from "../src/utils/locationMerger";
+import { DeeplyAllowMatchers } from "vitest";
+const locationA: ILocation = {
   conceptId: 3,
   name: "Location Name",
   description: "Location Description",
@@ -7,8 +9,14 @@ const locationA = {
   location: "Location Address",
   times: [],
   acceptsOnlineOrders: true,
+  shortDescription: undefined,
+  coordinates: undefined,
+  today: { day: 1, month: 1, year: 1 },
+  menu: undefined,
+  todaysSoups: undefined,
+  todaysSpecials: undefined,
 };
-const locationAA = {
+const locationAA: ILocation = {
   conceptId: 3,
   name: "Location Name",
   description: "Location Description",
@@ -16,8 +24,14 @@ const locationAA = {
   location: "Location Address Changed",
   times: [],
   acceptsOnlineOrders: true,
+  shortDescription: undefined,
+  coordinates: undefined,
+  today: { day: 1, month: 1, year: 1 },
+  menu: undefined,
+  todaysSoups: undefined,
+  todaysSpecials: undefined,
 };
-const locationAAA = {
+const locationAAA: ILocation = {
   conceptId: 3,
   name: "Location Name",
   description: "Location Description",
@@ -25,8 +39,14 @@ const locationAAA = {
   location: "Location Address Changed",
   times: [],
   acceptsOnlineOrders: false,
+  shortDescription: undefined,
+  coordinates: undefined,
+  today: { day: 1, month: 1, year: 1 },
+  menu: undefined,
+  todaysSoups: undefined,
+  todaysSpecials: undefined,
 };
-const locationB = {
+const locationB: ILocation = {
   conceptId: 2,
   name: "Location Name",
   description: "Location Description",
@@ -34,15 +54,24 @@ const locationB = {
   location: "Location Address",
   times: [],
   acceptsOnlineOrders: true,
+  shortDescription: undefined,
+  coordinates: undefined,
+  today: { day: 1, month: 1, year: 1 },
+  menu: undefined,
+  todaysSoups: undefined,
+  todaysSpecials: undefined,
 };
 // https://stackoverflow.com/questions/40135684/is-there-an-array-equality-match-function-that-ignores-element-position-in-jest
-const expectArrayEquivalence = <T>(actual: T[], expected: T[]) => {
+const expectArrayEquivalence = <M>(
+  actual: DeeplyAllowMatchers<M>[],
+  expected: DeeplyAllowMatchers<M>[]
+) => {
   expect(actual).toEqual(expect.arrayContaining(expected));
   expect(expected).toEqual(expect.arrayContaining(actual));
 };
 describe("merging", () => {
   test("", () => {
-    const merger = new LocationMerger();
+    const merger = new ScrapeResultMerger();
     merger.addLocation(locationA);
     merger.addLocation(locationAA);
     merger.addLocation(locationAAA);
@@ -54,7 +83,7 @@ describe("merging", () => {
     ]);
   });
   test("highly necessary test", () => {
-    const merger = new LocationMerger();
+    const merger = new ScrapeResultMerger();
     merger.addLocation(locationA);
     merger.addLocation(locationAA);
     merger.addLocation(locationAAA);
