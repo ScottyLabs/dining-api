@@ -27,7 +27,7 @@ Now install the API's dependencies by 'cd'-ing into the root of the repository a
 pnpm install
 ```
 
-Start your local database with `pnpm db:start` and then start the server with `pnpm dev` and it should work, assuming you have the correct env variables. (To see the contents of the database, I recommend using DBeaver. You can also run `pnpm db:studio` to start up drizzle studio)
+Start your local database with `pnpm db:start`, `pnpm db:push` (if this is your first time) and then start the server with `pnpm dev` and it should work, assuming you have the correct env variables. (To see the contents of the database, I recommend using DBeaver. You can also run `pnpm db:studio` to start up drizzle studio)
 
 ## Database schema changes (important!)
 
