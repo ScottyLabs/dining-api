@@ -1,3 +1,5 @@
+// don't add .unique() or .notNull() to a primary key, drizzle doesn't like it when you remove it later on.
+
 import {
   pgTable,
   text,
@@ -11,7 +13,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const emailTable = pgTable("emails", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),
   email: text("email").notNull(),
 });
@@ -20,10 +22,10 @@ export const conceptIdToInternalIdTable = pgTable("concept_id_to_internal_id", {
   internalId: text("internal_id")
     .notNull()
     .references(() => locationDataTable.id, { onDelete: "cascade" }),
-  externalId: text("external_id").notNull().unique().primaryKey(),
+  externalId: text("external_id").unique().primaryKey(),
 });
 export const locationDataTable = pgTable("location_data", {
-  id: text("id").notNull().primaryKey(),
+  id: text("id").primaryKey(),
   name: text("name"),
   shortDescription: text("short_description"),
   description: text("description").notNull(),
@@ -33,12 +35,12 @@ export const locationDataTable = pgTable("location_data", {
   location: text("location").notNull(),
   coordinateLat: decimal("coordinate_lat", { mode: "number", scale: 30 }),
   coordinateLng: decimal("coordinate_lng", { mode: "number", scale: 30 }),
-  acceptsOnlineOrders: boolean().notNull(),
+  acceptsOnlineOrders: boolean("accepts_online_orders").notNull(),
 });
 export const timesTable = pgTable(
   "location_times",
   {
-    id: integer().notNull().generatedAlwaysAsIdentity().primaryKey(),
+    id: integer("id").notNull().generatedAlwaysAsIdentity().primaryKey(),
     locationId: text("location_id")
       .references(() => locationDataTable.id, {
         onDelete: "cascade",
@@ -55,7 +57,6 @@ export const timesTable = pgTable(
  */
 export const overwritesTable = pgTable("overwrites_table", {
   locationId: text("location_id")
-    .notNull()
     .primaryKey()
     .references(() => locationDataTable.id, {
       onDelete: "cascade",
@@ -66,8 +67,8 @@ export const overwritesTable = pgTable("overwrites_table", {
   url: text("url"),
   menu: text("menu"),
   location: text("location"),
-  coordinateLat: decimal({ mode: "number", scale: 30 }),
-  coordinateLng: decimal({ mode: "number", scale: 30 }),
+  coordinateLat: decimal("coordinate_lat", { mode: "number", scale: 30 }),
+  coordinateLng: decimal("coordinate_lng", { mode: "number", scale: 30 }),
   acceptsOnlineOrders: boolean("accepts_online_orders"),
 });
 export const timeOverwritesTable = pgTable(
@@ -86,14 +87,14 @@ export const timeOverwritesTable = pgTable(
 export const specialType = pgEnum("specialType", ["special", "soup"]);
 
 export const specialsTable = pgTable("specials", {
-  id: integer().notNull().generatedAlwaysAsIdentity().primaryKey(),
+  id: integer("id").notNull().generatedAlwaysAsIdentity().primaryKey(),
   locationId: text("location_id")
     .references(() => locationDataTable.id, {
       onDelete: "cascade",
     })
     .notNull(),
-  name: text().notNull(),
-  description: text().notNull(),
-  date: date().notNull(),
-  type: specialType().notNull(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  date: date("date").notNull(),
+  type: specialType("type").notNull(),
 });
