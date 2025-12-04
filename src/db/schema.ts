@@ -98,3 +98,14 @@ export const specialsTable = pgTable("specials", {
   date: date("date").notNull(),
   type: specialType("type").notNull(),
 });
+
+export const locationReportsTable = pgTable("location_reports", {
+  id: integer("id").notNull().generatedAlwaysAsIdentity().primaryKey(),
+  locationId: text("location_id")
+    .references(() => locationDataTable.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  message: text("message").notNull(),
+  createdAt: text("created_at").notNull(),
+});

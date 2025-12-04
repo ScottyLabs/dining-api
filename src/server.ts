@@ -14,6 +14,8 @@ import { openapi } from "@elysiajs/openapi";
 import { initDBConnection } from "db/db";
 import { DateTime } from "luxon";
 import { QueryUtils } from "db/dbQueryUtils";
+import { locationDataTable, locationReportsTable } from "db/schema";
+import { eq } from "drizzle-orm";
 
 /** only used for Slack debug diff logging */
 let cachedLocations: ILocation[] = [];
@@ -98,11 +100,39 @@ app.post(
     }),
   }
 );
-// backend for reporting locations  // 
+// backend for reporting locations
 app.post(
   "/api/report-location",
   async ({ body: { locationId, message } }) => {
-    const slackMsg = `Location Reported\nLocation ID: ${locationId}\nMessage: ${message}`;
+    // Validate locationId exists in DB
+    const location = await db
+      .select()
+      .from(locationDataTable)
+      .where(eq(locationDataTable.id, String(locationId)))
+      .limit(1);
+
+    if (location.length === 0) {
+      return { success: false, error: "Invalid location ID" };
+    }
+
+    const locationName = location[0].name ?? "Unknown";
+    const timestamp = DateTime.now().setZone("America/New_York").toFormat("yyyy-MM-dd HH:mm:ss");
+
+    // Store report in database
+    await db.insert(locationReportsTable).values({
+      locationId: String(locationId),
+      message: message,
+      createdAt: timestamp,
+    });
+
+    // Send formatted Slack message
+    const slackMsg = [
+      `:warning: *Location Report Submitted*`,
+      `*Location:* ${locationName} (ID: ${locationId})`,
+      `*Message:* ${message}`,
+      `*Time:* ${timestamp} ET`,
+      `*Link:* https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/${locationId}`,
+    ].join("\n");
     await notifySlack(slackMsg, env.SLACK_BACKEND_WEBHOOK_URL);
 
     return { success: true };
@@ -114,6 +144,15 @@ app.post(
     }),
   }
 );
+
+// Admin endpoint to view all reports
+app.get("/api/reports", async () => {
+  const reports = await db
+    .select()
+    .from(locationReportsTable)
+    .orderBy(locationReportsTable.id);
+  return { reports };
+});
 
 setInterval(() => {
   reload().catch(
