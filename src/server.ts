@@ -98,6 +98,22 @@ app.post(
     }),
   }
 );
+// backend for reporting locations  // 
+app.post(
+  "/api/report-location",
+  async ({ body: { locationId, message } }) => {
+    const slackMsg = `Location Reported\nLocation ID: ${locationId}\nMessage: ${message}`;
+    await notifySlack(slackMsg, env.SLACK_BACKEND_WEBHOOK_URL);
+
+    return { success: true };
+  },
+  {
+    body: t.Object({
+      locationId: t.Number(),
+      message: t.String(),
+    }),
+  }
+);
 
 setInterval(() => {
   reload().catch(
