@@ -1,61 +1,30 @@
 import { Elysia, t } from "elysia";
 import { cors } from "@elysiajs/cors";
-import DiningParser from "./parser/diningParser";
-import { ILocation } from "types";
 import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
-import ScrapeResultMerger from "utils/locationMerger";
-import { addLocationDataToDb } from "db/updateLocation";
 import { deprecatedNotice } from "deprecationNotice";
-import { getDiffsBetweenLocationData } from "utils/diff";
 import { getAllLocationsFromDB } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
 import { initDBConnection } from "db/db";
 import { DateTime } from "luxon";
 import { QueryUtils } from "db/dbQueryUtils";
+import { refreshDB } from "reload";
+import { LocationsSchema } from "schemas";
 
-/** only used for Slack debug diff logging */
-let cachedLocations: ILocation[] = [];
-async function reload(): Promise<void> {
-  const now = new Date();
-  console.log(`Reloading Dining API: ${now}`);
-  const parser = new DiningParser();
-  const locationMerger = new ScrapeResultMerger();
-
-  for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
-    // Wait a bit before starting the next round of scrapes.
-    if (i > 0)
-      await new Promise((resolve) =>
-        setTimeout(resolve, env.INTER_SCRAPE_WAIT_INTERVAL)
-      );
-
-    const locations = await parser.process();
-    locations.forEach((location) => locationMerger.addLocation(location));
-  }
-  const finalLocations = locationMerger.getMostFrequentLocations();
-  if (finalLocations.length === 0) {
-    notifySlack("<!channel> No data scraped! Skipping");
-  } else {
-    const diffs = getDiffsBetweenLocationData(cachedLocations, finalLocations);
-    cachedLocations = finalLocations;
-
-    if (diffs.length === 0) {
-      notifySlack("Dining API reloaded (data unchanged)");
-    } else {
-      await notifySlack("Dining API reloaded with the following changes:");
-      for (const diff of diffs) {
-        await notifySlack(diff);
-      }
-    }
-
-    await Promise.all(
-      finalLocations.map((location) => addLocationDataToDb(db, location))
-    );
-  }
-}
 const [pool, db] = initDBConnection(env.DATABASE_URL);
-export const app = new Elysia({ adapter: node() }).use(openapi()); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
+export const app = new Elysia({ adapter: node() }).use(
+  openapi({
+    // references: fromTypes("src/server.ts"), // welp I can't get this to work
+    documentation: {
+      tags: [],
+      info: {
+        title: "CMU Dining API",
+        version: "2.0.0",
+      },
+    },
+  })
+); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
   if (code === "NOT_FOUND") {
@@ -69,23 +38,39 @@ app.onError(({ error, path, code }) => {
   }
 });
 app.use(cors());
-app.onAfterHandle(({ response }) => {
-  if (typeof response === "object") {
+app.onAfterHandle(({ responseValue }) => {
+  if (typeof responseValue === "object") {
     // pretty print this
-    return new Response(JSON.stringify(response, null, 4), {
+    return new Response(JSON.stringify(responseValue, null, 4), {
       headers: { "Content-Type": "application/json; charset=utf-8" },
     }); // we can actually set proper content-type headers this way
   }
 });
 
-app.get("/", () => {
-  return "ScottyLabs Dining API";
-});
+app.get(
+  "/",
+  () => {
+    return "ScottyLabs Dining API";
+  },
+  { response: t.String({ examples: ["ScottyLabs Dining API"] }) }
+);
 app.get(
   "/api/v2/locations",
-  async () => await getAllLocationsFromDB(db, DateTime.now())
+  async () => await getAllLocationsFromDB(db, DateTime.now()),
+  { response: LocationsSchema }
 );
-app.get("/api/emails", async () => await new QueryUtils(db).getEmails());
+app.get("/api/emails", async () => await new QueryUtils(db).getEmails(), {
+  response: t.Array(
+    t.Object({
+      name: t.String({
+        example: ["Alice"],
+      }),
+      email: t.String({
+        example: "alice72@andrew.cmu.edu",
+      }),
+    })
+  ),
+});
 
 app.post(
   "/api/sendSlackMessage",
@@ -100,11 +85,11 @@ app.post(
 );
 
 setInterval(() => {
-  reload().catch(
+  refreshDB(db).catch(
     (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
   );
 }, env.RELOAD_WAIT_INTERVAL);
-reload().catch(
+refreshDB(db).catch(
   (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
 );
 
@@ -114,16 +99,30 @@ app.listen(env.PORT, ({ hostname, port }) => {
 
 // DEPRECATED
 
-app.get("/locations", async () => ({ locations: deprecatedNotice }));
-
-app.get("/location/:name", async ({ params: { name } }) => {
-  const filteredLocation = deprecatedNotice.filter((location) => {
-    return location.name?.toLowerCase().includes(name.toLowerCase());
-  });
-  return {
-    locations: filteredLocation,
-  };
+app.get("/locations", async () => ({ locations: deprecatedNotice }), {
+  detail: {
+    tags: ["Deprecated"],
+    hide: true,
+  },
 });
+
+app.get(
+  "/location/:name",
+  async ({ params: { name } }) => {
+    const filteredLocation = deprecatedNotice.filter((location) => {
+      return location.name?.toLowerCase().includes(name.toLowerCase());
+    });
+    return {
+      locations: filteredLocation,
+    };
+  },
+  {
+    detail: {
+      tags: ["Deprecated"],
+      hide: true,
+    },
+  }
+);
 
 app.get(
   "/locations/time/:day/:hour/:min",
@@ -146,5 +145,11 @@ app.get(
       return returning;
     });
     return { locations: result };
+  },
+  {
+    detail: {
+      tags: ["Deprecated"],
+      hide: true,
+    },
   }
 );
