@@ -33,6 +33,7 @@ export const LocationSchema = t.Object({
   acceptsOnlineOrders: t.Boolean(),
 
   id: t.String(),
+  conceptId: t.Nullable(t.String()),
 });
 
 export const LocationsSchema = t.Array(LocationSchema);

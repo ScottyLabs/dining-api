@@ -1,5 +1,5 @@
 import {
-  conceptIdToInternalIdTable,
+  externalIdToInternalIdTable,
   emailTable,
   locationDataTable,
   overwritesTable,
@@ -74,19 +74,26 @@ export class QueryUtils {
           eq(locationDataTable.id, timesTable.locationId),
           gte(timesTable.date, timeSearchCutoffStr)
         )
+      )
+      .leftJoin(
+        externalIdToInternalIdTable,
+        eq(externalIdToInternalIdTable.internalId, locationDataTable.id)
       );
+
     return locationData.reduce<
       Record<
         string,
         | typeof locationDataTable.$inferSelect & {
             times: ITimeRangeInternal[];
+            conceptId: string | null;
           }
       >
-    >((acc, { location_data, location_times }) => {
+    >((acc, { location_data, location_times, external_id_to_internal_id }) => {
       if (!acc[location_data.id]) {
         acc[location_data.id] = {
           ...location_data,
           times: [],
+          conceptId: null,
         };
       }
       if (location_times !== null) {
@@ -95,6 +102,10 @@ export class QueryUtils {
           endMinutesSinceMidnight: location_times.endTime,
           date: location_times.date,
         });
+      }
+      if (external_id_to_internal_id !== null) {
+        acc[location_data.id]!.conceptId =
+          external_id_to_internal_id.externalId;
       }
       return acc;
     }, {});

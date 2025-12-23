@@ -1,7 +1,7 @@
 import { ILocation } from "types";
 import { DBType } from "./db";
 import {
-  conceptIdToInternalIdTable,
+  externalIdToInternalIdTable,
   locationDataTable,
   specialsTable,
   timeOverwritesTable,
@@ -13,8 +13,8 @@ import { DateTime } from "luxon";
 async function getInternalId(db: DBType, externalId: string) {
   let [idMapping] = await db
     .select()
-    .from(conceptIdToInternalIdTable)
-    .where(eq(conceptIdToInternalIdTable.externalId, externalId));
+    .from(externalIdToInternalIdTable)
+    .where(eq(externalIdToInternalIdTable.externalId, externalId));
 
   return idMapping?.internalId ?? crypto.randomUUID();
 }
@@ -104,12 +104,12 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
 
     // in case the conceptId->internalId mapping entry isn't there
     await tx
-      .insert(conceptIdToInternalIdTable)
+      .insert(externalIdToInternalIdTable)
       .values({
         internalId: internalId,
         externalId: location.conceptId.toString(),
       })
-      .onConflictDoNothing({ target: conceptIdToInternalIdTable.externalId });
+      .onConflictDoNothing({ target: externalIdToInternalIdTable.externalId });
   });
   return internalId;
 }

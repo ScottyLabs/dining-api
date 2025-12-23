@@ -1,0 +1,1 @@
+CREATE INDEX "internal_id" ON "concept_id_to_internal_id" USING btree ("internal_id");

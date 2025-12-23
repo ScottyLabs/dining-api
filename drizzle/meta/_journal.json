@@ -22,6 +22,20 @@
       "when": 1763850203721,
       "tag": "0002_fair_meteorite",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1766524240470,
+      "tag": "0003_dazzling_rachel_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1766524517020,
+      "tag": "0004_swift_frightful_four",
+      "breakpoints": true
     }
   ]
 }

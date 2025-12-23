@@ -17,13 +17,20 @@ export const emailTable = pgTable("emails", {
   name: text("name").notNull(),
   email: text("email").notNull(),
 });
-export const conceptIdToInternalIdTable = pgTable("concept_id_to_internal_id", {
-  // keeping both as text for the most flexibility
-  internalId: text("internal_id")
-    .notNull()
-    .references(() => locationDataTable.id, { onDelete: "cascade" }),
-  externalId: text("external_id").unique().primaryKey(),
-});
+export const externalIdType = pgEnum("externalIdType", ["concept_id"]);
+
+export const externalIdToInternalIdTable = pgTable(
+  "external_id_to_internal_id",
+  {
+    // keeping both as text for the most flexibility
+    internalId: text("internal_id")
+      .notNull()
+      .references(() => locationDataTable.id, { onDelete: "cascade" }),
+    externalId: text("external_id").unique().primaryKey(),
+    type: externalIdType("external_id_type").default("concept_id"),
+  },
+  (table) => [index("internal_id").on(table.internalId)]
+);
 export const locationDataTable = pgTable("location_data", {
   id: text("id").primaryKey(),
   name: text("name"),

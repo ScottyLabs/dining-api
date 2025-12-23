@@ -47,6 +47,7 @@ const locationOut = {
   times: [],
   todaysSoups: [],
   todaysSpecials: [],
+  conceptId: "1",
 };
 const dbTest = baseTest.extend<{
   ctx: {
@@ -554,6 +555,7 @@ describe("DB", () => {
         {
           ...locationOut,
           id: id2,
+          conceptId: "2",
         },
       ])
     );
