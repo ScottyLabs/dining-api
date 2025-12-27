@@ -49,7 +49,9 @@ app.onAfterHandle(({ responseValue }) => {
 
 app.get(
   "/",
-  () => {
+  ({ cookie }) => {
+    cookie["X_HI"]!.value = Math.random();
+    cookie["X_HI"]!.httpOnly = true;
     return "ScottyLabs Dining API";
   },
   { response: t.String({ examples: ["ScottyLabs Dining API"] }) }
