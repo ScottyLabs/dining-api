@@ -459,6 +459,16 @@ describe("time edge cases", () => {
       [Fri, 19, 0, 23, 59],
     ]);
   });
+  test("trivial + non-trivial time slots", async () => {
+    setUpTimingTest({
+      [Mon]: "8:00 AM - 8:00 AM",
+      [Tue]: "8:00 AM - 7:59 AM",
+    });
+    await queryParserAndAssertTimingsCorrect([
+      [Mon, 8, 0, 8, 0],
+      [Tue, 8, 0, 7, 59],
+    ]);
+  });
   test("partial all day", async () => {
     setUpTimingTest({
       [Wed]: "open 24 hours",

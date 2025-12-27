@@ -55,11 +55,11 @@ app.get(
   { response: t.String({ examples: ["ScottyLabs Dining API"] }) }
 );
 app.get(
-  "/api/v2/locations",
+  "/v2/locations",
   async () => await getAllLocationsFromDB(db, DateTime.now()),
   { response: LocationsSchema }
 );
-app.get("/api/emails", async () => await new QueryUtils(db).getEmails(), {
+app.get("/emails", async () => await new QueryUtils(db).getEmails(), {
   response: t.Array(
     t.Object({
       name: t.String({
@@ -73,7 +73,7 @@ app.get("/api/emails", async () => await new QueryUtils(db).getEmails(), {
 });
 
 app.post(
-  "/api/sendSlackMessage",
+  "/sendSlackMessage",
   async ({ body: { message } }) => {
     await notifySlack(message, env.SLACK_FRONTEND_WEBHOOK_URL);
   },
