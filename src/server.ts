@@ -11,7 +11,15 @@ import { DateTime } from "luxon";
 import { QueryUtils } from "db/dbQueryUtils";
 import { refreshDB } from "reload";
 import { LocationsSchema } from "schemas";
+import * as client from "openid-client";
+import { jwtDecode } from "jwt-decode";
 
+const OIDCConfig = await client.discovery(
+  env.OIDC_SERVER,
+  env.OIDC_CLIENT_ID,
+  env.OIDC_CLIENT_SECRET
+);
+const activeSessions: Record<string, string> = {};
 const [pool, db] = initDBConnection(env.DATABASE_URL);
 export const app = new Elysia({ adapter: node() }).use(
   openapi({
@@ -38,14 +46,14 @@ app.onError(({ error, path, code }) => {
   }
 });
 app.use(cors());
-app.onAfterHandle(({ responseValue }) => {
-  if (typeof responseValue === "object") {
-    // pretty print this
-    return new Response(JSON.stringify(responseValue, null, 4), {
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-    }); // we can actually set proper content-type headers this way
-  }
-});
+// app.onAfterHandle(({ responseValue }) => {
+//   if (typeof responseValue === "object") {
+//     // pretty print this
+//     return new Response(JSON.stringify(responseValue, null, 4), {
+//       headers: { "Content-Type": "application/json; charset=utf-8" },
+//     }); // we can actually set proper content-type headers this way
+//   }
+// });
 
 app.get(
   "/",
@@ -85,14 +93,86 @@ app.post(
     }),
   }
 );
-
-setInterval(() => {
+if (!env.DEV_DONT_FETCH) {
+  setInterval(() => {
+    refreshDB(db).catch(
+      (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+    );
+  }, env.RELOAD_WAIT_INTERVAL);
   refreshDB(db).catch(
     (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
   );
-}, env.RELOAD_WAIT_INTERVAL);
-refreshDB(db).catch(
-  (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+}
+app.get("/login", ({ set, request }) => {
+  const originalOrigin = `${request.headers.get(
+    "x-forwarded-proto"
+  )}://${request.headers.get("x-forwarded-host")}/api/code-exchange`;
+  const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
+    redirect_uri: originalOrigin,
+    scope: "openid email",
+  });
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: redirectURL.href,
+    },
+  });
+});
+app.get("/logout", ({ cookie, request }) => {
+  const originalOrigin = `${request.headers.get(
+    "x-forwarded-proto"
+  )}://${request.headers.get("x-forwarded-host")}`;
+  cookie["session_id"]!.value = "";
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: originalOrigin,
+    },
+  });
+});
+app.get(
+  "/whoami",
+  ({ cookie }) => {
+    const session = cookie["session_id"]!.value as string | undefined;
+    const jwt = activeSessions[session ?? ""];
+    if (jwt) {
+      return { sub: jwtDecode(jwt).sub ?? null };
+    } else {
+      return { sub: null };
+    }
+  },
+  { response: t.Object({ sub: t.Nullable(t.String()) }) }
+);
+app.get(
+  "/code-exchange",
+  async ({ query, request, cookie }) => {
+    const reqURL = new URL(request.url);
+    const originalOrigin = `${request.headers.get(
+      "x-forwarded-proto"
+    )}://${request.headers.get("x-forwarded-host")}`;
+    const fullPath = `${originalOrigin}/api${reqURL.pathname}${reqURL.search}`;
+    const tokens = await client
+      .authorizationCodeGrant(OIDCConfig, new URL(fullPath))
+      .catch((e) => {
+        console.error(e);
+        return undefined;
+      });
+
+    if (tokens?.id_token !== undefined) {
+      const randSessId = crypto.randomUUID();
+      activeSessions[randSessId] = tokens.id_token;
+      cookie["session_id"]!.value = randSessId;
+      cookie["session_id"]!.httpOnly = true;
+      cookie["session_id"]!.sameSite = "strict";
+    }
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: originalOrigin,
+      },
+    });
+  },
+  { query: t.Object({ code: t.String() }) }
 );
 
 app.listen(env.PORT, ({ hostname, port }) => {
