@@ -104,6 +104,7 @@ if (!env.DEV_DONT_FETCH) {
   );
 }
 app.get("/login", ({ set, request }) => {
+  console.log(request.headers);
   const originalOrigin = `${request.headers.get(
     "x-forwarded-proto"
   )}://${request.headers.get("x-forwarded-host")}/api/code-exchange`;
