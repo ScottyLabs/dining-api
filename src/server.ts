@@ -46,20 +46,21 @@ app.onError(({ error, path, code }) => {
   }
 });
 app.use(cors());
-// app.onAfterHandle(({ responseValue }) => {
-//   if (typeof responseValue === "object") {
-//     // pretty print this
-//     return new Response(JSON.stringify(responseValue, null, 4), {
-//       headers: { "Content-Type": "application/json; charset=utf-8" },
-//     }); // we can actually set proper content-type headers this way
-//   }
-// });
+app.onAfterHandle(({ responseValue }) => {
+  if (
+    typeof responseValue === "object" &&
+    !(responseValue instanceof Response)
+  ) {
+    // pretty print this JSON response
+    return new Response(JSON.stringify(responseValue, null, 4), {
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+    }); // we can actually set proper content-type headers this way
+  }
+});
 
 app.get(
   "/",
-  ({ cookie }) => {
-    cookie["X_HI"]!.value = Math.random();
-    cookie["X_HI"]!.httpOnly = true;
+  () => {
     return "ScottyLabs Dining API";
   },
   { response: t.String({ examples: ["ScottyLabs Dining API"] }) }
@@ -103,36 +104,48 @@ if (!env.DEV_DONT_FETCH) {
     (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
   );
 }
-app.get("/login", ({ set, request, cookie }) => {
-  const originalOrigin = request.headers.get("referer");
-  if (originalOrigin === null) return new Response(null, { status: 403 });
-  cookie["referer"]!.value = originalOrigin;
-  const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
-    redirect_uri: originalOrigin + "api/code-exchange",
-    scope: "openid email",
-  });
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: redirectURL.href,
-    },
-  });
-});
-app.get("/logout", ({ cookie, request }) => {
-  const originalOrigin = request.headers.get("referer")!;
-  cookie["session_id"]!.value = "";
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: originalOrigin,
-    },
-  });
-});
+app.get(
+  "/login",
+  ({ request, cookie, query }) => {
+    const originalOrigin = query.redirectURL;
+    const curOrigin = new URL(request.url);
+    if (originalOrigin === null) return new Response(null, { status: 403 });
+    cookie["original_origin"]!.value = originalOrigin;
+    const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
+      redirect_uri: `${curOrigin.origin}/code-exchange`,
+      scope: "openid email",
+    });
+    return new Response(null, {
+      status: 303,
+      headers: {
+        Location: redirectURL.href,
+      },
+    });
+  },
+  { query: t.Object({ redirectURL: t.Nullable(t.String()) }) }
+);
+app.get(
+  "/logout",
+  ({ cookie, request, query }) => {
+    const originalOrigin = query.redirectURL;
+    if (originalOrigin === null) return new Response(null, { status: 403 });
+
+    cookie["session_id"]!.remove();
+    return new Response(null, {
+      status: 303,
+      headers: {
+        Location: originalOrigin,
+      },
+    });
+  },
+  { query: t.Object({ redirectURL: t.Nullable(t.String()) }) }
+);
 app.get(
   "/whoami",
   ({ cookie }) => {
     const session = cookie["session_id"]!.value as string | undefined;
     const jwt = activeSessions[session ?? ""];
+
     if (jwt) {
       return { sub: jwtDecode(jwt).sub ?? null };
     } else {
@@ -144,12 +157,9 @@ app.get(
 app.get(
   "/code-exchange",
   async ({ query, request, cookie }) => {
-    const reqURL = new URL(request.url);
-    const originalOrigin = cookie["referer"]!.value as string;
-    const fullPath = `${originalOrigin}api${reqURL.pathname}${reqURL.search}`;
-    console.log(fullPath);
+    const originalOrigin = cookie["original_origin"]!.value as string;
     const tokens = await client
-      .authorizationCodeGrant(OIDCConfig, new URL(fullPath))
+      .authorizationCodeGrant(OIDCConfig, new URL(request.url))
       .catch((e) => {
         console.error(e);
         return undefined;
@@ -163,7 +173,7 @@ app.get(
       cookie["session_id"]!.sameSite = "strict";
     }
     return new Response(null, {
-      status: 302,
+      status: 303,
       headers: {
         Location: originalOrigin,
       },
