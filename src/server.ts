@@ -104,7 +104,8 @@ if (!env.DEV_DONT_FETCH) {
   );
 }
 app.get("/login", ({ set, request, cookie }) => {
-  const originalOrigin = request.headers.get("referer")!;
+  const originalOrigin = request.headers.get("referer");
+  if (originalOrigin === null) return new Response(null, { status: 403 });
   cookie["referer"]!.value = originalOrigin;
   const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
     redirect_uri: originalOrigin + "api/code-exchange",
