@@ -171,6 +171,9 @@ app.get(
       cookie["session_id"]!.value = randSessId;
       cookie["session_id"]!.httpOnly = true;
       cookie["session_id"]!.sameSite = env.ENV === "prod" ? "strict" : "none"; // allow staging environments to use cookie despite violating same-site policies
+      console.log("created session", randSessId);
+    } else {
+      console.log("did not create session successfully!");
     }
     return new Response(null, {
       status: 303,
