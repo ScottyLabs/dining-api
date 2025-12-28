@@ -103,13 +103,11 @@ if (!env.DEV_DONT_FETCH) {
     (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
   );
 }
-app.get("/login", ({ set, request }) => {
-  console.log(request.headers);
-  const originalOrigin = `${request.headers.get(
-    "x-forwarded-proto"
-  )}://${request.headers.get("x-forwarded-host")}/api/code-exchange`;
+app.get("/login", ({ set, request, cookie }) => {
+  const originalOrigin = request.headers.get("referer")!;
+  cookie["referer"]!.value = originalOrigin;
   const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
-    redirect_uri: originalOrigin,
+    redirect_uri: originalOrigin + "api/code-exchange",
     scope: "openid email",
   });
   return new Response(null, {
@@ -120,9 +118,7 @@ app.get("/login", ({ set, request }) => {
   });
 });
 app.get("/logout", ({ cookie, request }) => {
-  const originalOrigin = `${request.headers.get(
-    "x-forwarded-proto"
-  )}://${request.headers.get("x-forwarded-host")}`;
+  const originalOrigin = request.headers.get("referer")!;
   cookie["session_id"]!.value = "";
   return new Response(null, {
     status: 302,
@@ -148,10 +144,9 @@ app.get(
   "/code-exchange",
   async ({ query, request, cookie }) => {
     const reqURL = new URL(request.url);
-    const originalOrigin = `${request.headers.get(
-      "x-forwarded-proto"
-    )}://${request.headers.get("x-forwarded-host")}`;
-    const fullPath = `${originalOrigin}/api${reqURL.pathname}${reqURL.search}`;
+    const originalOrigin = cookie["referer"]!.value as string;
+    const fullPath = `${originalOrigin}api${reqURL.pathname}${reqURL.search}`;
+    console.log(fullPath);
     const tokens = await client
       .authorizationCodeGrant(OIDCConfig, new URL(fullPath))
       .catch((e) => {
