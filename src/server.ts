@@ -175,10 +175,6 @@ app.get(
   { query: t.Object({ code: t.String() }) }
 );
 
-app.listen(env.PORT, ({ hostname, port }) => {
-  notifySlack(`Dining API is running at ${hostname}:${port}`);
-});
-
 // DEPRECATED
 
 app.get("/locations", async () => ({ locations: deprecatedNotice }), {
@@ -235,3 +231,6 @@ app.get(
     },
   }
 );
+app.listen(env.PORT, ({ hostname, port }) => {
+  notifySlack(`Dining API is running at ${hostname}:${port}`);
+});
