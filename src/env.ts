@@ -19,6 +19,7 @@ const envSchema = z.object({
     .string()
     .transform((x) => x === "true")
     .default(false),
+  ENV: z.enum(["dev", "staging", "prod"]),
 });
 console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);

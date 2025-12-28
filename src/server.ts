@@ -170,7 +170,7 @@ app.get(
       activeSessions[randSessId] = tokens.id_token;
       cookie["session_id"]!.value = randSessId;
       cookie["session_id"]!.httpOnly = true;
-      cookie["session_id"]!.sameSite = "strict";
+      cookie["session_id"]!.sameSite = env.ENV === "prod" ? "strict" : "none"; // allow staging environments to use cookie despite violating same-site policies
     }
     return new Response(null, {
       status: 303,
