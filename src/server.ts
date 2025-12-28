@@ -170,7 +170,8 @@ app.get(
       activeSessions[randSessId] = tokens.id_token;
       cookie["session_id"]!.value = randSessId;
       cookie["session_id"]!.httpOnly = true;
-      cookie["session_id"]!.sameSite = env.ENV === "prod" ? "strict" : false; // allow staging environments to use cookie despite violating same-site policies
+      cookie["session_id"]!.secure = true;
+      cookie["session_id"]!.sameSite = env.ENV === "prod" ? "strict" : "none";
       console.log("created session", randSessId);
     } else {
       console.log("did not create session successfully!");
