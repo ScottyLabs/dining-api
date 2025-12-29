@@ -26,6 +26,9 @@ importers:
       cheerio:
         specifier: 1.0.0-rc.12
         version: 1.0.0-rc.12
+      cookie-signature:
+        specifier: ^1.2.2
+        version: 1.2.2
       drizzle-kit:
         specifier: ^0.31.4
         version: 0.31.4
@@ -75,6 +78,9 @@ importers:
       '@testcontainers/postgresql':
         specifier: ^11.8.0
         version: 11.8.0
+      '@types/cookie-signature':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@types/luxon':
         specifier: ^3.7.1
         version: 3.7.1
@@ -1193,6 +1199,9 @@ packages:
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
+
+  '@types/cookie-signature@1.1.2':
+    resolution: {integrity: sha512-2OhrZV2LVnUAXklUFwuYUTokalh/dUb8rqt70OW6ByMSxYpauPZ+kfNLknX3aJyjY5iu8i3cUyoLZP9Fn37tTg==}
 
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
@@ -3878,6 +3887,10 @@ snapshots:
     dependencies:
       '@types/node': 24.5.2
 
+  '@types/cookie-signature@1.1.2':
+    dependencies:
+      '@types/node': 24.10.4
+
   '@types/deep-eql@4.0.2': {}
 
   '@types/docker-modem@3.0.6':
@@ -3919,7 +3932,6 @@ snapshots:
   '@types/node@24.10.4':
     dependencies:
       undici-types: 7.16.0
-    optional: true
 
   '@types/node@24.5.2':
     dependencies:
@@ -5408,8 +5420,7 @@ snapshots:
 
   undici-types@7.12.0: {}
 
-  undici-types@7.16.0:
-    optional: true
+  undici-types@7.16.0: {}
 
   undici@7.16.0: {}
 

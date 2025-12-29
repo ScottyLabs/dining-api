@@ -20,6 +20,7 @@ const envSchema = z.object({
     .transform((x) => x === "true")
     .default(false),
   ENV: z.enum(["dev", "staging", "prod"]),
+  SESSION_COOKIE_SIGNING_SECRET: z.string(),
 });
 console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);

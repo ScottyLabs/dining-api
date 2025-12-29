@@ -10,6 +10,7 @@ import {
   primaryKey,
   index,
   pgEnum,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const emailTable = pgTable("emails", {
@@ -104,4 +105,41 @@ export const specialsTable = pgTable("specials", {
   description: text("description").notNull(),
   date: date("date").notNull(),
   type: specialType("type").notNull(),
+});
+
+export const UserTable = pgTable(
+  "users",
+  {
+    id: integer("id").notNull().generatedByDefaultAsIdentity().primaryKey(),
+    googleId: text("google_id").notNull(),
+    email: text("email").notNull(),
+    firstName: text("first_name"),
+    lastName: text("last_name"),
+    pictureUrl: text("picture_url"),
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+      mode: "date",
+    }).defaultNow(),
+    updatedAt: timestamp("updated_at", {
+      withTimezone: true,
+      mode: "date",
+    }).defaultNow(),
+  },
+  (table) => [index("google_id").on(table.googleId)]
+);
+export const UserSessionTable = pgTable("sessions", {
+  sessionId: text("id").notNull().primaryKey(),
+  userId: integer("user_id")
+    .references(() => UserTable.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    mode: "date",
+  }).defaultNow(),
 });

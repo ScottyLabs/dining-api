@@ -6,21 +6,13 @@ import { node } from "@elysiajs/node";
 import { deprecatedNotice } from "deprecationNotice";
 import { getAllLocationsFromDB } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
-import { initDBConnection } from "db/db";
+import { db, initDBConnection } from "db/db";
 import { DateTime } from "luxon";
 import { QueryUtils } from "db/dbQueryUtils";
 import { refreshDB } from "reload";
 import { LocationsSchema } from "schemas";
-import * as client from "openid-client";
-import { jwtDecode } from "jwt-decode";
+import { authPlugin, fetchUserDetails, protectedRoute } from "auth";
 
-const OIDCConfig = await client.discovery(
-  env.OIDC_SERVER,
-  env.OIDC_CLIENT_ID,
-  env.OIDC_CLIENT_SECRET
-);
-const activeSessions: Record<string, string> = {};
-const [pool, db] = initDBConnection(env.DATABASE_URL);
 export const app = new Elysia({ adapter: node() }).use(
   openapi({
     // references: fromTypes("src/server.ts"), // welp I can't get this to work
@@ -39,13 +31,14 @@ app.onError(({ error, path, code }) => {
     console.log(`Someone tried visiting ${path}, which does not exist :P`);
   } else {
     notifySlack(
-      `<!channel> handling request on ${path} failed with error ${error}\n${
+      `<!channel> handling request on ${path} failed with error ${error} ${code}\n${
         error instanceof Error ? error.stack : "No stack trace"
       }`
     );
   }
 });
 app.use(cors());
+app.use(authPlugin);
 app.onAfterHandle(({ responseValue }) => {
   if (
     typeof responseValue === "object" &&
@@ -105,85 +98,26 @@ if (!env.DEV_DONT_FETCH) {
   );
 }
 app.get(
-  "/login",
-  ({ request, cookie, query }) => {
-    const originalOrigin = query.redirectURL;
-    const curOrigin = new URL(request.url);
-    if (originalOrigin === null) return new Response(null, { status: 403 });
-    cookie["original_origin"]!.value = originalOrigin;
-    const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
-      redirect_uri: `${curOrigin.origin}/code-exchange`,
-      scope: "openid email",
-    });
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: redirectURL.href,
-      },
-    });
-  },
-  { query: t.Object({ redirectURL: t.Nullable(t.String()) }) }
-);
-app.get(
-  "/logout",
-  ({ cookie, request, query }) => {
-    const originalOrigin = query.redirectURL;
-    if (originalOrigin === null) return new Response(null, { status: 403 });
-
-    cookie["session_id"]!.remove();
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: originalOrigin,
-      },
-    });
-  },
-  { query: t.Object({ redirectURL: t.Nullable(t.String()) }) }
-);
-app.get(
   "/whoami",
-  ({ cookie }) => {
-    const session = cookie["session_id"]!.value as string | undefined;
-    const jwt = activeSessions[session ?? ""];
-
-    if (jwt) {
-      return { sub: jwtDecode(jwt).sub ?? null };
-    } else {
-      return { sub: null };
-    }
+  async ({ cookie }) => {
+    return {
+      user: await fetchUserDetails(cookie["session_id"]!.value as string),
+    };
   },
-  { response: t.Object({ sub: t.Nullable(t.String()) }) }
-);
-app.get(
-  "/code-exchange",
-  async ({ query, request, cookie }) => {
-    const originalOrigin = cookie["original_origin"]!.value as string;
-    const tokens = await client
-      .authorizationCodeGrant(OIDCConfig, new URL(request.url))
-      .catch((e) => {
-        console.error(e);
-        return undefined;
-      });
-
-    if (tokens?.id_token !== undefined) {
-      const randSessId = crypto.randomUUID();
-      activeSessions[randSessId] = tokens.id_token;
-      cookie["session_id"]!.value = randSessId;
-      cookie["session_id"]!.httpOnly = true;
-      cookie["session_id"]!.secure = true;
-      cookie["session_id"]!.sameSite = env.ENV === "prod" ? "strict" : "none";
-      console.log("created session", randSessId);
-    } else {
-      console.log("did not create session successfully!");
-    }
-    return new Response(null, {
-      status: 303,
-      headers: {
-        Location: originalOrigin,
-      },
-    });
-  },
-  { query: t.Object({ code: t.String() }) }
+  {
+    response: t.Object({
+      user: t.Nullable(
+        t.Object({
+          googleId: t.String(),
+          id: t.Number(),
+          email: t.String(),
+          firstName: t.Nullable(t.String()),
+          lastName: t.Nullable(t.String()),
+          pictureUrl: t.Nullable(t.String()),
+        })
+      ),
+    }),
+  }
 );
 
 // DEPRECATED
