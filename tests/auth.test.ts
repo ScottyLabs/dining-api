@@ -75,4 +75,27 @@ describe("auth tests", () => {
       email: "e@andrew.cmu.edu",
     });
   });
+  dbTest.concurrent("updating user", async ({ ctx: { db } }) => {
+    const sessionId1 = await createUserSession(db, {
+      googleId: "1",
+      email: "e@andrew.cmu.edu",
+      firstName: undefined,
+      lastName: undefined,
+      pfpURL: undefined,
+    });
+    const sessionId2 = await createUserSession(db, {
+      googleId: "1",
+      email: "e@andrew.cmu.edu",
+      firstName: "Defined",
+      lastName: undefined,
+      pfpURL: undefined,
+    });
+
+    const user = await fetchUserSession(db, sessionId1!);
+    expect(user).toMatchObject({
+      googleId: "1",
+      email: "e@andrew.cmu.edu",
+      firstName: "Defined",
+    });
+  });
 });

@@ -51,7 +51,7 @@ async function createOrUpdateUser(
     await db
       .insert(UserTable)
       .values({
-        id: userId,
+        id: userId, // user id will get generated automatically if we pass in undefined
         googleId: user.googleId,
         firstName: user.firstName,
         lastName: user.lastName,

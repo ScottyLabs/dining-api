@@ -6,7 +6,7 @@ import { node } from "@elysiajs/node";
 import { deprecatedNotice } from "deprecationNotice";
 import { getAllLocationsFromDB } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
-import { db, initDBConnection } from "db/db";
+import { db } from "db/db";
 import { DateTime } from "luxon";
 import { QueryUtils } from "db/dbQueryUtils";
 import { refreshDB } from "reload";
