@@ -23,6 +23,7 @@ authPlugin.get(
     const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
       redirect_uri: `${curOrigin.origin}/code-exchange`,
       scope: "openid email profile",
+      prompt: "select_account", // force account picker
     });
     return new Response(null, {
       status: 303,
