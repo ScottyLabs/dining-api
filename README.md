@@ -1,11 +1,8 @@
 # Dining API
 
-> [!IMPORTANT]  
-> Make sure `bun` is on the latest version! (Earlier versions are rather buggy) Run `bun upgrade` to update.
+This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://dining.apis.scottylabs.org/).
 
-This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://apis.scottylabs.org/dining/).
-
-To build and deploy the service, you'll need [Bun](https://bun.sh),
+To build and deploy the service, you'll need [pnpm](https://pnpm.io/),
 which you should install beforehand.
 
 Then, clone this repository to your computer by running
@@ -27,19 +24,23 @@ If you already have the node_modules folder or package-lock.json from previous v
 Now install the API's dependencies by 'cd'-ing into the root of the repository and running:
 
 ```
-bun install
+pnpm install
 ```
 
-Then, you can run the server with `bun dev` and it should work! You can also use
-`bun run dev` since `bun dev` is its shorthand version.
+Start your local database with `pnpm db:start`, `pnpm db:push` (if this is your first time) and then start the server with `pnpm dev` and it should work, assuming you have the correct env variables. (To see the contents of the database, I recommend using DBeaver. You can also run `pnpm db:studio` to start up drizzle studio)
 
-Note: To add new dependencies, use `bun add dependency-name`. To remove dependencies, use `bun remove dependency-name`. Run `bun outdated` to see what dependencies are outdated and `bun update` to update all outdated dependencies to the latest version.
+## Database schema changes (important!)
 
-## Testing the Dockerfile
+When you make changes to the database schema, be sure to run `pnpm db:push` to keep your local db in sync.
 
-Build: `docker build -f Dockerfile . -t dining`
-Run the server: `docker run -p 127.0.0.1:5010:5010 dining`
-Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash -p 127.0.0.1:5010:5010 dining`
+Before merging your PR, be sure to run `pnpm db:generate` to generate a migration file, which will then be automatically applied to the staging and production databases when deployed. (You should do this before running tests as well!)
+
+To test if the migration files work, you can run `pnpm run-prod`, which will spin up a production version of the server and a postgres database mounted on a new volume. The server is created using the same Dockerfile used in our Railway deployments, so if it works locally, it (probably) works in production as well.
+
+## Extra docker commands
+
+Run bash inside it (for debugging): `docker run --rm -it --entrypoint bash  dining-api-server`
+Close dockerfile + delete volumes: `docker-compose down --volumes`
 
 ## Under the hood
 
@@ -47,4 +48,8 @@ We get the entire list of locations from `DINING_URL`, fetch location specifics 
 
 ## Before submitting a PR
 
-- Make sure all tests pass with `bun run test` or `bun run test --watch` for watch mode. (NOTE! `bun test` does something different and does NOT work!)
+- Make sure all tests pass with `pnpm test` or `pnpm test --watch` for watch mode.
+
+## Random notes
+
+the "cheerio" package is pinned at version "1.0.0-rc.12" because newer versions seem to be incompatible with jest.

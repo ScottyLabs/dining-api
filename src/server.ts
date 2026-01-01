@@ -1,104 +1,87 @@
 import { Elysia, t } from "elysia";
 import { cors } from "@elysiajs/cors";
-import DiningParser from "./parser/diningParser";
-import { ILocation } from "types";
 import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
-import { getDiffsBetweenLocationData } from "utils/diff";
-import { getEmails } from "./db";
-import LocationMerger from "utils/locationMerger";
+import { deprecatedNotice } from "deprecationNotice";
+import { getAllLocationsFromDB } from "db/getLocations";
+import { openapi } from "@elysiajs/openapi";
+import { db } from "db/db";
+import { DateTime, Settings } from "luxon";
+import { QueryUtils } from "db/dbQueryUtils";
+import { refreshDB } from "reload";
+import { LocationsSchema } from "schemas";
+import { authPlugin, fetchUserDetails } from "auth";
+import { applyOverrides } from "db/locationOverwrite";
+import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
+// applyOverrides(db, locationCoordinateOverwrites);
+Settings.defaultZone = "America/New_York";
 
-let cachedLocations: ILocation[] = [];
-
-async function reload(): Promise<void> {
-  const now = new Date();
-  console.log(`Reloading Dining API: ${now}`);
-  const parser = new DiningParser();
-  const locationMerger = new LocationMerger();
-
-  for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
-    // Wait a bit before starting the next round of scrapes.
-    if (i > 0)
-      await new Promise((resolve) =>
-        setTimeout(resolve, env.INTER_SCRAPE_WAIT_INTERVAL)
-      );
-
-    const locations = await parser.process();
-    locations.forEach((location) => locationMerger.addLocation(location));
-  }
-  const finalLocations = locationMerger.getMostFrequentLocations();
-  if (finalLocations.length === 0) {
-    notifySlack("<!channel> No data scraped! Skipping");
-  } else {
-    const diffs = getDiffsBetweenLocationData(cachedLocations, finalLocations);
-    cachedLocations = finalLocations;
-
-    if (diffs.length === 0) {
-      notifySlack("Dining API reloaded (data unchanged)");
-    } else {
-      await notifySlack("Dining API reloaded with the following changes:");
-      for (const diff of diffs) {
-        await notifySlack(diff);
-      }
-    }
-  }
-}
-
-export const app = new Elysia({ adapter: node() }); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
+export const app = new Elysia({ adapter: node() }).use(
+  openapi({
+    // references: fromTypes("src/server.ts"), // welp I can't get this to work
+    documentation: {
+      tags: [],
+      info: {
+        title: "CMU Dining API",
+        version: "2.0.0",
+      },
+    },
+  })
+); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
   if (code === "NOT_FOUND") {
     console.log(`Someone tried visiting ${path}, which does not exist :P`);
   } else {
     notifySlack(
-      `<!channel> handling request on ${path} failed with error ${error}\n${
+      `<!channel> handling request on ${path} failed with error ${error} ${code}\n${
         error instanceof Error ? error.stack : "No stack trace"
       }`
     );
   }
 });
 app.use(cors());
-
-app.get("/", () => {
-  return "ScottyLabs Dining API";
+app.use(authPlugin);
+app.onAfterHandle(({ responseValue }) => {
+  if (
+    typeof responseValue === "object" &&
+    !(responseValue instanceof Response)
+  ) {
+    // pretty print this JSON response
+    return new Response(JSON.stringify(responseValue, null, 4), {
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+    }); // we can actually set proper content-type headers this way
+  }
 });
 
-app.get("/locations", () => ({ locations: cachedLocations }));
-
-app.get("/location/:name", ({ params: { name } }) => {
-  const filteredLocation = cachedLocations.filter((location) => {
-    return location.name?.toLowerCase().includes(name.toLowerCase());
-  });
-  return {
-    locations: filteredLocation,
-  };
+app.get(
+  "/",
+  () => {
+    return "ScottyLabs Dining API";
+  },
+  { response: t.String({ examples: ["ScottyLabs Dining API"] }) }
+);
+app.get(
+  "/v2/locations",
+  async () => await getAllLocationsFromDB(db, DateTime.now()),
+  { response: LocationsSchema }
+);
+app.get("/emails", async () => await new QueryUtils(db).getEmails(), {
+  response: t.Array(
+    t.Object({
+      name: t.String({
+        example: ["Alice"],
+      }),
+      email: t.String({
+        example: "alice72@andrew.cmu.edu",
+      }),
+    })
+  ),
 });
 
-app.get("/locations/time/:day/:hour/:min", ({ params: { day, hour, min } }) => {
-  const result = cachedLocations.filter((el) => {
-    let returning = false;
-    el.times.forEach((element) => {
-      const startMins =
-        element.start.day * 1440 +
-        element.start.hour * 60 +
-        element.start.minute;
-      const endMins =
-        element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
-      const currentMins =
-        parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
-      if (currentMins >= startMins && currentMins < endMins) {
-        returning = true;
-      }
-    });
-    return returning;
-  });
-  return { locations: result };
-});
-
-app.get("/api/emails", getEmails);
 app.post(
-  "/api/sendSlackMessage",
+  "/sendSlackMessage",
   async ({ body: { message } }) => {
     await notifySlack(message, env.SLACK_FRONTEND_WEBHOOK_URL);
   },
@@ -108,22 +91,95 @@ app.post(
     }),
   }
 );
-
-setInterval(() => {
-  reload().catch(
+if (!env.DEV_DONT_FETCH) {
+  setInterval(() => {
+    refreshDB(db).catch(
+      (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+    );
+  }, env.RELOAD_WAIT_INTERVAL);
+  refreshDB(db).catch(
     (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
   );
-}, env.RELOAD_WAIT_INTERVAL);
+}
+app.get(
+  "/whoami",
+  async ({ cookie }) => {
+    return {
+      user: await fetchUserDetails(cookie["session_id"]!.value as string),
+    };
+  },
+  {
+    response: t.Object({
+      user: t.Nullable(
+        t.Object({
+          googleId: t.String(),
+          id: t.Number(),
+          email: t.String(),
+          firstName: t.Nullable(t.String()),
+          lastName: t.Nullable(t.String()),
+          pictureUrl: t.Nullable(t.String()),
+        })
+      ),
+    }),
+  }
+);
 
-// Initial load and start the server
-reload()
-  .then(() => {
-    app.listen(env.PORT, ({ hostname, port }) => {
-      notifySlack(`Dining API is running at ${hostname}:${port}`);
+// DEPRECATED
+
+app.get("/locations", async () => ({ locations: deprecatedNotice }), {
+  detail: {
+    tags: ["Deprecated"],
+    hide: true,
+  },
+});
+
+app.get(
+  "/location/:name",
+  async ({ params: { name } }) => {
+    const filteredLocation = deprecatedNotice.filter((location) => {
+      return location.name?.toLowerCase().includes(name.toLowerCase());
     });
-  })
-  .catch(async (er) => {
-    await notifySlack("<!channel> Dining API startup failed!!");
-    await notifySlack(`*Error caught*\n${er.stack}`);
-    process.exit(1);
-  });
+    return {
+      locations: filteredLocation,
+    };
+  },
+  {
+    detail: {
+      tags: ["Deprecated"],
+      hide: true,
+    },
+  }
+);
+
+app.get(
+  "/locations/time/:day/:hour/:min",
+  async ({ params: { day, hour, min } }) => {
+    const result = deprecatedNotice.filter((el) => {
+      let returning = false;
+      el.times.forEach((element) => {
+        const startMins =
+          element.start.day * 1440 +
+          element.start.hour * 60 +
+          element.start.minute;
+        const endMins =
+          element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
+        const currentMins =
+          parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
+        if (currentMins >= startMins && currentMins < endMins) {
+          returning = true;
+        }
+      });
+      return returning;
+    });
+    return { locations: result };
+  },
+  {
+    detail: {
+      tags: ["Deprecated"],
+      hide: true,
+    },
+  }
+);
+app.listen(env.PORT, ({ hostname, port }) => {
+  notifySlack(`Dining API is running at ${hostname}:${port}`);
+});

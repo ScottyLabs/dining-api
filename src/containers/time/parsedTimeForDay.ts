@@ -1,11 +1,10 @@
-import { DayOfTheWeek } from "types";
 import ParsedTimeBase from "./parsedTimeBase";
 
 /**
- * For parsing a string representing a day to a day of the week enum
+ * For parsing a string representing a day to a day of the week (0-6)
  */
 export default class ParsedTimeForDay extends ParsedTimeBase {
-  declare value: DayOfTheWeek;
+  declare value: number;
 
   parse() {
     this.value = convertDayStringToEnum(this.input);
@@ -13,31 +12,31 @@ export default class ParsedTimeForDay extends ParsedTimeBase {
   }
 }
 
-export function convertDayStringToEnum(dayStr: string): DayOfTheWeek {
+export function convertDayStringToEnum(dayStr: string): number {
   const normalizedDay = dayStr.trim().toLowerCase();
   switch (normalizedDay) {
     case "sunday":
     case "sun":
-      return DayOfTheWeek.SUNDAY;
+      return 0;
     case "monday":
     case "mon":
-      return DayOfTheWeek.MONDAY;
+      return 1;
     case "tuesday":
     case "tue":
-      return DayOfTheWeek.TUESDAY;
+      return 2;
     case "wednesday":
     case "wed":
-      return DayOfTheWeek.WEDNESDAY;
+      return 3;
     case "thursday":
     case "thu":
     case "thurs":
-      return DayOfTheWeek.THURSDAY;
+      return 4;
     case "friday":
     case "fri":
-      return DayOfTheWeek.FRIDAY;
+      return 5;
     case "saturday":
     case "sat":
-      return DayOfTheWeek.SATURDAY;
+      return 6;
     default:
       throw new Error(`Invalid Day: ${dayStr}`);
   }

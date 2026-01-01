@@ -3,6 +3,7 @@ import { env } from "env";
 async function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
 /**
  *
  * @param message
@@ -13,7 +14,10 @@ export async function notifySlack(
   message: string,
   slackUrl: string = env.SLACK_BACKEND_WEBHOOK_URL
 ) {
-  if (env.IN_TEST_MODE) return;
+  if (env.IN_TEST_MODE) {
+    console.log("would've notified slack with message", message);
+    return;
+  }
   console.log("Sending message to slack:", message);
   try {
     await axios.post(

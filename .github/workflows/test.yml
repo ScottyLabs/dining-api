@@ -6,11 +6,23 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [24]
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2 # Setup bun
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          bun-version: latest
-      - run: bun install
-      - name: Run bun test
-        run: bun run test
+          version: 10
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: run tests
+        run: pnpm test:coverage
+      - name: "Report Coverage"
+        uses: davelosert/vitest-coverage-report-action@v2

@@ -1,31 +1,39 @@
+export interface IDate {
+  year: number;
+  /** 1-12 */
+  month: number;
+  /** 1-31 */
+  day: number;
+}
 export interface ILocation {
   conceptId: number;
   name: string;
-  shortDescription?: string;
+  shortDescription: string | undefined;
   description: string;
   url: string;
-  menu?: string;
+  menu: string | undefined;
   location: string;
-  coordinates?: ICoordinate;
+  coordinates: ICoordinate | undefined;
   acceptsOnlineOrders: boolean;
-  times: ITimeRange[];
-  todaysSpecials?: ISpecial[];
-  todaysSoups?: ISpecial[];
+  /** Assuming these times fall after today */
+  times: IFullTimeRange[];
+  /** used when figuring out which time entries to clear in the database. (we can't just look at `times` directly to figure that out, because it might as well be empty) (also, technically if this data is in the future, times won't be cleared properly. we hope that isn't the case though) */
+  today: IDate;
+  todaysSpecials: ISpecial[] | undefined;
+  todaysSoups: ISpecial[] | undefined;
 }
 export interface ISpecial {
   title: string;
   description: string;
 }
 
-export interface ITimeSlot {
-  day: DayOfTheWeek;
-  hour: number;
-  minute: number;
-}
-
-export interface ITimeRange {
-  start: ITimeSlot;
-  end: ITimeSlot;
+export interface IFullTimeRange {
+  year: number;
+  month: number;
+  day: number;
+  startMinutesFromMidnight: number;
+  /** Can be less than start if the time slot wraps around to the next day (eg. 2 PM - 2 AM) */
+  endMinutesFromMidnight: number;
 }
 export interface ICoordinate {
   lat: number;
@@ -34,16 +42,6 @@ export interface ICoordinate {
 
 export interface ILocationCoordinateOverwrites {
   [conceptId: string]: ICoordinate;
-}
-
-export enum DayOfTheWeek {
-  SUNDAY = 0,
-  MONDAY = 1,
-  TUESDAY = 2,
-  WEDNESDAY = 3,
-  THURSDAY = 4,
-  FRIDAY = 5,
-  SATURDAY = 6,
 }
 
 export enum MonthOfTheYear {
@@ -62,8 +60,6 @@ export enum MonthOfTheYear {
 }
 
 export enum TimeInfoType {
-  DAY = "DAY",
-  DATE = "DATE",
   TIME = "TIME",
   CLOSED = "CLOSED",
   TWENTYFOURHOURS = "TWENTYFOURHOURS",

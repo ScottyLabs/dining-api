@@ -12,6 +12,15 @@ const envSchema = z.object({
   IN_TEST_MODE: z.stringbool().default(false),
   SLACK_MESSAGE_PREFIX: z.string().default("local-dev"),
   DATABASE_URL: z.string(),
+  OIDC_SERVER: z.string().transform((x) => new URL(x)),
+  OIDC_CLIENT_ID: z.string(),
+  OIDC_CLIENT_SECRET: z.string(),
+  DEV_DONT_FETCH: z
+    .string()
+    .transform((x) => x === "true")
+    .default(false),
+  ENV: z.enum(["dev", "staging", "prod"]),
+  SESSION_COOKIE_SIGNING_SECRET: z.string(),
 });
 console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);
