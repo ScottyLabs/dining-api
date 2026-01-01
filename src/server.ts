@@ -7,7 +7,7 @@ import { deprecatedNotice } from "deprecationNotice";
 import { getAllLocationsFromDB } from "db/getLocations";
 import { openapi } from "@elysiajs/openapi";
 import { db } from "db/db";
-import { DateTime } from "luxon";
+import { DateTime, Settings } from "luxon";
 import { QueryUtils } from "db/dbQueryUtils";
 import { refreshDB } from "reload";
 import { LocationsSchema } from "schemas";
@@ -15,6 +15,8 @@ import { authPlugin, fetchUserDetails } from "auth";
 import { applyOverrides } from "db/locationOverwrite";
 import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
 // applyOverrides(db, locationCoordinateOverwrites);
+Settings.defaultZone = "America/New_York";
+
 export const app = new Elysia({ adapter: node() }).use(
   openapi({
     // references: fromTypes("src/server.ts"), // welp I can't get this to work
