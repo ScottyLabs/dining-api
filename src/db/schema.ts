@@ -107,7 +107,7 @@ export const specialsTable = pgTable("specials", {
   type: specialType("type").notNull(),
 });
 
-export const UserTable = pgTable(
+export const userTable = pgTable(
   "users",
   {
     id: integer("id").notNull().generatedByDefaultAsIdentity().primaryKey(),
@@ -127,10 +127,10 @@ export const UserTable = pgTable(
   },
   (table) => [index("google_id").on(table.googleId)]
 );
-export const UserSessionTable = pgTable("sessions", {
+export const userSessionTable = pgTable("sessions", {
   sessionId: text("id").notNull().primaryKey(),
   userId: integer("user_id")
-    .references(() => UserTable.id, {
+    .references(() => userTable.id, {
       onDelete: "cascade",
     })
     .notNull(),

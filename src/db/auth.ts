@@ -1,8 +1,8 @@
 import { notifySlack } from "utils/slack";
 import { DBType } from "./db";
-import { UserSessionTable, UserTable } from "./schema";
-import { Column, eq, sql } from "drizzle-orm";
-import { PgTable, PgUpdateSetSource } from "drizzle-orm/pg-core";
+import { userSessionTable, userTable } from "./schema";
+import { eq } from "drizzle-orm";
+import { conflictUpdateSet } from "./util";
 
 interface User {
   firstName: string | undefined;
@@ -20,8 +20,8 @@ export async function createUserSession(db: DBType, user: User) {
   let dbUserEntry = (
     await db
       .select()
-      .from(UserTable)
-      .where(eq(UserTable.googleId, user.googleId))
+      .from(userTable)
+      .where(eq(userTable.googleId, user.googleId))
   )[0];
   dbUserEntry = await createOrUpdateUser(
     db,
@@ -32,7 +32,7 @@ export async function createUserSession(db: DBType, user: User) {
 
   const newSession = (
     await db
-      .insert(UserSessionTable)
+      .insert(userSessionTable)
       .values({
         userId: dbUserEntry.id,
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
@@ -49,7 +49,7 @@ async function createOrUpdateUser(
 ) {
   return (
     await db
-      .insert(UserTable)
+      .insert(userTable)
       .values({
         id: userId, // user id will get generated automatically if we pass in undefined
         googleId: user.googleId,
@@ -59,8 +59,8 @@ async function createOrUpdateUser(
         pictureUrl: user.pfpURL,
       })
       .onConflictDoUpdate({
-        target: UserTable.id,
-        set: conflictUpdateSet(UserTable, [
+        target: userTable.id,
+        set: conflictUpdateSet(userTable, [
           "updatedAt",
           "email",
           "firstName",
@@ -75,22 +75,11 @@ export async function fetchUserSession(db: DBType, sessionId: string) {
   const session = (
     await db
       .select()
-      .from(UserSessionTable)
-      .where(eq(UserSessionTable.sessionId, sessionId))
-      .innerJoin(UserTable, eq(UserSessionTable.userId, UserTable.id))
+      .from(userSessionTable)
+      .where(eq(userSessionTable.sessionId, sessionId))
+      .innerJoin(userTable, eq(userSessionTable.userId, userTable.id))
   )[0];
   if (session === undefined || +session.sessions.expiresAt < Date.now())
     return null;
   return session.users;
-}
-function conflictUpdateSet<TTable extends PgTable>(
-  table: TTable,
-  columns: (keyof TTable["_"]["columns"] & keyof TTable)[]
-): PgUpdateSetSource<TTable> {
-  return Object.assign(
-    {},
-    ...columns.map((k) => ({
-      [k]: sql.raw(`excluded.${(table[k] as Column).name}`),
-    }))
-  ) as PgUpdateSetSource<TTable>;
 }

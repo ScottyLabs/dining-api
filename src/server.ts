@@ -11,8 +11,10 @@ import { DateTime } from "luxon";
 import { QueryUtils } from "db/dbQueryUtils";
 import { refreshDB } from "reload";
 import { LocationsSchema } from "schemas";
-import { authPlugin, fetchUserDetails, protectedRoute } from "auth";
-
+import { authPlugin, fetchUserDetails } from "auth";
+import { applyOverrides } from "db/locationOverwrite";
+import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
+// applyOverrides(db, locationCoordinateOverwrites);
 export const app = new Elysia({ adapter: node() }).use(
   openapi({
     // references: fromTypes("src/server.ts"), // welp I can't get this to work
