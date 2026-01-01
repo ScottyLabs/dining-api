@@ -54,8 +54,8 @@ const locationCoordinateOverwrites: ILocationCoordinateOverwrites = {
     lng: -79.9400539411368,
   },
   "95": {
-    lat: 40.44110394047497,
-    lng: -79.94341681666283,
+    lat: 40.44239859745149,
+    lng: -79.93978739035869,
   },
   "103": {
     lat: 40.44294406631636,
@@ -128,6 +128,14 @@ const locationCoordinateOverwrites: ILocationCoordinateOverwrites = {
   "180": {
     lat: 40.44414285761781,
     lng: -79.93888579754876,
+  },
+  "202": {
+    lat: 40.44253638019975,
+    lng: -79.94032253558025,
+  },
+  "168": {
+    lat: 40.44283900428467,
+    lng: -79.94133909281383,
   },
 };
 
