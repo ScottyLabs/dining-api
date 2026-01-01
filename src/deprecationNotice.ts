@@ -3,7 +3,7 @@ export const deprecatedNotice: ILocationOld[] = [
     acceptsOnlineOrders: false,
     conceptId: -1111,
     description:
-      "Please use the new /api/v2/locations endpoint. See /openapi for schema details",
+      "Please use the new https://api.cmueats.com/v2/locations endpoint. See /openapi for schema details",
     name: "This api format has been deprecated",
     location: "Now",
     times: [],
