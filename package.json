@@ -50,7 +50,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
-    "@babel/preset-typescript": "^7.24.7",
+    "@babel/preset-typescript": "^7.28.5",
     "@rollup/plugin-typescript": "^12.1.4",
     "@testcontainers/postgresql": "^11.8.0",
     "@types/cookie-signature": "^1.1.2",
