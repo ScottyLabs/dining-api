@@ -34,7 +34,7 @@
     "@elysiajs/openapi": "^1.4.11",
     "@types/express": "^5.0.3",
     "axios": "^1.10.0",
-    "cheerio": "1.0.0-rc.12",
+    "cheerio": "1.1.2",
     "cookie-signature": "^1.2.2",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.4",
