@@ -12,9 +12,7 @@ import { QueryUtils } from "db/dbQueryUtils";
 import { refreshDB } from "reload";
 import { LocationsSchema } from "schemas";
 import { authPlugin, fetchUserDetails } from "auth";
-import { applyOverrides } from "db/locationOverwrite";
-import locationCoordinateOverwrites from "overwrites/locationCoordinateOverwrites";
-// applyOverrides(db, locationCoordinateOverwrites);
+
 Settings.defaultZone = "America/New_York";
 
 export const app = new Elysia({ adapter: node() }).use(
