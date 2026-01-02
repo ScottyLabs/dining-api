@@ -52,7 +52,7 @@
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-typescript": "^7.24.7",
     "@rollup/plugin-typescript": "^12.1.4",
-    "@testcontainers/postgresql": "^11.8.0",
+    "@testcontainers/postgresql": "^11.11.0",
     "@types/cookie-signature": "^1.1.2",
     "@types/luxon": "^3.7.1",
     "@types/node": "^24.0.14",
