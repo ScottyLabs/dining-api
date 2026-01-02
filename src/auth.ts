@@ -84,6 +84,7 @@ authPlugin.get(
         );
         cookie["session_id"]!.httpOnly = true;
         cookie["session_id"]!.secure = true;
+        cookie["session_id"]!.maxAge = 30 * 24 * 60 * 60; // 30 days
         cookie["session_id"]!.sameSite = env.ENV === "prod" ? "strict" : "none";
         console.log("created session", sessionId);
         return new Response(null, {
