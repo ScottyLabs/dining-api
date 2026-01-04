@@ -13,7 +13,10 @@ interface User {
 }
 export async function createUserSession(db: DBType, user: User) {
   if (user.googleId === undefined) return;
-  if (user.email === undefined || user.email.match(/.+@.*cmu.edu/g) === null) {
+  if (
+    user.email === undefined ||
+    user.email.match(/^.+@(?:[^@]+\.)?cmu\.edu$/i) === null
+  ) {
     notifySlack(`Skipped adding user with email ${user.email}`);
     return;
   }
