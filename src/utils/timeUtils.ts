@@ -1,54 +1,47 @@
-import { DayOfTheWeek, ITimeMoment, ITimeRange } from "types";
+import { ITimeRangeInternal } from "db/dbQueryUtils";
+import { DateTime } from "luxon";
 
-export function getNextDay(day: DayOfTheWeek): DayOfTheWeek {
-  const weekdays: DayOfTheWeek[] = [
-    DayOfTheWeek.SUNDAY,
-    DayOfTheWeek.MONDAY,
-    DayOfTheWeek.TUESDAY,
-    DayOfTheWeek.WEDNESDAY,
-    DayOfTheWeek.THURSDAY,
-    DayOfTheWeek.FRIDAY,
-    DayOfTheWeek.SATURDAY,
-  ]; // ordered by time
-  return weekdays[(weekdays.indexOf(day) + 1) % 7];
-}
-
-export function getMinutesSinceStartOfSunday(timeMoment: ITimeMoment) {
-  return timeMoment.day * (24 * 60) + timeMoment.hour * 60 + timeMoment.minute;
-}
 /**
  *
- * @param moment1
- * @param moment2
- * @returns Delta in minutes of moment1 - moment2
+ * @param timeRanges does not need to be sorted
+ * @returns
  */
-export function compareTimeMoments(moment1: ITimeMoment, moment2: ITimeMoment) {
-  return (
-    getMinutesSinceStartOfSunday(moment1) -
-    getMinutesSinceStartOfSunday(moment2)
-  );
-}
-
-export function sortAndMergeTimeRanges(timeRanges: ITimeRange[]) {
-  timeRanges.sort((range1, range2) =>
-    compareTimeMoments(range1.start, range2.start)
-  );
-  const mergedRanges: ITimeRange[] = [];
-
-  for (const timeRange of timeRanges) {
-    const lastTimeRange = mergedRanges.length
+export function mergeTimeRanges(
+  timeRanges: { start: number; end: number }[],
+  slackBetweenRanges = 0
+) {
+  const mergedRanges: { start: number; end: number }[] = [];
+  timeRanges.sort((a, b) => a.start - b.start);
+  for (const rng of timeRanges) {
+    const lastMergedRange = mergedRanges.length
       ? mergedRanges[mergedRanges.length - 1]
       : undefined;
     if (
-      lastTimeRange &&
-      compareTimeMoments(lastTimeRange.end, timeRange.start) >= 0
+      lastMergedRange &&
+      lastMergedRange.end + slackBetweenRanges >= rng.start
     ) {
-      if (compareTimeMoments(timeRange.end, lastTimeRange.end) > 0) {
-        lastTimeRange.end = timeRange.end; // join current range with last range
-      }
+      lastMergedRange.end = Math.max(lastMergedRange.end, rng.end);
     } else {
-      mergedRanges.push(timeRange);
+      mergedRanges.push(rng);
     }
   }
   return mergedRanges;
+}
+export function pad(n: number) {
+  return n.toString().padStart(2, "0");
+}
+/** Wraps time intervals to the next day if end < start, and then merges everything */
+export function remapAndMergeTimeIntervals(timeRanges: ITimeRangeInternal[]) {
+  const timeStampedIntervals = timeRanges.map((rng) => {
+    const date = DateTime.fromISO(rng.date, { zone: "America/New_York" });
+    const startDate = date.set({ minute: rng.startMinutesSinceMidnight });
+    const endDate = date.set({ minute: rng.endMinutesSinceMidnight }).plus({
+      days: rng.endMinutesSinceMidnight < rng.startMinutesSinceMidnight ? 1 : 0,
+    }); // account for wrap-around
+    return {
+      start: startDate.toMillis(),
+      end: endDate.toMillis(),
+    };
+  });
+  return mergeTimeRanges(timeStampedIntervals, 60 * 1000); // merge gaps of at most 1 min
 }

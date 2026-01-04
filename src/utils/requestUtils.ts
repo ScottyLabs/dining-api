@@ -1,28 +1,45 @@
 import axios from "axios";
-import { AXIOS_RETRY_INTERVAL_MS, IS_TESTING } from "../config";
-
+import { notifySlack } from "./slack";
+import { env } from "env";
+import { DateTime } from "luxon";
 const wait = (ms: number) => {
   return new Promise((re) => setTimeout(re, ms));
 };
-
-export async function getHTMLResponse(
-  url: URL,
-  retriesLeft = 4
-): Promise<string> {
+/**
+ *
+ * @param url
+ * @param retriesLeft
+ * @returns the serverDate returned is in EST time, since that's the timezone that the dining server operates in (ex. at midnight est, the 7-day times shift to the next day.)
+ */
+export async function getHTMLResponse(url: URL, retriesLeft = 4) {
   try {
-    if (!IS_TESTING) console.log(`Scraping ${url}`);
+    if (!env.IN_TEST_MODE) console.log(`Scraping ${url}`);
     const response = await axios.get(url.toString());
-    if (!IS_TESTING)
+    if (!env.IN_TEST_MODE)
       console.log({
         message: `Scraped ${url}`,
         html: response.data,
         url: url.toString(),
       });
-    return response.data;
-  } catch (err) {
-    if (!IS_TESTING) console.error(err);
+
+    const attemptedParsedDate = DateTime.fromRFC2822(
+      response.headers.date
+    ).setZone("America/New_York");
+    if (!attemptedParsedDate.isValid) {
+      notifySlack(
+        `<!channel> Ran into unparseable date response header! url: ${url} response headers: ${response.headers.date}`
+      );
+    }
+    return {
+      body: response.data,
+      serverDate: attemptedParsedDate.isValid
+        ? attemptedParsedDate
+        : (DateTime.now().setZone("America/New_York") as DateTime<true>), // date should always be valid...
+    };
+  } catch (err: any) {
+    notifySlack(`Error scraping ${url}\n${err.stack}`);
     if (retriesLeft > 0) {
-      await wait(AXIOS_RETRY_INTERVAL_MS);
+      await wait(env.AXIOS_RETRY_INTERVAL_MS);
       return await getHTMLResponse(url, retriesLeft - 1);
     } else throw err;
   }

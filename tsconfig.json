@@ -3,17 +3,17 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "module": "esnext",
     "skipLibCheck": true,
-    "types": ["bun-types", "jest"],
+    "types": ["node", "vitest/globals"],
 
     /* Bundler mode */
-    "rootDir": "./src",
+    "rootDir": ".",
     "baseUrl": "./src",
     "outDir": "./dist",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
+    // "allowImportingTsExtensions": true,
+    // "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
@@ -24,7 +24,9 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true, // this should honestly be the default, since you're not guaranteed to get a value when you key into an object
+    "exactOptionalPropertyTypes": true // | undefined needs to be explicit
   },
-  "include": ["src"]
+  "include": ["src", "tests"]
 }

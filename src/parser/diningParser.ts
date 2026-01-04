@@ -2,8 +2,8 @@ import { getHTMLResponse } from "../utils/requestUtils";
 import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
-import locationOverwrites from "overwrites/locationOverwrites";
 import { ILocation, ISpecial } from "types";
+import { notifySlack } from "utils/slack";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -17,8 +17,6 @@ export default class DiningParser {
   static readonly DINING_SOUPS_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
 
-  constructor() {}
-
   async process(): Promise<ILocation[]> {
     const locationBuilders =
       await this.initializeLocationBuildersFromMainPage();
@@ -26,19 +24,28 @@ export default class DiningParser {
     const [specials, soups] = await this.fetchSpecials();
 
     for (const builder of locationBuilders) {
-      await builder.populateDetailedInfo();
+      await builder
+        .populateDetailedInfo()
+        .catch((e) =>
+          notifySlack(
+            `<!channel> failed to parse page with id ${builder.getConceptId()} with error ${
+              e.stack
+            }`
+          )
+        );
       builder.setSoup(soups);
       builder.setSpecials(specials);
-      builder.overwriteLocation(locationOverwrites);
     }
 
-    return locationBuilders.map((builder) => builder.build());
+    return locationBuilders
+      .map((builder) => builder.build())
+      .filter((location) => location !== undefined); // remove the unsuccessful parses
   }
 
   private async initializeLocationBuildersFromMainPage(): Promise<
     LocationBuilder[]
   > {
-    const mainPageHTML = await getHTMLResponse(
+    const { body: mainPageHTML } = await getHTMLResponse(
       new URL(DiningParser.DINING_URL)
     );
     const mainContainer = load(mainPageHTML)("div.conceptCards");
@@ -47,9 +54,7 @@ export default class DiningParser {
     if (linkHeaders.length === 0) {
       throw new Error("Unable to load page");
     }
-    return Array.from(linkHeaders).map(
-      (card) => new LocationBuilder(card)
-    );
+    return Array.from(linkHeaders).map((card) => new LocationBuilder(card));
   }
 
   private async fetchSpecials(): Promise<
@@ -57,10 +62,14 @@ export default class DiningParser {
   > {
     return await Promise.all([
       retrieveSpecials(
-        await getHTMLResponse(new URL(DiningParser.DINING_SPECIALS_URL))
+        (
+          await getHTMLResponse(new URL(DiningParser.DINING_SPECIALS_URL))
+        ).body
       ),
       retrieveSpecials(
-        await getHTMLResponse(new URL(DiningParser.DINING_SOUPS_URL))
+        (
+          await getHTMLResponse(new URL(DiningParser.DINING_SOUPS_URL))
+        ).body
       ),
     ]);
   }
