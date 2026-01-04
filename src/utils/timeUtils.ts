@@ -1,4 +1,4 @@
-import { ITimeRangeInternal } from "db/dbQueryUtils";
+import { IDateTimeRange } from "db/dbQueryUtils";
 import { DateTime } from "luxon";
 
 /**
@@ -31,7 +31,7 @@ export function pad(n: number) {
   return n.toString().padStart(2, "0");
 }
 /** Wraps time intervals to the next day if end < start, and then merges everything */
-export function remapAndMergeTimeIntervals(timeRanges: ITimeRangeInternal[]) {
+export function remapAndMergeTimeIntervals(timeRanges: IDateTimeRange[]) {
   const timeStampedIntervals = timeRanges.map((rng) => {
     const date = DateTime.fromISO(rng.date, { zone: "America/New_York" });
     const startDate = date.set({ minute: rng.startMinutesSinceMidnight });

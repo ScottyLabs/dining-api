@@ -1,7 +1,7 @@
-import { ITimeRangeInternal, QueryUtils } from "./dbQueryUtils";
+import { IDateTimeRange, QueryUtils } from "./dbQueryUtils";
 import { DateTime } from "luxon";
-import { pad, remapAndMergeTimeIntervals } from "utils/timeUtils";
-import { IParsedTimeRange } from "containers/time/parsedTime";
+import { remapAndMergeTimeIntervals } from "utils/timeUtils";
+import { ITimeSlot } from "containers/time/parsedTime";
 import { DBType } from "./db";
 
 /**
@@ -45,8 +45,8 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
 }
 
 function applyTimeOverrides(
-  originalTimes: ITimeRangeInternal[],
-  overrideTimes?: { [date in string]: IParsedTimeRange[] }
+  originalTimes: IDateTimeRange[],
+  overrideTimes?: { [date in string]: ITimeSlot[] }
 ) {
   if (overrideTimes === undefined) return originalTimes;
   for (const [overrideDate, timeRanges] of Object.entries(overrideTimes)) {

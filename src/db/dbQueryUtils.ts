@@ -12,12 +12,12 @@ import { DBType } from "./db";
 import { notifySlack } from "utils/slack";
 import { and, eq, gte } from "drizzle-orm";
 import { parseTimeSlots } from "containers/timeBuilder";
-import { IParsedTimeRange } from "containers/time/parsedTime";
+import { ITimeSlot } from "containers/time/parsedTime";
 
 type RequiredProperty<T> = { [P in keyof T]: NonNullable<T[P]> };
 
 /** More-so the database representation of a time range */
-export interface ITimeRangeInternal {
+export interface IDateTimeRange {
   date: string;
   startMinutesSinceMidnight: number;
   endMinutesSinceMidnight: number;
@@ -84,7 +84,7 @@ export class QueryUtils {
       Record<
         string,
         | typeof locationDataTable.$inferSelect & {
-            times: ITimeRangeInternal[];
+            times: IDateTimeRange[];
             conceptId: string | null;
           }
       >
@@ -149,7 +149,7 @@ export class QueryUtils {
         return [];
       });
     const idToTimeOverrides = timeOverrides.reduce<{
-      [locationId in string]: { [date in string]: IParsedTimeRange[] };
+      [locationId in string]: { [date in string]: ITimeSlot[] };
     }>((acc, override) => {
       return {
         ...acc,

@@ -23,6 +23,8 @@ export const app = new Elysia({ adapter: node() }).use(
       info: {
         title: "CMU Dining API",
         version: "2.0.0",
+        description:
+          "Hello!~ Thanks for checking out the cmueats api. Have a great day!",
       },
     },
   })
@@ -63,7 +65,13 @@ app.get(
 app.get(
   "/v2/locations",
   async () => await getAllLocationsFromDB(db, DateTime.now()),
-  { response: LocationsSchema }
+  {
+    response: LocationsSchema,
+    detail: {
+      description:
+        "The times array is guaranteed to be sorted and non-overlapping. Both start and end are inclusive boundaries",
+    },
+  }
 );
 app.get("/emails", async () => await new QueryUtils(db).getEmails(), {
   response: t.Array(
