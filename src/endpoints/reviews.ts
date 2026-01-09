@@ -1,0 +1,115 @@
+import Elysia, { status, t } from "elysia";
+import { fetchUserDetails } from "./auth";
+import {
+  addStarReview,
+  deleteStarReview,
+  getStarSummary,
+  getTagSummary,
+  updateTagReview,
+} from "db/reviews";
+import { db } from "db/db";
+
+export const reviewEndpoints = new Elysia();
+reviewEndpoints
+  .resolve(async ({ cookie }) => {
+    const session = cookie["session_id"]!.value as string | undefined;
+    const userDetails = await fetchUserDetails(session);
+
+    return {
+      user: userDetails,
+    };
+  })
+  .get(
+    "/v2/locations/:locationId/reviews/summary",
+    async ({ params: { locationId }, user }) => {
+      const [starData, tagData] = await Promise.all([
+        getStarSummary(db, { locationId, userId: user?.id }),
+        getTagSummary(db, { locationId, userId: user?.id }),
+      ]);
+      return {
+        starData,
+        tagData,
+      };
+    },
+    {
+      response: t.Object({
+        starData: t.Object({
+          avg: t.Nullable(t.Number()),
+          personalRating: t.Nullable(t.Number()),
+          buckets: t.Array(t.Number(), { example: [0, 1, 0, 4, 12, 4] }),
+        }),
+        tagData: t.Array(
+          t.Object({
+            id: t.Number(),
+            name: t.String(),
+            totalVotes: t.Number(),
+            totalLikes: t.Number(),
+            myReview: t.Nullable(
+              t.Object({
+                vote: t.Boolean(),
+                text: t.Nullable(t.String()),
+                createdAt: t.Number(),
+                updatedAt: t.Number(),
+              })
+            ),
+          })
+        ),
+      }),
+    }
+  )
+  .put(
+    "/v2/locations/:locationId/reviews/stars/me",
+    async ({ user, params: { locationId }, body: { stars } }) => {
+      if (user === null) throw status("Unauthorized");
+      await addStarReview(db, { locationId, rating: stars, userId: user.id });
+      return new Response("{}", { status: 201 });
+    },
+    {
+      body: t.Object({ stars: t.Number() }),
+    }
+  )
+  .delete(
+    "/v2/locations/:locationId/reviews/stars/me",
+    async ({ user, params: { locationId } }) => {
+      if (user === null) throw status("Unauthorized");
+      await deleteStarReview(db, { locationId, userId: user.id });
+    }
+  )
+  .put(
+    "/v2/locations/:locationId/reviews/tags/:tagId/me",
+    async ({ user, params: { locationId, tagId }, body: { voteUp, text } }) => {
+      if (user === null) throw status("Unauthorized");
+      if (isNaN(parseInt(tagId))) throw status("Bad Request");
+      await updateTagReview(db, {
+        locationId,
+        userId: user.id,
+        tagId: parseInt(tagId),
+        text,
+        voteUp,
+      });
+      return new Response("{}", { status: 201 });
+    },
+    {
+      body: t.Object({
+        voteUp: t.Optional(t.Boolean()),
+        text: t.Optional(t.String()),
+      }),
+    }
+  )
+  // .delete(
+  //   "/v2/locations/:locationId/reviews/tags/:tagId/me",
+  //   async ({ user, params: { locationId, tagId } }) => {
+  //     if (user === null) return status("Unauthorized");
+  //     if (isNaN(parseInt(tagId))) return status("Bad Request");
+  //     await updateTagReview(db, {
+  //       locationId,
+  //       userId: user.id,
+  //       tagId: parseInt(tagId),
+  //       voteUp: undefined,
+  //       text: undefined,
+  //     });
+  //   }
+  // )
+  .get("/v2/locations/:locationId/reviews/tags", () => {
+    return status("I'm a teapot");
+  });

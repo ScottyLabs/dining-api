@@ -1,5 +1,6 @@
 // don't add .unique() or .notNull() to a primary key, drizzle doesn't like it when you remove it later on.
 
+import { sql } from "drizzle-orm";
 import {
   pgTable,
   text,
@@ -11,6 +12,8 @@ import {
   index,
   pgEnum,
   timestamp,
+  uniqueIndex,
+  check,
 } from "drizzle-orm/pg-core";
 
 export const emailTable = pgTable("emails", {
@@ -143,3 +146,68 @@ export const userSessionTable = pgTable("sessions", {
     mode: "date",
   }).defaultNow(),
 });
+export const tagListTable = pgTable("tag_list", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  name: text("name").notNull(),
+  sortOrder: integer("sort_order").notNull(),
+});
+export const tagReviewTable = pgTable(
+  "tag_reviews",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    tagId: integer("tag_id")
+      .notNull()
+      .references(() => tagListTable.id, { onDelete: "cascade" }),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => userTable.id, { onDelete: "cascade" }),
+    locationId: text("location_id")
+      .notNull()
+      .references(() => locationDataTable.id, { onDelete: "cascade" }),
+    vote: boolean("vote").notNull(),
+    writtenReview: text("written_review"), // nullable by default
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("tag_reviews_location_tag_user_uniq").on(
+      t.locationId,
+      t.tagId,
+      t.userId
+    ),
+  ]
+);
+export const starReviewTable = pgTable(
+  "star_reviews",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => userTable.id, { onDelete: "cascade" }),
+    locationId: text("location_id")
+      .notNull()
+      .references(() => locationDataTable.id, { onDelete: "cascade" }),
+    starRating: decimal("star_rating", {
+      precision: 2,
+      scale: 1,
+      mode: "number",
+    }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("star_reviews_location_user_uniq").on(t.locationId, t.userId),
+    check(
+      "rating_number_check",
+      sql`${t.starRating} > 0 AND ${t.starRating} <= 5 AND mod(${t.starRating}*2,1) = 0`
+    ), // rating is a multiple of .5
+  ]
+);

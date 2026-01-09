@@ -43,6 +43,13 @@
       "when": 1766977018835,
       "tag": "0005_overconfident_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1767645817421,
+      "tag": "0006_short_pestilence",
+      "breakpoints": true
     }
   ]
 }
