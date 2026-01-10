@@ -1,6 +1,7 @@
 import {
   addStarReview,
   deleteStarReview,
+  getAllTagReviewsForLocation,
   getStarSummary,
   getTagSummary,
   initializeTags,
@@ -136,6 +137,30 @@ describe("location review tests", () => {
           }),
         ])
       );
+      const allReviewsForLocation1 = await getAllTagReviewsForLocation(db, {
+        locationId: locationId1,
+      });
+      const allReviewsForLocation2 = await getAllTagReviewsForLocation(db, {
+        locationId: locationId2,
+      });
+      expect(allReviewsForLocation1).toHaveLength(1);
+      expect(allReviewsForLocation2).toHaveLength(1);
+      expect(allReviewsForLocation1[0]).toMatchObject({
+        tagId: 1,
+        userId: user1.id,
+        locationId: locationId1,
+        vote: false,
+        writtenReview: "bad",
+        tagName: "Food (nutrition)",
+      });
+      expect(allReviewsForLocation2[0]).toMatchObject({
+        tagId: 1,
+        userId: user1.id,
+        locationId: locationId2,
+        vote: true,
+        writtenReview: "good",
+        tagName: "Food (nutrition)",
+      });
     }
   );
   reviewTest.concurrent(
@@ -197,6 +222,13 @@ describe("location review tests", () => {
           locationId: locationId1,
           userId: user2.id,
           rating: 0,
+        })
+      ).rejects.toThrowError();
+      expect(
+        addStarReview(db, {
+          locationId: locationId1,
+          userId: user2.id,
+          rating: -2,
         })
       ).rejects.toThrowError();
       expect(
@@ -284,6 +316,67 @@ describe("location review tests", () => {
           }),
         ])
       );
+      const allReviewsForLocation1 = await getAllTagReviewsForLocation(db, {
+        locationId: locationId1,
+      });
+      const allReviewsForLocation2 = await getAllTagReviewsForLocation(db, {
+        locationId: locationId2,
+      });
+      expect(allReviewsForLocation1).toHaveLength(0);
+      expect(allReviewsForLocation2).toHaveLength(0);
+    }
+  );
+  reviewTest.concurrent(
+    "add review to nonexistent tag",
+    async ({ ctx: { db, locationId1, user1, locationId2, user2 } }) => {
+      expect(
+        updateTagReview(db, {
+          locationId: locationId1,
+          userId: user1.id,
+          tagId: 100,
+          voteUp: true,
+          text: "good",
+        })
+      ).rejects.toThrowError();
+
+      const tagSummary1 = await getTagSummary(db, {
+        locationId: locationId1,
+        userId: user1.id,
+      });
+      const tagSummary2 = await getTagSummary(db, {
+        locationId: locationId1,
+        userId: user2.id,
+      });
+
+      expect(tagSummary1.length).toBe(9);
+      expect(tagSummary1).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 1,
+            totalVotes: 0,
+            totalLikes: 0,
+            myReview: null,
+          }),
+        ])
+      );
+      expect(tagSummary2).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 1,
+            totalVotes: 0,
+            totalLikes: 0,
+            myReview: null,
+          }),
+        ])
+      );
+      const allReviewsForLocation1 = await getAllTagReviewsForLocation(db, {
+        locationId: locationId1,
+      });
+      const allReviewsForLocation2 = await getAllTagReviewsForLocation(db, {
+        locationId: locationId2,
+      });
+      expect(allReviewsForLocation1).toHaveLength(0);
+      expect(allReviewsForLocation2).toHaveLength(0);
     }
   );
 });

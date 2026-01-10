@@ -3,6 +3,7 @@ import { fetchUserDetails } from "./auth";
 import {
   addStarReview,
   deleteStarReview,
+  getAllTagReviewsForLocation,
   getStarSummary,
   getTagSummary,
   updateTagReview,
@@ -73,6 +74,7 @@ reviewEndpoints
     async ({ user, params: { locationId } }) => {
       if (user === null) throw status("Unauthorized");
       await deleteStarReview(db, { locationId, userId: user.id });
+      return new Response("{}", { status: 200 });
     }
   )
   .put(
@@ -96,20 +98,24 @@ reviewEndpoints
       }),
     }
   )
-  // .delete(
-  //   "/v2/locations/:locationId/reviews/tags/:tagId/me",
-  //   async ({ user, params: { locationId, tagId } }) => {
-  //     if (user === null) return status("Unauthorized");
-  //     if (isNaN(parseInt(tagId))) return status("Bad Request");
-  //     await updateTagReview(db, {
-  //       locationId,
-  //       userId: user.id,
-  //       tagId: parseInt(tagId),
-  //       voteUp: undefined,
-  //       text: undefined,
-  //     });
-  //   }
-  // )
-  .get("/v2/locations/:locationId/reviews/tags", () => {
-    return status("I'm a teapot");
-  });
+  .get(
+    "/v2/locations/:locationId/reviews/tags",
+    async ({ params: { locationId } }) => {
+      return await getAllTagReviewsForLocation(db, { locationId });
+    },
+    {
+      response: t.Array(
+        t.Object({
+          writtenReview: t.String(),
+          tagName: t.String(),
+          id: t.Number(),
+          tagId: t.Number(),
+          userId: t.Number(),
+          locationId: t.String(),
+          vote: t.Boolean(),
+          createdAt: t.Number(),
+          updatedAt: t.Number(),
+        })
+      ),
+    }
+  );

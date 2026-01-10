@@ -1,6 +1,6 @@
 // good reference: https://www.kishokanth.com/blog/partial-matching-objects-and-arrays-in-jest
 
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { DBType } from "./db";
 import { starReviewTable, tagListTable, tagReviewTable } from "./schema";
 import { conflictUpdateSet } from "./util";
@@ -184,5 +184,29 @@ export async function getTagSummary(
           updatedAt: tagData.tag_reviews.updatedAt.getTime(),
         }
       : null,
+  }));
+}
+
+export async function getAllTagReviewsForLocation(
+  db: DBType,
+  { locationId }: { locationId: string }
+) {
+  const reviews = await db
+    .select()
+    .from(tagReviewTable)
+    .where(
+      and(
+        eq(tagReviewTable.locationId, locationId),
+        isNotNull(tagReviewTable.writtenReview)
+      )
+    )
+    .innerJoin(tagListTable, eq(tagReviewTable.tagId, tagListTable.id))
+    .orderBy(desc(tagReviewTable.updatedAt));
+  return reviews.map(({ tag_list, tag_reviews }) => ({
+    ...tag_reviews,
+    writtenReview: tag_reviews.writtenReview!, // we can make this assertion since we filtered out the NULL values in the SQL query above
+    tagName: tag_list.name,
+    createdAt: tag_reviews.createdAt.getTime(),
+    updatedAt: tag_reviews.updatedAt.getTime(),
   }));
 }
