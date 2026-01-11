@@ -96,7 +96,7 @@ reviewEndpoints
     {
       body: t.Object({
         voteUp: t.Nullable(t.Boolean()),
-        text: t.Nullable(t.String()),
+        text: t.Nullable(t.String({ maxLength: 1000 })),
       }),
     }
   )
