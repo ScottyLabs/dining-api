@@ -25,11 +25,11 @@ export async function updateTagReview(
     tagId: number;
     locationId: string;
     userId: number;
-    voteUp: boolean | undefined;
-    text: string | undefined;
+    voteUp: boolean | null;
+    text: string | null;
   }
 ) {
-  if (voteUp === undefined) {
+  if (voteUp === null) {
     // delete the review
     await db
       .delete(tagReviewTable)

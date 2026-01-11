@@ -66,7 +66,9 @@ reviewEndpoints
       return new Response("{}", { status: 201 });
     },
     {
-      body: t.Object({ stars: t.Number() }),
+      body: t.Object({
+        stars: t.Number({ minimum: 0.5, maximum: 5, multipleOf: 0.5 }),
+      }),
     }
   )
   .delete(
@@ -93,8 +95,8 @@ reviewEndpoints
     },
     {
       body: t.Object({
-        voteUp: t.Optional(t.Boolean()),
-        text: t.Optional(t.String()),
+        voteUp: t.Nullable(t.Boolean()),
+        text: t.Nullable(t.String()),
       }),
     }
   )

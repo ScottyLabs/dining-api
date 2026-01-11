@@ -283,8 +283,8 @@ describe("location review tests", () => {
         locationId: locationId1,
         userId: user1.id,
         tagId: 1,
-        voteUp: undefined,
-        text: undefined,
+        voteUp: null,
+        text: null,
       });
       const tagSummary1 = await getTagSummary(db, {
         locationId: locationId1,
