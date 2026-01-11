@@ -46,6 +46,7 @@ const reviewTest = dbTest.extend<{
   };
 }>({
   ctx: async ({ ctx: { db, container, pool } }, use) => {
+    // seed data with test locations, test users, and tags
     const locationId1 = await addLocationDataToDb(db, locationIn);
     const locationId2 = await addLocationDataToDb(db, {
       ...locationIn,

@@ -11,8 +11,11 @@ import { refreshDB } from "reload";
 import { authEndpoints } from "endpoints/auth";
 import { miscEndpoints } from "endpoints/misc";
 import { reviewEndpoints } from "endpoints/reviews";
+import { populateTags } from "db/seed";
 
 Settings.defaultZone = "America/New_York";
+
+populateTags(db);
 
 export const app = new Elysia({ adapter: node() }).use(
   openapi({
