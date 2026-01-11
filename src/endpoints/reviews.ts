@@ -88,7 +88,7 @@ reviewEndpoints
         locationId,
         userId: user.id,
         tagId: parseInt(tagId),
-        text,
+        text: text?.replaceAll(/\n(?=\n\n)/g, "") ?? null, // limit consecutive newlines to at most 2
         voteUp,
       });
       return new Response("{}", { status: 201 });
