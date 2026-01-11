@@ -166,6 +166,7 @@ export const tagReviewTable = pgTable(
       .references(() => locationDataTable.id, { onDelete: "cascade" }),
     vote: boolean("vote").notNull(),
     writtenReview: text("written_review"), // nullable by default
+    hidden: boolean("hidden").default(false), // moderation purposes
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
       .notNull()
       .defaultNow(),

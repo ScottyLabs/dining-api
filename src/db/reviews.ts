@@ -1,6 +1,6 @@
 // good reference: https://www.kishokanth.com/blog/partial-matching-objects-and-arrays-in-jest
 
-import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
+import { and, desc, eq, isNotNull, not, sql } from "drizzle-orm";
 import { DBType } from "./db";
 import { starReviewTable, tagListTable, tagReviewTable } from "./schema";
 import { conflictUpdateSet } from "./util";
@@ -197,13 +197,18 @@ export async function getAllTagReviewsForLocation(
     .where(
       and(
         eq(tagReviewTable.locationId, locationId),
-        isNotNull(tagReviewTable.writtenReview)
+        isNotNull(tagReviewTable.writtenReview),
+        not(tagReviewTable.hidden)
       )
     )
     .innerJoin(tagListTable, eq(tagReviewTable.tagId, tagListTable.id))
     .orderBy(desc(tagReviewTable.updatedAt));
   return reviews.map(({ tag_list, tag_reviews }) => ({
-    ...tag_reviews,
+    id: tag_reviews.id,
+    tagId: tag_reviews.tagId,
+    userId: tag_reviews.userId,
+    locationId: tag_reviews.locationId,
+    vote: tag_reviews.vote,
     writtenReview: tag_reviews.writtenReview!, // we can make this assertion since we filtered out the NULL values in the SQL query above
     tagName: tag_list.name,
     createdAt: tag_reviews.createdAt.getTime(),

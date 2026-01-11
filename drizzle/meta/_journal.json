@@ -50,6 +50,13 @@
       "when": 1767645817421,
       "tag": "0006_short_pestilence",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768158573717,
+      "tag": "0007_naive_lady_mastermind",
+      "breakpoints": true
     }
   ]
 }
