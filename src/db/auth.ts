@@ -11,6 +11,13 @@ interface User {
   email: string | undefined;
   googleId: string | undefined;
 }
+
+/**
+ * Creates a session for the user, and adds user to database if new user
+ * @param db
+ * @param user
+ * @returns User session id, or undefined if failed to create session
+ */
 export async function createUserSession(db: DBType, user: User) {
   if (user.googleId === undefined) return;
   if (
@@ -43,7 +50,7 @@ export async function createUserSession(db: DBType, user: User) {
       })
       .returning()
   )[0];
-  return newSession === undefined ? undefined : newSession.sessionId;
+  return newSession?.sessionId;
 }
 async function createOrUpdateUser(
   db: DBType,
@@ -74,7 +81,11 @@ async function createOrUpdateUser(
       .returning()
   )[0];
 }
-export async function fetchUserSession(db: DBType, sessionId: string) {
+export type DBUser = typeof userTable.$inferSelect;
+export async function fetchUserSession(
+  db: DBType,
+  sessionId: string
+): Promise<DBUser | null> {
   const session = (
     await db
       .select()

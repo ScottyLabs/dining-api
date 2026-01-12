@@ -12,8 +12,8 @@ const OIDCConfig = await client.discovery(
   env.OIDC_CLIENT_ID,
   env.OIDC_CLIENT_SECRET
 );
-export const authPlugin = new Elysia();
-authPlugin.get(
+export const authEndpoints = new Elysia();
+authEndpoints.get(
   "/login",
   ({ request, cookie, query }) => {
     const originalOrigin = query.redirectURL;
@@ -32,9 +32,12 @@ authPlugin.get(
       },
     });
   },
-  { query: t.Object({ redirectURL: t.Nullable(t.String()) }) }
+  {
+    query: t.Object({ redirectURL: t.Nullable(t.String()) }),
+    detail: { hide: true },
+  }
 );
-authPlugin.get(
+authEndpoints.get(
   "/logout",
   ({ cookie, request, query }) => {
     const originalOrigin = query.redirectURL;
@@ -48,9 +51,12 @@ authPlugin.get(
       },
     });
   },
-  { query: t.Object({ redirectURL: t.Nullable(t.String()) }) }
+  {
+    query: t.Object({ redirectURL: t.Nullable(t.String()) }),
+    detail: { hide: true },
+  }
 );
-authPlugin.get(
+authEndpoints.get(
   "/code-exchange",
   async ({ request, cookie }) => {
     const originalOrigin = cookie["original_origin"]!.value as string;
@@ -102,16 +108,17 @@ authPlugin.get(
       },
     });
   },
-  { query: t.Object({ code: t.String() }) }
+  { query: t.Object({ code: t.String() }), detail: { hide: true } }
 );
 export async function fetchUserDetails(sessionId?: string) {
+  if (env.HARDCODE_SESSION_FOR_DEV_TESTING)
+    sessionId = env.HARDCODE_SESSION_FOR_DEV_TESTING;
   if (sessionId === undefined) return null;
   const unsignedSessionId = cookieSigner.unsign(
     sessionId,
     env.SESSION_COOKIE_SIGNING_SECRET
   );
   if (!unsignedSessionId) return null;
-
   return await fetchUserSession(db, unsignedSessionId);
 }
 /**
@@ -128,3 +135,30 @@ export const protectedRoute = () => {
     };
   });
 };
+
+authEndpoints.get(
+  "/whoami",
+  async ({ cookie }) => {
+    return {
+      user: await fetchUserDetails(cookie["session_id"]!.value as string),
+    };
+  },
+  {
+    response: t.Object({
+      user: t.Nullable(
+        t.Object({
+          googleId: t.String(),
+          id: t.Number(),
+          email: t.String(),
+          firstName: t.Nullable(t.String()),
+          lastName: t.Nullable(t.String()),
+          pictureUrl: t.Nullable(t.String()),
+        })
+      ),
+    }),
+    detail: {
+      description:
+        "If you have an active login session with cmueats, this will return your user info. (this is NOT intended to work cross-site)",
+    },
+  }
+);
