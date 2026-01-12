@@ -1,10 +1,11 @@
 import { db } from "db/db";
 import { QueryUtils } from "db/dbQueryUtils";
 import { getAllLocationsFromDB } from "db/getLocations";
-import Elysia, { env, t } from "elysia";
+import Elysia, { t } from "elysia";
 import { DateTime } from "luxon";
 import { notifySlack } from "utils/slack";
 import { LocationsSchema } from "./schemas";
+import { env } from "env";
 
 export const miscEndpoints = new Elysia();
 miscEndpoints.get(

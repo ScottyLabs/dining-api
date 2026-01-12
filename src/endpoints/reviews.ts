@@ -37,7 +37,11 @@ reviewEndpoints
         starData: t.Object({
           avg: t.Nullable(t.Number()),
           personalRating: t.Nullable(t.Number()),
-          buckets: t.Array(t.Number(), { example: [0, 1, 0, 4, 12, 4] }),
+          buckets: t.Array(t.Number(), {
+            example: [0, 1, 0, 4, 12, 4],
+            description:
+              "Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}",
+          }),
         }),
         tagData: t.Array(
           t.Object({
@@ -83,7 +87,10 @@ reviewEndpoints
     "/v2/locations/:locationId/reviews/tags/:tagId/me",
     async ({ user, params: { locationId, tagId }, body: { voteUp, text } }) => {
       if (user === null) throw status("Unauthorized");
-      if (isNaN(parseInt(tagId))) throw status("Bad Request");
+      if (isNaN(parseInt(tagId)))
+        throw new Response("Invalid tag ID: must be a valid integer", {
+          status: 400,
+        });
       await updateTagReview(db, {
         locationId,
         userId: user.id,

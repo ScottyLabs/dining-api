@@ -13,6 +13,10 @@ export async function initializeTags(db: DBType, tags: string[]) {
     .insert(tagListTable)
     .values(tags.map((tag, i) => ({ name: tag, sortOrder: i * 10 })));
 }
+
+/**
+ * Passing in `undefined` for voteUp will delete the review, even if `text` is specified
+ */
 export async function updateTagReview(
   db: DBType,
   {
@@ -36,10 +40,8 @@ export async function updateTagReview(
       .where(
         and(
           eq(tagReviewTable.locationId, locationId),
-          and(
-            eq(tagReviewTable.tagId, tagId),
-            eq(tagReviewTable.userId, userId)
-          )
+          eq(tagReviewTable.tagId, tagId),
+          eq(tagReviewTable.userId, userId)
         )
       );
   } else {
@@ -66,6 +68,10 @@ export async function updateTagReview(
       });
   }
 }
+
+/**
+ * Assumes that rating is a multiple of .5 in the range [.5,5]
+ */
 export async function addStarReview(
   db: DBType,
   {
@@ -162,10 +168,8 @@ export async function getTagSummary(
       .leftJoin(
         tagReviewTable,
         and(
-          and(
-            eq(subQuery.id, tagReviewTable.tagId),
-            eq(tagReviewTable.locationId, locationId)
-          ),
+          eq(subQuery.id, tagReviewTable.tagId),
+          eq(tagReviewTable.locationId, locationId),
           eq(tagReviewTable.userId, userId ?? -1)
         )
       )

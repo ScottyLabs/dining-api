@@ -3,7 +3,6 @@ import { DBType } from "./db";
 import { userSessionTable, userTable } from "./schema";
 import { eq } from "drizzle-orm";
 import { conflictUpdateSet } from "./util";
-import { env } from "env";
 
 interface User {
   firstName: string | undefined;
