@@ -1,6 +1,6 @@
 import { Element, load } from "cheerio";
 
-import { IParsedTimeRange } from "./time/parsedTime";
+import { ITimeSlot } from "./time/parsedTime";
 import { convertMonthStringToEnum } from "./time/parsedTimeForDate";
 import { IDate, IFullTimeRange, TimeInfoType } from "types";
 import { parseToken } from "utils/parseTimeToken";
@@ -84,7 +84,7 @@ export function getAllTimeSlotsFromSchedule(
  * @returns
  */
 export function parseTimeSlots(timeSlotStrings: string) {
-  const timeRanges: IParsedTimeRange[] = [];
+  const timeRanges: ITimeSlot[] = [];
 
   for (const token of timeSlotStrings
     .split(/[,;]/)
@@ -118,7 +118,7 @@ export function parseTimeSlots(timeSlotStrings: string) {
  * @returns
  */
 export function augmentAndEditTimeRangesWithDateInfo(
-  timeRanges: IParsedTimeRange[],
+  timeRanges: ITimeSlot[],
   day: number,
   month: number,
   year: number
@@ -137,7 +137,7 @@ export function augmentAndEditTimeRangesWithDateInfo(
   }
   return allRanges;
 }
-function rollBack12AmEndTime(range: IParsedTimeRange) {
+function rollBack12AmEndTime(range: ITimeSlot) {
   if (range.end.hour === 0 && range.end.minute === 0) {
     range.end.hour = 23;
     range.end.minute = 59;

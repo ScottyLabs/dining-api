@@ -24,6 +24,15 @@ describe("auth tests", () => {
     expect(
       await createUserSession(db, {
         googleId: "1",
+        email: "e@fakecmu.edu",
+        firstName: "John",
+        lastName: "Smith",
+        pfpURL: "ok.com",
+      })
+    ).toBe(undefined);
+    expect(
+      await createUserSession(db, {
+        googleId: "1",
         email: "e@andrew.cmu.edu",
         firstName: "John",
         lastName: "Smith",

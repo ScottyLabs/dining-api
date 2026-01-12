@@ -6,7 +6,7 @@ interface Time {
 }
 
 /** what you get after parsing a time string like `2:00 AM - 3:00 AM, 4:00 PM - 2:00 AM` (do note that end can be < start) */
-export interface IParsedTimeRange {
+export interface ITimeSlot {
   start: Time;
   end: Time;
 }
@@ -16,7 +16,7 @@ export interface IParsedTimeRange {
  * structure
  */
 export default class ParsedTime extends ParsedTimeBase {
-  declare value: IParsedTimeRange;
+  declare value: ITimeSlot;
 
   private parseTime(timeStr: string): Time {
     const normalizedStr = timeStr.trim().toLowerCase();

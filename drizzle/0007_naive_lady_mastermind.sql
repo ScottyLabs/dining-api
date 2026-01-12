@@ -1,0 +1,1 @@
+ALTER TABLE "tag_reviews" ADD COLUMN "hidden" boolean DEFAULT false;

@@ -3,17 +3,19 @@ import { cors } from "@elysiajs/cors";
 import { env } from "env";
 import { notifySlack } from "utils/slack";
 import { node } from "@elysiajs/node";
-import { deprecatedNotice } from "deprecationNotice";
-import { getAllLocationsFromDB } from "db/getLocations";
+import { deprecatedEndpoints } from "endpoints/deprecated";
 import { openapi } from "@elysiajs/openapi";
 import { db } from "db/db";
-import { DateTime, Settings } from "luxon";
-import { QueryUtils } from "db/dbQueryUtils";
+import { Settings } from "luxon";
 import { refreshDB } from "reload";
-import { LocationsSchema } from "schemas";
-import { authPlugin, fetchUserDetails } from "auth";
+import { authEndpoints } from "endpoints/auth";
+import { miscEndpoints } from "endpoints/misc";
+import { reviewEndpoints } from "endpoints/reviews";
+import { populateTags } from "db/seed";
 
 Settings.defaultZone = "America/New_York";
+
+populateTags(db);
 
 export const app = new Elysia({ adapter: node() }).use(
   openapi({
@@ -23,12 +25,15 @@ export const app = new Elysia({ adapter: node() }).use(
       info: {
         title: "CMU Dining API",
         version: "2.0.0",
+        description:
+          "Hello!~ Thanks for checking out the cmueats api. Have a great day!",
       },
     },
   })
 ); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
+  if (code === 401) return; // unauthorized
   if (code === "NOT_FOUND") {
     console.log(`Someone tried visiting ${path}, which does not exist :P`);
   } else {
@@ -39,8 +44,7 @@ app.onError(({ error, path, code }) => {
     );
   }
 });
-app.use(cors());
-app.use(authPlugin);
+
 app.onAfterHandle(({ responseValue }) => {
   if (
     typeof responseValue === "object" &&
@@ -52,43 +56,12 @@ app.onAfterHandle(({ responseValue }) => {
     }); // we can actually set proper content-type headers this way
   }
 });
+app.use(cors());
+app.use(authEndpoints);
+app.use(deprecatedEndpoints);
+app.use(miscEndpoints);
+app.use(reviewEndpoints);
 
-app.get(
-  "/",
-  () => {
-    return "ScottyLabs Dining API";
-  },
-  { response: t.String({ examples: ["ScottyLabs Dining API"] }) }
-);
-app.get(
-  "/v2/locations",
-  async () => await getAllLocationsFromDB(db, DateTime.now()),
-  { response: LocationsSchema }
-);
-app.get("/emails", async () => await new QueryUtils(db).getEmails(), {
-  response: t.Array(
-    t.Object({
-      name: t.String({
-        example: ["Alice"],
-      }),
-      email: t.String({
-        example: "alice72@andrew.cmu.edu",
-      }),
-    })
-  ),
-});
-
-app.post(
-  "/sendSlackMessage",
-  async ({ body: { message } }) => {
-    await notifySlack(message, env.SLACK_FRONTEND_WEBHOOK_URL);
-  },
-  {
-    body: t.Object({
-      message: t.String(),
-    }),
-  }
-);
 if (!env.DEV_DONT_FETCH) {
   setInterval(() => {
     refreshDB(db).catch(
@@ -99,85 +72,7 @@ if (!env.DEV_DONT_FETCH) {
     (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
   );
 }
-app.get(
-  "/whoami",
-  async ({ cookie }) => {
-    return {
-      user: await fetchUserDetails(cookie["session_id"]!.value as string),
-    };
-  },
-  {
-    response: t.Object({
-      user: t.Nullable(
-        t.Object({
-          googleId: t.String(),
-          id: t.Number(),
-          email: t.String(),
-          firstName: t.Nullable(t.String()),
-          lastName: t.Nullable(t.String()),
-          pictureUrl: t.Nullable(t.String()),
-        })
-      ),
-    }),
-  }
-);
 
-// DEPRECATED
-
-app.get("/locations", async () => ({ locations: deprecatedNotice }), {
-  detail: {
-    tags: ["Deprecated"],
-    hide: true,
-  },
-});
-
-app.get(
-  "/location/:name",
-  async ({ params: { name } }) => {
-    const filteredLocation = deprecatedNotice.filter((location) => {
-      return location.name?.toLowerCase().includes(name.toLowerCase());
-    });
-    return {
-      locations: filteredLocation,
-    };
-  },
-  {
-    detail: {
-      tags: ["Deprecated"],
-      hide: true,
-    },
-  }
-);
-
-app.get(
-  "/locations/time/:day/:hour/:min",
-  async ({ params: { day, hour, min } }) => {
-    const result = deprecatedNotice.filter((el) => {
-      let returning = false;
-      el.times.forEach((element) => {
-        const startMins =
-          element.start.day * 1440 +
-          element.start.hour * 60 +
-          element.start.minute;
-        const endMins =
-          element.end.day * 1440 + element.end.hour * 60 + element.end.minute;
-        const currentMins =
-          parseInt(day) * 1440 + parseInt(hour) * 60 + parseInt(min);
-        if (currentMins >= startMins && currentMins < endMins) {
-          returning = true;
-        }
-      });
-      return returning;
-    });
-    return { locations: result };
-  },
-  {
-    detail: {
-      tags: ["Deprecated"],
-      hide: true,
-    },
-  }
-);
 app.listen(env.PORT, ({ hostname, port }) => {
   notifySlack(`Dining API is running at ${hostname}:${port}`);
 });
