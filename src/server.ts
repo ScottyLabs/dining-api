@@ -33,6 +33,7 @@ export const app = new Elysia({ adapter: node() }).use(
 ); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
+  if (code === 401) return; // unauthorized
   if (code === "NOT_FOUND") {
     console.log(`Someone tried visiting ${path}, which does not exist :P`);
   } else {
