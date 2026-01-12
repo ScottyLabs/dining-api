@@ -15,7 +15,7 @@ export async function initializeTags(db: DBType, tags: string[]) {
 }
 
 /**
- * Passing in `undefined` for voteUp will delete the review, even if `text` is specified
+ * Passing in `null` for voteUp will delete the review, even if `text` is specified
  */
 export async function updateTagReview(
   db: DBType,
