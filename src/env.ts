@@ -7,6 +7,7 @@ const envSchema = z.object({
   RELOAD_WAIT_INTERVAL: z.coerce.number().default(1000 * 60 * 30), // 30 min
   SLACK_BACKEND_WEBHOOK_URL: z.string(),
   SLACK_FRONTEND_WEBHOOK_URL: z.string(),
+  SLACK_MAIN_CHANNEL_WEBHOOK_URL: z.string(),
   AXIOS_RETRY_INTERVAL_MS: z.coerce.number().default(1000),
   /** Special flag when running automated tests */
   IN_TEST_MODE: z.stringbool().default(false),
@@ -20,7 +21,7 @@ const envSchema = z.object({
     .transform((x) => x === "true")
     .default(false),
   ENV: z.enum(["dev", "staging", "prod"]),
-  SESSION_COOKIE_SIGNING_SECRET: z.string(),
+  SESSION_COOKIE_SIGNING_SECRET: z.string().default("lemon melon cookie"),
   HARDCODE_SESSION_FOR_DEV_TESTING: z.string().optional(),
 });
 console.log(envSchema.parse(process.env));

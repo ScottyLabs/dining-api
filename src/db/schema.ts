@@ -212,3 +212,24 @@ export const starReviewTable = pgTable(
     ), // rating is a multiple of .5
   ]
 );
+
+export const reportsTable = pgTable(
+  "reports",
+  {
+      id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+      userId: integer("user_id")
+        .references(() => userTable.id, {
+          onDelete: "cascade",
+        }),
+      createdAt: timestamp("created_at", {
+        withTimezone: true,
+        mode: "date",
+      }).defaultNow(),
+      locationId: text("location_id")
+      .references(() => locationDataTable.id, {
+        onDelete: "cascade",
+      })
+      .notNull(),
+      message: text("message").notNull(),
+  }
+)

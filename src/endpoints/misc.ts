@@ -6,6 +6,8 @@ import { DateTime } from "luxon";
 import { notifySlack } from "utils/slack";
 import { LocationsSchema } from "./schemas";
 import { env } from "env";
+import { reportsTable } from "db/schema";
+import { fetchUserDetails } from "./auth";
 
 export const miscEndpoints = new Elysia();
 miscEndpoints.get(
@@ -49,5 +51,35 @@ miscEndpoints.post(
       message: t.String(),
     }),
     detail: { hide: true },
+  }
+);
+
+miscEndpoints.post(
+  "/reportError",
+  async ({cookie, body: { location_id, message } }) => {
+    const session = cookie["session_id"]!.value as string | undefined;
+    const userDetails = await fetchUserDetails(session);
+
+    const userId = userDetails?.id;
+
+    await notifySlack(`
+        User (${userId}) has reported an error with location ${location_id}:
+        ${message}
+      `, env.SLACK_MAIN_CHANNEL_WEBHOOK_URL);
+    db.insert(reportsTable).values({
+      locationId: location_id,
+      message: message,
+      userId: userId,
+    })
+  },
+  {
+    body: t.Object({
+      location_id: t.String(),
+      message: t.String(),
+    }),
+    detail: {
+      description:
+        "Endpoint for reporting errors in information",
+      },
   }
 );
