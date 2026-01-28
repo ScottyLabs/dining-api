@@ -13,7 +13,7 @@ miscEndpoints.get(
   () => {
     return "ScottyLabs Dining API";
   },
-  { response: t.String({ examples: ["ScottyLabs Dining API"] }) }
+  { response: t.String({ examples: ["ScottyLabs Dining API"] }) },
 );
 miscEndpoints.get(
   "/v2/locations",
@@ -24,7 +24,7 @@ miscEndpoints.get(
       description:
         "The times array is guaranteed to be sorted and non-overlapping. Both start and end are inclusive boundaries",
     },
-  }
+  },
 );
 miscEndpoints.get("/emails", async () => await new QueryUtils(db).getEmails(), {
   response: t.Array(
@@ -35,7 +35,7 @@ miscEndpoints.get("/emails", async () => await new QueryUtils(db).getEmails(), {
       email: t.String({
         example: "alice72@andrew.cmu.edu",
       }),
-    })
+    }),
   ),
 });
 
@@ -49,5 +49,22 @@ miscEndpoints.post(
       message: t.String(),
     }),
     detail: { hide: true },
-  }
+  },
+);
+miscEndpoints.post(
+  "/report",
+  async ({ body: { message, locationId, locationName } }) => {
+    await notifySlack(
+      `Report for ${locationName} (\`${locationId}\`): ${message}`,
+      env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
+    );
+    return {};
+  },
+  {
+    body: t.Object({
+      locationName: t.String(),
+      locationId: t.String(),
+      message: t.String({ maxLength: 300 }),
+    }),
+  },
 );
