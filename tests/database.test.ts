@@ -1,4 +1,8 @@
-import { addLocationDataToDb, addTimeOverride } from "db/updateLocation";
+import {
+  addLocationDataToDb,
+  addTimeOverride,
+  addWeeklyTimeOverride,
+} from "db/updateLocation";
 import { getAllLocationsFromDB } from "db/getLocations";
 import { DateTime } from "luxon";
 import { ILocation } from "types";
@@ -54,7 +58,7 @@ describe("general location insertion tests", () => {
     "properly resets state on every new dbTest",
     async ({ ctx: { db } }) => {
       expect(await getAllLocationsFromDB(db, DateTime.now())).toEqual([]);
-    }
+    },
   );
   dbTest.concurrent(
     "works on insertion with times",
@@ -94,7 +98,7 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent(
     "works on insertion with times (tests search window)",
@@ -114,7 +118,7 @@ describe("general location insertion tests", () => {
       });
       const dbResult = await getAllLocationsFromDB(
         db,
-        parseDate("1/3/25") // 2 days after latest time
+        parseDate("1/3/25"), // 2 days after latest time
       );
       expect(dbResult).toEqual([
         {
@@ -124,7 +128,7 @@ describe("general location insertion tests", () => {
           times: [],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent(
     "works on insertion with times (tests search window)",
@@ -143,7 +147,7 @@ describe("general location insertion tests", () => {
       });
       const dbResult = await getAllLocationsFromDB(
         db,
-        parseDate("1/3/25") // 2 days after latest time
+        parseDate("1/3/25"), // 2 days after latest time
       );
       expect(dbResult).toEqual([
         {
@@ -157,7 +161,7 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent(
     "works on insertion with times (DST - start 2AM -> 3AM) (3/9/25)",
@@ -179,7 +183,7 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent(
     "works on insertion with times (DST - start 2AM -> 3AM) (3/9/25)",
@@ -201,7 +205,29 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
+  );
+  dbTest.concurrent(
+    "works on insertion with times (DST - start 2AM -> 3AM) (3/9/25)",
+    async ({ ctx: { db } }) => {
+      const id = await addLocationDataToDb(db, {
+        ...locationIn,
+        times: [parseTime("3/8/25", "2:30 am", "2:15 am")], // 2:15 technically doesn't exist on that day
+      });
+      const dbResult = await getAllLocationsFromDB(db, parseDate("1/3/25"));
+      expect(dbResult).toEqual([
+        {
+          ...locationOut,
+          id: id,
+          times: [
+            {
+              start: timeToUnixTimestamp("3/8/25 2:30 AM"), // 3:30 AM... this is certainly some behavior...
+              end: timeToUnixTimestamp("3/9/25 3:15 AM"),
+            },
+          ],
+        },
+      ]);
+    },
   );
   dbTest.concurrent(
     "works on insertion with times (DST - end 2AM -> 1AM) (11/2/25) [if a place closes at 2 AM, we assume it's the second 2AM (I mean, the first 2AM technically doesn't exist...)",
@@ -228,7 +254,7 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent(
     "works on insertion with times (DST - end 2AM -> 1AM) (11/2/25) [if a place closes at 1:30 AM, we assume dbTest's the first 1:30 AM and not the second]",
@@ -255,7 +281,7 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent("works on specials", async ({ ctx: { db } }) => {
     const id = await addLocationDataToDb(db, {
@@ -386,7 +412,7 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent("works on time overwrites", async ({ ctx: { db } }) => {
     const id = await addLocationDataToDb(db, {
@@ -403,13 +429,13 @@ describe("general location insertion tests", () => {
       db,
       id,
       "1/1/25",
-      "2:00 AM - 3:00 PM"
+      "2:00 AM - 3:00 PM",
     );
     const success2 = await addTimeOverride(
       db,
       id,
       "1/1/25",
-      "3:00 AM - 4:00 PM"
+      "3:00 AM - 4:00 PM",
     ); // second one should overwrite the first one
     expect(success1).toBe(true);
     expect(success2).toBe(true);
@@ -482,6 +508,101 @@ describe("general location insertion tests", () => {
       },
     ]);
   });
+  dbTest.concurrent(
+    "point time overwrites take precedence over weekly time overwrites",
+    async ({ ctx: { db } }) => {
+      const locationId = await addLocationDataToDb(db, {
+        ...locationIn,
+        times: [
+          parseTime("1/1/25", "5:00 am", "5:00 pm"),
+          parseTime("1/2/25", "5:00 am", "5:00 pm"),
+          parseTime("1/3/25", "5:00 am", "5:00 pm"),
+          parseTime("1/4/25", "5:00 am", "5:00 pm"),
+          parseTime("1/5/25", "5:00 am", "5:00 pm"),
+        ],
+      });
+
+      const success = await addTimeOverride(
+        db,
+        locationId,
+        "1/1/25",
+        "5:00 AM - 6:00 AM",
+      );
+      await addWeeklyTimeOverride(db, locationId, 3, "9:00 PM - 10:00 PM");
+      await addWeeklyTimeOverride(db, locationId, 3, "9:00 PM - 11:00 PM");
+      await addWeeklyTimeOverride(db, locationId, 4, "9:00 PM - 11:00 PM");
+      expect(success).toBe(true);
+      expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+        {
+          ...locationOut,
+          id: locationId,
+          times: [
+            {
+              start: timeToUnixTimestamp("1/1/25 5:00 AM"),
+              end: timeToUnixTimestamp("1/1/25 6:00 AM"),
+            },
+            {
+              start: timeToUnixTimestamp("1/2/25 9:00 PM"),
+              end: timeToUnixTimestamp("1/2/25 11:00 PM"),
+            },
+            {
+              start: timeToUnixTimestamp("1/3/25 5:00 AM"),
+              end: timeToUnixTimestamp("1/3/25 5:00 PM"),
+            },
+            {
+              start: timeToUnixTimestamp("1/4/25 5:00 AM"),
+              end: timeToUnixTimestamp("1/4/25 5:00 PM"),
+            },
+            {
+              start: timeToUnixTimestamp("1/5/25 5:00 AM"),
+              end: timeToUnixTimestamp("1/5/25 5:00 PM"),
+            },
+          ],
+        },
+      ]);
+    },
+  );
+  dbTest.concurrent("weekly time overwrites", async ({ ctx: { db } }) => {
+    const locationId = await addLocationDataToDb(db, {
+      ...locationIn,
+      times: [
+        parseTime("1/1/25", "5:00 am", "5:00 pm"),
+        parseTime("1/2/25", "5:00 am", "5:00 pm"),
+        parseTime("1/3/25", "5:00 am", "5:00 pm"),
+        parseTime("1/4/25", "5:00 am", "5:00 pm"),
+        parseTime("1/5/25", "5:00 am", "5:00 pm"),
+      ],
+    });
+
+    await addWeeklyTimeOverride(db, locationId, 3, "9:00 PM - 10:00 PM");
+    await addWeeklyTimeOverride(db, locationId, 3, "9:00 PM - 11:00 PM");
+    await addWeeklyTimeOverride(db, locationId, 4, "9:00 PM - 11:00 PM");
+    await addWeeklyTimeOverride(db, locationId, 5, "CLOSED");
+    expect(await getAllLocationsFromDB(db, parseDate("1/1/25"))).toEqual([
+      {
+        ...locationOut,
+        id: locationId,
+        times: [
+          {
+            start: timeToUnixTimestamp("1/1/25 9:00 PM"),
+            end: timeToUnixTimestamp("1/1/25 11:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/2/25 9:00 PM"),
+            end: timeToUnixTimestamp("1/2/25 11:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/4/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/4/25 5:00 PM"),
+          },
+          {
+            start: timeToUnixTimestamp("1/5/25 5:00 AM"),
+            end: timeToUnixTimestamp("1/5/25 5:00 PM"),
+          },
+        ],
+      },
+    ]);
+  });
   dbTest.concurrent("works on general overwrites", async ({ ctx: { db } }) => {
     const id = await addLocationDataToDb(db, {
       ...locationIn,
@@ -526,7 +647,7 @@ describe("general location insertion tests", () => {
           id: id2,
           conceptId: "2",
         },
-      ])
+      ]),
     );
   });
   dbTest.concurrent(
@@ -571,7 +692,7 @@ describe("general location insertion tests", () => {
           ],
         },
       ]);
-    }
+    },
   );
   dbTest.concurrent("time merging", async ({ ctx: { db } }) => {
     const id = await addLocationDataToDb(db, {

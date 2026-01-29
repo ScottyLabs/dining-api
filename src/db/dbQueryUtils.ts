@@ -6,6 +6,7 @@ import {
   specialsTable,
   timeOverwritesTable,
   timesTable,
+  weeklyTimeOverwritesTable,
 } from "./schema";
 
 import { DBType } from "./db";
@@ -72,21 +73,21 @@ export class QueryUtils {
         timesTable,
         and(
           eq(locationDataTable.id, timesTable.locationId),
-          gte(timesTable.date, timeSearchCutoffStr)
-        )
+          gte(timesTable.date, timeSearchCutoffStr),
+        ),
       )
       .leftJoin(
         externalIdToInternalIdTable,
-        eq(externalIdToInternalIdTable.internalId, locationDataTable.id)
+        eq(externalIdToInternalIdTable.internalId, locationDataTable.id),
       );
 
     return locationData.reduce<
       Record<
         string,
-        | typeof locationDataTable.$inferSelect & {
-            times: IDateTimeRange[];
-            conceptId: string | null;
-          }
+        typeof locationDataTable.$inferSelect & {
+          times: IDateTimeRange[];
+          conceptId: string | null;
+        }
       >
     >((acc, { location_data, location_times, external_id_to_internal_id }) => {
       if (!acc[location_data.id]) {
@@ -126,10 +127,10 @@ export class QueryUtils {
         [overwrite.locationId]: Object.fromEntries(
           Object.entries(overwrite).filter(([key, v]) => {
             return key !== "locationId" && v !== null;
-          })
+          }),
         ) as RequiredProperty<typeof overwritesTable.$inferSelect>,
       }),
-      {}
+      {},
     );
   }
 
@@ -144,7 +145,7 @@ export class QueryUtils {
       .where(gte(timeOverwritesTable.date, earliestDate))
       .catch((e) => {
         notifySlack(
-          `<!channel> Failed to fetch time overwrites with error ${e}`
+          `<!channel> Failed to fetch time overwrites with error ${e}`,
         );
         return [];
       });
@@ -159,7 +160,21 @@ export class QueryUtils {
         },
       };
     }, {});
-    return idToTimeOverrides;
+    const weeklyOverrides = await this.db
+      .select()
+      .from(weeklyTimeOverwritesTable);
+    const idToWeeklyOverrides = weeklyOverrides.reduce<{
+      [locationId in string]: { [weekday in number]: ITimeSlot[] };
+    }>((acc, curOverride) => {
+      return {
+        ...acc,
+        [curOverride.locationId]: {
+          ...acc[curOverride.locationId],
+          [curOverride.weekday]: parseTimeSlots(curOverride.timeString),
+        },
+      };
+    }, {});
+    return { idToTimeOverrides, idToWeeklyOverrides };
   }
 
   async getEmails(): Promise<{ name: string; email: string }[]> {

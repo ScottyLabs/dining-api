@@ -6,6 +6,7 @@ import {
   specialsTable,
   timeOverwritesTable,
   timesTable,
+  weeklyTimeOverwritesTable,
 } from "./schema";
 import { and, eq, gte } from "drizzle-orm";
 import { pad } from "utils/timeUtils";
@@ -50,7 +51,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
       });
 
     const todayAsSQLString = `${location.today.year}-${pad(
-      location.today.month
+      location.today.month,
     )}-${pad(location.today.day)}`;
     // add specials
     await tx
@@ -58,8 +59,8 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
       .where(
         and(
           eq(specialsTable.locationId, internalId),
-          eq(specialsTable.date, todayAsSQLString)
-        )
+          eq(specialsTable.date, todayAsSQLString),
+        ),
       );
     const specials = [
       ...(location.todaysSpecials?.map((sp) => ({
@@ -79,7 +80,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
           name: special.title,
           description: special.description,
           type: special.type,
-        }))
+        })),
       );
 
     // remove rows from whenever the scrape started from (aka remove entries corresponding to the last 7 days)
@@ -88,8 +89,8 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
       .where(
         and(
           eq(timesTable.locationId, internalId),
-          and(gte(timesTable.date, todayAsSQLString))
-        )
+          and(gte(timesTable.date, todayAsSQLString)),
+        ),
       );
     if (location.times.length) {
       await tx.insert(timesTable).values(
@@ -98,7 +99,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
           date: `${time.year}-${pad(time.month)}-${pad(time.day)}`,
           startTime: time.startMinutesFromMidnight,
           endTime: time.endMinutesFromMidnight,
-        }))
+        })),
       );
     }
 
@@ -125,7 +126,7 @@ export async function addTimeOverride(
   db: DBType,
   locationId: string,
   date: string,
-  timeStringOverride: string
+  timeStringOverride: string,
 ) {
   const parsedDate = DateTime.fromFormat(date, "M/d/yy");
   if (!parsedDate.isValid) {
@@ -141,6 +142,29 @@ export async function addTimeOverride(
     .values(rowToInsert)
     .onConflictDoUpdate({
       target: [timeOverwritesTable.locationId, timeOverwritesTable.date],
+      set: rowToInsert,
+    });
+  return true;
+}
+export async function addWeeklyTimeOverride(
+  db: DBType,
+  locationId: string,
+  weekday: number,
+  timeStringOverride: string,
+) {
+  const rowToInsert: typeof weeklyTimeOverwritesTable.$inferInsert = {
+    weekday,
+    locationId: locationId,
+    timeString: timeStringOverride,
+  };
+  await db
+    .insert(weeklyTimeOverwritesTable)
+    .values(rowToInsert)
+    .onConflictDoUpdate({
+      target: [
+        weeklyTimeOverwritesTable.locationId,
+        weeklyTimeOverwritesTable.weekday,
+      ],
       set: rowToInsert,
     });
   return true;

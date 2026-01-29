@@ -15,11 +15,13 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
 
   const DB = new QueryUtils(db);
   const locationIdToData = await DB.getLocationIdToDataMap(
-    timeSearchCutoff.toSQLDate()
+    timeSearchCutoff.toSQLDate(),
   );
   const specials = await DB.getSpecials(today.toSQLDate());
   const generalOverrides = await DB.getGeneralOverrides();
-  const timeOverrides = await DB.getTimeOverrides(timeSearchCutoff.toSQLDate());
+  const { idToTimeOverrides, idToWeeklyOverrides } = await DB.getTimeOverrides(
+    timeSearchCutoff.toSQLDate(),
+  );
 
   // apply overrides, merge all time intervals, and add specials
   const finalLocationData = Object.entries(locationIdToData).map(
@@ -28,7 +30,12 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
         ...data,
         ...generalOverrides[id], // this line only works because the override table has the same columns as the normal table
         times: remapAndMergeTimeIntervals(
-          applyTimeOverrides(data.times, timeOverrides[id])
+          applyTimeOverrides(
+            data.times,
+            timeSearchCutoff,
+            idToTimeOverrides[id],
+            idToWeeklyOverrides[id],
+          ),
         ),
         // .map(
         //   (time) =>
@@ -39,26 +46,54 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
         todaysSoups: specials[id]?.soups ?? [],
         todaysSpecials: specials[id]?.specials ?? [],
       };
-    }
+    },
   );
   return finalLocationData;
 }
 
 function applyTimeOverrides(
   originalTimes: IDateTimeRange[],
-  overrideTimes?: { [date in string]: ITimeSlot[] }
+  startDate: DateTime<true>,
+  overridePointTimes?: { [date in string]: ITimeSlot[] },
+  overrideWeeklyTimes?: { [weekday in number]: ITimeSlot[] },
 ) {
-  if (overrideTimes === undefined) return originalTimes;
-  for (const [overrideDate, timeRanges] of Object.entries(overrideTimes)) {
-    originalTimes = originalTimes.filter((time) => time.date !== overrideDate);
+  if (overridePointTimes === undefined && overrideWeeklyTimes === undefined)
+    return originalTimes;
+  if (overrideWeeklyTimes !== undefined) {
+    for (let i = 0; i < 8; i++) {
+      // 7 + 1 day prior
+      const curDate = startDate.plus({ days: i });
+      const overrideIntervals = overrideWeeklyTimes[curDate.weekday % 7];
+      if (overrideIntervals === undefined) continue;
+      originalTimes = originalTimes.filter(
+        (time) => time.date !== curDate.toSQLDate(),
+      );
+      originalTimes.push(
+        ...overrideIntervals?.map((rng) => ({
+          date: curDate.toSQLDate(),
+          startMinutesSinceMidnight: rng.start.hour * 60 + rng.start.minute,
+          endMinutesSinceMidnight: rng.end.hour * 60 + rng.end.minute,
+        })),
+      );
+    }
+  }
+  //takes precedence over weekly overrides
+  if (overridePointTimes !== undefined) {
+    for (const [overrideDate, timeRanges] of Object.entries(
+      overridePointTimes,
+    )) {
+      originalTimes = originalTimes.filter(
+        (time) => time.date !== overrideDate,
+      );
 
-    originalTimes.push(
-      ...timeRanges.map((rng) => ({
-        date: overrideDate,
-        startMinutesSinceMidnight: rng.start.hour * 60 + rng.start.minute,
-        endMinutesSinceMidnight: rng.end.hour * 60 + rng.end.minute,
-      }))
-    );
+      originalTimes.push(
+        ...timeRanges.map((rng) => ({
+          date: overrideDate,
+          startMinutesSinceMidnight: rng.start.hour * 60 + rng.start.minute,
+          endMinutesSinceMidnight: rng.end.hour * 60 + rng.end.minute,
+        })),
+      );
+    }
   }
   return originalTimes;
 }
