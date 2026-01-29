@@ -149,7 +149,7 @@ export class QueryUtils {
         );
         return [];
       });
-    const idToTimeOverrides = timeOverrides.reduce<{
+    const idToPointOverrides = timeOverrides.reduce<{
       [locationId in string]: { [date in string]: ITimeSlot[] };
     }>((acc, override) => {
       return {
@@ -174,7 +174,7 @@ export class QueryUtils {
         },
       };
     }, {});
-    return { idToTimeOverrides, idToWeeklyOverrides };
+    return { idToPointOverrides, idToWeeklyOverrides };
   }
 
   async getEmails(): Promise<{ name: string; email: string }[]> {

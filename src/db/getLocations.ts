@@ -19,7 +19,7 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
   );
   const specials = await DB.getSpecials(today.toSQLDate());
   const generalOverrides = await DB.getGeneralOverrides();
-  const { idToTimeOverrides, idToWeeklyOverrides } = await DB.getTimeOverrides(
+  const { idToPointOverrides, idToWeeklyOverrides } = await DB.getTimeOverrides(
     timeSearchCutoff.toSQLDate(),
   );
 
@@ -33,7 +33,7 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
           applyTimeOverrides(
             data.times,
             timeSearchCutoff,
-            idToTimeOverrides[id],
+            idToPointOverrides[id],
             idToWeeklyOverrides[id],
           ),
         ),
@@ -69,7 +69,7 @@ function applyTimeOverrides(
         (time) => time.date !== curDate.toSQLDate(),
       );
       originalTimes.push(
-        ...overrideIntervals?.map((rng) => ({
+        ...overrideIntervals.map((rng) => ({
           date: curDate.toSQLDate(),
           startMinutesSinceMidnight: rng.start.hour * 60 + rng.start.minute,
           endMinutesSinceMidnight: rng.end.hour * 60 + rng.end.minute,
