@@ -162,7 +162,13 @@ export class QueryUtils {
     }, {});
     const weeklyOverrides = await this.db
       .select()
-      .from(weeklyTimeOverwritesTable);
+      .from(weeklyTimeOverwritesTable)
+      .catch((e) => {
+        notifySlack(
+          `<!channel> Failed to fetch weekly time overwrites with error ${e}`,
+        );
+        return [];
+      });
     const idToWeeklyOverrides = weeklyOverrides.reduce<{
       [locationId in string]: { [weekday in number]: ITimeSlot[] };
     }>((acc, curOverride) => {

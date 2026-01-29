@@ -212,7 +212,7 @@ describe("general location insertion tests", () => {
     async ({ ctx: { db } }) => {
       const id = await addLocationDataToDb(db, {
         ...locationIn,
-        times: [parseTime("3/8/25", "2:30 am", "2:15 am")], // 2:15 technically doesn't exist on that day
+        times: [parseTime("3/8/25", "2:30 am", "2:15 am")], // end time is earlier than start, so it rolls to 3/9 2:15 AM, which is skipped to 3:15 AM by DST jump
       });
       const dbResult = await getAllLocationsFromDB(db, parseDate("1/3/25"));
       expect(dbResult).toEqual([
@@ -221,7 +221,7 @@ describe("general location insertion tests", () => {
           id: id,
           times: [
             {
-              start: timeToUnixTimestamp("3/8/25 2:30 AM"), // 3:30 AM... this is certainly some behavior...
+              start: timeToUnixTimestamp("3/8/25 2:30 AM"),
               end: timeToUnixTimestamp("3/9/25 3:15 AM"),
             },
           ],
