@@ -108,7 +108,7 @@ export const weeklyTimeOverwritesTable = pgTable(
     timeString: text("time_string").notNull(),
   },
   (t) => [
-    uniqueIndex("location_weekday").on(t.locationId, t.weekday),
+    primaryKey({ columns: [t.locationId, t.weekday] }),
     check("weekday_check", sql`${t.weekday} >= 0 AND ${t.weekday} < 7`), // sunday is 0, monday is 1, etc.
   ],
 );
