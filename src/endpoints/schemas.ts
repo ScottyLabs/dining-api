@@ -24,6 +24,7 @@ export const LocationSchema = t.Object({
 
   name: t.Nullable(t.String({ examples: ["Schatz"] })),
   location: t.String(),
+  ratingsAvg: t.Nullable(t.Number()),
   shortDescription: t.Nullable(t.String()),
   description: t.String(),
   url: t.String(),

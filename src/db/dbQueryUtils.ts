@@ -1,9 +1,11 @@
+import { avg, sql } from "drizzle-orm";
 import {
   externalIdToInternalIdTable,
   emailTable,
   locationDataTable,
   overwritesTable,
   specialsTable,
+  starReviewTable,
   timeOverwritesTable,
   timesTable,
 } from "./schema";
@@ -83,10 +85,10 @@ export class QueryUtils {
     return locationData.reduce<
       Record<
         string,
-        | typeof locationDataTable.$inferSelect & {
-            times: IDateTimeRange[];
-            conceptId: string | null;
-          }
+        typeof locationDataTable.$inferSelect & {
+          times: IDateTimeRange[];
+          conceptId: string | null;
+        }
       >
     >((acc, { location_data, location_times, external_id_to_internal_id }) => {
       if (!acc[location_data.id]) {
@@ -160,6 +162,18 @@ export class QueryUtils {
       };
     }, {});
     return idToTimeOverrides;
+  }
+
+  async getRatingsAvgs() {
+    const ratingsAvgs = await this.db
+      .select({
+        starRating: sql<number>`cast(${avg(starReviewTable.starRating)} as decimal(2,1))`,
+        locationId: starReviewTable.locationId,
+      })
+      .from(starReviewTable)
+      .groupBy(starReviewTable.locationId);
+
+    return Object.fromEntries(ratingsAvgs.map((e) => [e.locationId, e.starRating]));
   }
 
   async getEmails(): Promise<{ name: string; email: string }[]> {
