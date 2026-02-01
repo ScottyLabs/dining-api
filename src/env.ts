@@ -7,6 +7,7 @@ const envSchema = z.object({
   RELOAD_WAIT_INTERVAL: z.coerce.number().default(1000 * 60 * 30), // 30 min
   SLACK_BACKEND_WEBHOOK_URL: z.string(),
   SLACK_FRONTEND_WEBHOOK_URL: z.string(),
+  SLACK_MAIN_CHANNEL_WEBHOOK_URL: z.string(),
   AXIOS_RETRY_INTERVAL_MS: z.coerce.number().default(1000),
   /** Special flag when running automated tests */
   IN_TEST_MODE: z.stringbool().default(false),

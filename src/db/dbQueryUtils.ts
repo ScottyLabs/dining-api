@@ -8,6 +8,7 @@ import {
   starReviewTable,
   timeOverwritesTable,
   timesTable,
+  weeklyTimeOverwritesTable,
 } from "./schema";
 
 import { DBType } from "./db";
@@ -74,12 +75,12 @@ export class QueryUtils {
         timesTable,
         and(
           eq(locationDataTable.id, timesTable.locationId),
-          gte(timesTable.date, timeSearchCutoffStr)
-        )
+          gte(timesTable.date, timeSearchCutoffStr),
+        ),
       )
       .leftJoin(
         externalIdToInternalIdTable,
-        eq(externalIdToInternalIdTable.internalId, locationDataTable.id)
+        eq(externalIdToInternalIdTable.internalId, locationDataTable.id),
       );
 
     return locationData.reduce<
@@ -128,10 +129,10 @@ export class QueryUtils {
         [overwrite.locationId]: Object.fromEntries(
           Object.entries(overwrite).filter(([key, v]) => {
             return key !== "locationId" && v !== null;
-          })
+          }),
         ) as RequiredProperty<typeof overwritesTable.$inferSelect>,
       }),
-      {}
+      {},
     );
   }
 
@@ -146,11 +147,11 @@ export class QueryUtils {
       .where(gte(timeOverwritesTable.date, earliestDate))
       .catch((e) => {
         notifySlack(
-          `<!channel> Failed to fetch time overwrites with error ${e}`
+          `<!channel> Failed to fetch time overwrites with error ${e}`,
         );
         return [];
       });
-    const idToTimeOverrides = timeOverrides.reduce<{
+    const idToPointOverrides = timeOverrides.reduce<{
       [locationId in string]: { [date in string]: ITimeSlot[] };
     }>((acc, override) => {
       return {
@@ -161,7 +162,27 @@ export class QueryUtils {
         },
       };
     }, {});
-    return idToTimeOverrides;
+    const weeklyOverrides = await this.db
+      .select()
+      .from(weeklyTimeOverwritesTable)
+      .catch((e) => {
+        notifySlack(
+          `<!channel> Failed to fetch weekly time overwrites with error ${e}`,
+        );
+        return [];
+      });
+    const idToWeeklyOverrides = weeklyOverrides.reduce<{
+      [locationId in string]: { [weekday in number]: ITimeSlot[] };
+    }>((acc, curOverride) => {
+      return {
+        ...acc,
+        [curOverride.locationId]: {
+          ...acc[curOverride.locationId],
+          [curOverride.weekday]: parseTimeSlots(curOverride.timeString),
+        },
+      };
+    }, {});
+    return { idToPointOverrides, idToWeeklyOverrides };
   }
 
   async getRatingsAvgs() {
