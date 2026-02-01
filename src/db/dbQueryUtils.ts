@@ -167,7 +167,8 @@ export class QueryUtils {
   async getRatingsAvgs() {
     const ratingsAvgs = await this.db
       .select({
-        starRating: sql<number>`cast(${avg(starReviewTable.starRating)} as decimal(2,1))`,
+        // <number> only declares it to be a number, we explicitly cast it to a num
+        starRating: sql`cast(${avg(starReviewTable.starRating)} as decimal(2,1))`.mapWith(Number),
         locationId: starReviewTable.locationId,
       })
       .from(starReviewTable)
