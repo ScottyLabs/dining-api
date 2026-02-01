@@ -30,6 +30,7 @@ const locationIn: ILocation = {
 const locationOut = {
   id: "DYNAMICALLY GENERATED, replace with real id",
   name: "dbTest",
+  ratingsAvg: null,
   shortDescription: "hi",
   description: "description",
   url: "https://hi.com",
