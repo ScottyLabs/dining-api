@@ -1,4 +1,4 @@
-import { avg, sql } from "drizzle-orm";
+import { avg, count, sql } from "drizzle-orm";
 import {
   externalIdToInternalIdTable,
   emailTable,
@@ -196,6 +196,18 @@ export class QueryUtils {
       .groupBy(starReviewTable.locationId);
 
     return Object.fromEntries(ratingsAvgs.map((e) => [e.locationId, e.starRating]));
+  }
+
+  async getRatingsCounts() {
+    const ratingsCounts = await this.db
+      .select({
+        count: count(starReviewTable.id).mapWith(Number),
+        locationId: starReviewTable.locationId,
+      })
+      .from(starReviewTable)
+      .groupBy(starReviewTable.locationId);
+
+    return Object.fromEntries(ratingsCounts.map((e) => [e.locationId, e.count]));
   }
 
   async getEmails(): Promise<{ name: string; email: string }[]> {
