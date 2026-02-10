@@ -47,6 +47,9 @@ importers:
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
+      nodemailer:
+        specifier: ^8.0.1
+        version: 8.0.1
       openid-client:
         specifier: ^6.8.1
         version: 6.8.1
@@ -87,6 +90,9 @@ importers:
       '@types/node':
         specifier: ^24.0.14
         version: 24.5.2
+      '@types/nodemailer':
+        specifier: ^7.0.9
+        version: 7.0.9
       '@types/pg':
         specifier: ^8.15.5
         version: 8.15.5
@@ -1239,6 +1245,9 @@ packages:
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
 
+  '@types/nodemailer@7.0.9':
+    resolution: {integrity: sha512-vI8oF1M+8JvQhsId0Pc38BdUP2evenIIys7c7p+9OZXSPOH5c1dyINP1jT8xQ2xPuBUXmIC87s+91IZMDjH8Ow==}
+
   '@types/pg@8.15.5':
     resolution: {integrity: sha512-LF7lF6zWEKxuT3/OR8wAZGzkg4ENGXFNyiV/JeOt9z5B+0ZVwbql9McqX5c/WStFq1GaGso7H1AzP/qSzmlCKQ==}
 
@@ -2191,6 +2200,10 @@ packages:
 
   node-releases@2.0.21:
     resolution: {integrity: sha512-5b0pgg78U3hwXkCM8Z9b2FJdPZlr9Psr9V2gQPESdGHqbntyFJKFW4r5TeWGFzafGY3hzs1JC62VEQMbl1JFkw==}
+
+  nodemailer@8.0.1:
+    resolution: {integrity: sha512-5kcldIXmaEjZcHR6F28IKGSgpmZHaF1IXLWFTG+Xh3S+Cce4MiakLtWY+PlBU69fLbRa8HlaGIrC/QolUpHkhg==}
+    engines: {node: '>=6.0.0'}
 
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
@@ -3937,6 +3950,10 @@ snapshots:
     dependencies:
       undici-types: 7.12.0
 
+  '@types/nodemailer@7.0.9':
+    dependencies:
+      '@types/node': 24.10.4
+
   '@types/pg@8.15.5':
     dependencies:
       '@types/node': 24.5.2
@@ -4883,6 +4900,8 @@ snapshots:
   negotiator@1.0.0: {}
 
   node-releases@2.0.21: {}
+
+  nodemailer@8.0.1: {}
 
   normalize-path@3.0.0: {}
 
