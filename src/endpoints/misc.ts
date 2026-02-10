@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import { notifySlack } from "utils/slack";
 import { LocationsSchema } from "./schemas";
 import { env } from "env";
+import { sendEmail } from "utils/email";
 
 export const miscEndpoints = new Elysia();
 miscEndpoints.get(
@@ -54,10 +55,7 @@ miscEndpoints.post(
 miscEndpoints.post(
   "/report",
   async ({ body: { message, locationId, locationName } }) => {
-    await notifySlack(
-      `Report for ${locationName} (\`${locationId}\`): ${message}`,
-      env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
-    );
+    runBackgroundJobForErrorReport({ locationName, locationId, message });
     return {};
   },
   {
@@ -68,3 +66,23 @@ miscEndpoints.post(
     }),
   },
 );
+async function runBackgroundJobForErrorReport({
+  locationName,
+  locationId,
+  message,
+}: {
+  locationName: string;
+  locationId: string;
+  message: string;
+}) {
+  const received = await sendEmail(
+    env.ALERT_EMAIL_SEND,
+    env.ALERT_EMAIL_CC,
+    `[CMU Eats] Report for ${locationName}`,
+    `${message}\n\n Best,\nCMU Eats team`,
+  );
+  await notifySlack(
+    `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${received.join(", ")}`,
+    env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
+  );
+}

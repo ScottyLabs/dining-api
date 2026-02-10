@@ -11,11 +11,7 @@ import { refreshDB } from "reload";
 import { authEndpoints } from "endpoints/auth";
 import { miscEndpoints } from "endpoints/misc";
 import { reviewEndpoints } from "endpoints/reviews";
-import { populateTags } from "db/seed";
-
 Settings.defaultZone = "America/New_York";
-
-populateTags(db);
 
 export const app = new Elysia({ adapter: node() }).use(
   openapi({
@@ -29,7 +25,7 @@ export const app = new Elysia({ adapter: node() }).use(
           "Hello!~ Thanks for checking out the cmueats api. Have a great day!",
       },
     },
-  })
+  }),
 ); // I don't trust bun (as a runtime) enough (Eric Xu - 7/18/2025). This may change in the future, but bun is currently NOT a full drop-in replacement for node and is still rather unstable from personal experience
 
 app.onError(({ error, path, code }) => {
@@ -40,7 +36,7 @@ app.onError(({ error, path, code }) => {
     notifySlack(
       `<!channel> handling request on ${path} failed with error ${error} ${code}\n${
         error instanceof Error ? error.stack : "No stack trace"
-      }`
+      }`,
     );
   }
 });
@@ -65,11 +61,12 @@ app.use(reviewEndpoints);
 if (!env.DEV_DONT_FETCH) {
   setInterval(() => {
     refreshDB(db).catch(
-      (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+      (er) =>
+        `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`,
     );
   }, env.RELOAD_WAIT_INTERVAL);
   refreshDB(db).catch(
-    (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`
+    (er) => `Error in reload process: ${notifySlack(String(er))}\n${er.stack}`,
   );
 }
 
