@@ -33,7 +33,7 @@
     "@elysiajs/node": "1.4.2",
     "@elysiajs/openapi": "^1.4.11",
     "@types/express": "^5.0.3",
-    "axios": "^1.10.0",
+    "axios": "^1.13.5",
     "cheerio": "1.0.0-rc.12",
     "cookie-signature": "^1.2.2",
     "drizzle-kit": "^0.31.4",
