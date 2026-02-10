@@ -55,14 +55,16 @@ miscEndpoints.post(
 miscEndpoints.post(
   "/report",
   async ({ body: { message, locationId, locationName } }) => {
-    runBackgroundJobForErrorReport({ locationName, locationId, message });
+    runBackgroundJobForErrorReport({ locationName, locationId, message }).catch(
+      console.error,
+    );
     return {};
   },
   {
     body: t.Object({
       locationName: t.String(),
       locationId: t.String(),
-      message: t.String({ maxLength: 300 }),
+      message: t.String({ maxLength: 300, minLength: 1 }),
     }),
   },
 );
@@ -79,7 +81,7 @@ async function runBackgroundJobForErrorReport({
     env.ALERT_EMAIL_SEND,
     env.ALERT_EMAIL_CC,
     `[CMU Eats] Report for ${locationName}`,
-    `${message}\n\n Best,\nCMU Eats team`,
+    `${message}\n\nBest,\nCMU Eats team`,
   );
   await notifySlack(
     `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${received.join(", ")}`,

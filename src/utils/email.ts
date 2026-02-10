@@ -22,7 +22,6 @@ export async function sendEmail(
     cc: cc.split(","),
     subject: title,
     text: body, // Plain-text version of the message
-    html: body.replaceAll("\n", "<br/>"), // HTML version of the message
   });
   return info.accepted;
 }
