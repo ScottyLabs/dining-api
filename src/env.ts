@@ -28,6 +28,7 @@ const envSchema = z.object({
   GOOGLE_REFRESH_TOKEN: z.string(),
   ALERT_EMAIL_SEND: z.string(),
   ALERT_EMAIL_CC: z.string(),
+  // see https://stackoverflow.com/questions/51933601/what-is-the-definitive-way-to-use-gmail-with-oauth-and-nodemailer for how to obtain refresh token
 });
 console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);
