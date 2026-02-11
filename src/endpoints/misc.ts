@@ -81,7 +81,7 @@ async function runBackgroundJobForErrorReport({
     env.ALERT_EMAIL_SEND,
     env.ALERT_EMAIL_CC,
     `[CMU Eats] Report for ${locationName}`,
-    `${message}\n\nBest,\nCMU Eats team`,
+    `${message}\n\nBest,\nCMU Eats automated report system`,
   );
   await notifySlack(
     `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${received.join(", ")}`,
