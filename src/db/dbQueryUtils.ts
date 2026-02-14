@@ -185,29 +185,29 @@ export class QueryUtils {
     return { idToPointOverrides, idToWeeklyOverrides };
   }
 
-  async getRatingsAvgs() {
-    const ratingsAvgs = await this.db
+  async getRatingsAvgsAndCounts(): Promise<
+    [Record<string, number>, Record<string, number>]
+  > {
+    const ratings = await this.db
       .select({
-        // <number> only declares it to be a number, we explicitly cast it to a num
-        starRating: sql`cast(${avg(starReviewTable.starRating)} as decimal(2,1))`.mapWith(Number),
-        locationId: starReviewTable.locationId,
-      })
-      .from(starReviewTable)
-      .groupBy(starReviewTable.locationId);
-
-    return Object.fromEntries(ratingsAvgs.map((e) => [e.locationId, e.starRating]));
-  }
-
-  async getRatingsCounts() {
-    const ratingsCounts = await this.db
-      .select({
+        starRating:
+          sql`cast(${avg(starReviewTable.starRating)} as decimal(2,1))`.mapWith(
+            Number,
+          ),
         count: count(starReviewTable.id).mapWith(Number),
         locationId: starReviewTable.locationId,
       })
       .from(starReviewTable)
       .groupBy(starReviewTable.locationId);
 
-    return Object.fromEntries(ratingsCounts.map((e) => [e.locationId, e.count]));
+    const ratingsAvgs = Object.fromEntries(
+      ratings.map((e) => [e.locationId, e.starRating]),
+    );
+    const ratingsCounts = Object.fromEntries(
+      ratings.map((e) => [e.locationId, e.count]),
+    );
+
+    return [ratingsAvgs, ratingsCounts];
   }
 
   async getEmails(): Promise<{ name: string; email: string }[]> {
