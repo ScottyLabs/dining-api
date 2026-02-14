@@ -23,6 +23,12 @@ const envSchema = z.object({
   ENV: z.enum(["dev", "staging", "prod"]),
   SESSION_COOKIE_SIGNING_SECRET: z.string().default("lemon melon cookie"),
   HARDCODE_SESSION_FOR_DEV_TESTING: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_REFRESH_TOKEN: z.string(),
+  ALERT_EMAIL_SEND: z.string(),
+  ALERT_EMAIL_CC: z.string(),
+  // see https://stackoverflow.com/questions/51933601/what-is-the-definitive-way-to-use-gmail-with-oauth-and-nodemailer for how to obtain refresh token
 });
 console.log(envSchema.parse(process.env));
 export const env = envSchema.parse(process.env);

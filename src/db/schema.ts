@@ -33,7 +33,7 @@ export const externalIdToInternalIdTable = pgTable(
     externalId: text("external_id").unique().primaryKey(),
     type: externalIdType("external_id_type").default("concept_id"),
   },
-  (table) => [index("internal_id").on(table.internalId)]
+  (table) => [index("internal_id").on(table.internalId)],
 );
 export const locationDataTable = pgTable("location_data", {
   id: text("id").primaryKey(),
@@ -61,7 +61,7 @@ export const timesTable = pgTable(
     startTime: integer("start_time").notNull(),
     endTime: integer("end_time").notNull(),
   },
-  (table) => [index("date_lookup").on(table.locationId, table.date)]
+  (table) => [index("date_lookup").on(table.locationId, table.date)],
 );
 /**
  * Includes everything in ILocation except for soups and specials
@@ -93,7 +93,24 @@ export const timeOverwritesTable = pgTable(
     date: date("date").notNull(),
     timeString: text("time_string").notNull(),
   },
-  (table) => [primaryKey({ columns: [table.locationId, table.date] })]
+  (table) => [primaryKey({ columns: [table.locationId, table.date] })],
+);
+export const weeklyTimeOverwritesTable = pgTable(
+  "weekly_time_overwrites_table",
+  {
+    locationId: text("location_id")
+      .notNull()
+      .references(() => locationDataTable.id, {
+        onDelete: "cascade",
+      }),
+    /** sunday is 0, monday is 1, ... */
+    weekday: integer("weekday").notNull(),
+    timeString: text("time_string").notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.locationId, t.weekday] }),
+    check("weekday_check", sql`${t.weekday} >= 0 AND ${t.weekday} < 7`), // sunday is 0, monday is 1, etc.
+  ],
 );
 export const specialType = pgEnum("specialType", ["special", "soup"]);
 
@@ -128,7 +145,7 @@ export const userTable = pgTable(
       mode: "date",
     }).defaultNow(),
   },
-  (table) => [index("google_id").on(table.googleId)]
+  (table) => [index("google_id").on(table.googleId)],
 );
 export const userSessionTable = pgTable("sessions", {
   sessionId: text("id").notNull().primaryKey(),
@@ -178,9 +195,9 @@ export const tagReviewTable = pgTable(
     uniqueIndex("tag_reviews_location_tag_user_uniq").on(
       t.locationId,
       t.tagId,
-      t.userId
+      t.userId,
     ),
-  ]
+  ],
 );
 export const starReviewTable = pgTable(
   "star_reviews",
@@ -208,9 +225,9 @@ export const starReviewTable = pgTable(
     uniqueIndex("star_reviews_location_user_uniq").on(t.locationId, t.userId),
     check(
       "rating_number_check",
-      sql`${t.starRating} > 0 AND ${t.starRating} <= 5 AND mod(${t.starRating}*2,1) = 0`
+      sql`${t.starRating} > 0 AND ${t.starRating} <= 5 AND mod(${t.starRating}*2,1) = 0`,
     ), // rating is a multiple of .5
-  ]
+  ],
 );
 
 export const reportsTable = pgTable(

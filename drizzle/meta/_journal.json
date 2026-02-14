@@ -57,6 +57,20 @@
       "when": 1768158573717,
       "tag": "0007_naive_lady_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1769645286049,
+      "tag": "0008_ordinary_rage",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1769646373776,
+      "tag": "0009_cooing_snowbird",
+      "breakpoints": true
     }
   ]
 }
