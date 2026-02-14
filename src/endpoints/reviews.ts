@@ -1,5 +1,6 @@
 import Elysia, { status, t } from "elysia";
 import { fetchUserDetails } from "./auth";
+import { eq } from "drizzle-orm"
 import {
   addStarReview,
   deleteStarReview,
@@ -9,6 +10,7 @@ import {
   updateTagReview,
 } from "db/reviews";
 import { db } from "db/db";
+import { reportsTable } from "db/schema";
 
 export const reviewEndpoints = new Elysia();
 reviewEndpoints
@@ -126,5 +128,25 @@ reviewEndpoints
           updatedAt: t.Number(),
         })
       ),
+    }
+  )
+  .get(
+    "/v2/locations/:locationId/reports",
+    async ({ params: { locationId } }) => {
+
+      const reports = await db.select().from(reportsTable).where(eq(reportsTable.locationId, locationId))
+      console.log("lol", await db.select().from(reportsTable))
+      return reports
+    },
+    {
+      response: t.Array(
+        t.Object({
+          id: t.Number(),
+          userId: t.Nullable(t.Number()),
+          createdAt: t.Date(),
+          locationId: t.String(),
+          message: t.String()
+        })
+      )
     }
   );

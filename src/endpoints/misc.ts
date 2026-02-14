@@ -65,6 +65,7 @@ miscEndpoints.post(
 
     const userId = userDetails?.id;
 
+
     await notifySlack(`
         User (${userId}) has reported an error with location ${location_id}:
         ${message}
