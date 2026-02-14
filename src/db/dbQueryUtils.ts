@@ -191,7 +191,9 @@ export class QueryUtils {
     const ratings = await this.db
       .select({
         starRating:
-          sql`cast(${avg(starReviewTable.starRating)} as decimal(2,1))`.mapWith(
+          // since all ratings are from 0 to 5, the whole part of the average cannot
+          // exceeds one. also we make the decimal digits longer for other consumers
+          sql`cast(${avg(starReviewTable.starRating)} as decimal(4,3))`.mapWith(
             Number,
           ),
         count: count(starReviewTable.id).mapWith(Number),
