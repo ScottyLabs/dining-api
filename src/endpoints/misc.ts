@@ -70,7 +70,7 @@ miscEndpoints.post(
         User (${userId}) has reported an error with location ${location_id}:
         ${message}
       `, env.SLACK_MAIN_CHANNEL_WEBHOOK_URL);
-    db.insert(reportsTable).values({
+    await db.insert(reportsTable).values({
       locationId: location_id,
       message: message,
       userId: userId,

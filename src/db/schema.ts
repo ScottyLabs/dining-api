@@ -241,7 +241,7 @@ export const reportsTable = pgTable(
       createdAt: timestamp("created_at", {
         withTimezone: true,
         mode: "date",
-      }).notNull().defaultNow(),
+      }).defaultNow(),
       locationId: text("location_id")
       .references(() => locationDataTable.id, {
         onDelete: "cascade",
