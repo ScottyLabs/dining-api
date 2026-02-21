@@ -6,6 +6,11 @@ import { DateTime } from "luxon";
 import { notifySlack } from "utils/slack";
 import { LocationsSchema } from "./schemas";
 import { env } from "env";
+import { eq } from "drizzle-orm"
+
+import { locationDataTable, reportsTable } from "db/schema";
+import { fetchUserDetails } from "./auth";
+
 import { sendEmail } from "utils/email";
 
 export const miscEndpoints = new Elysia();
@@ -52,23 +57,58 @@ miscEndpoints.post(
     detail: { hide: true },
   },
 );
+
 miscEndpoints.post(
   "/report",
-  async ({ body: { message, locationId, locationName } }) => {
-    runBackgroundJobForErrorReport({ locationName, locationId, message }).catch(
-      console.error,
-    );
-    return {};
+  async ({ cookie, body: { locationId, message } }) => {
+    const session = cookie["session_id"]!.value as string | undefined;
+    const userDetails = await fetchUserDetails(session);
+
+    const userId = userDetails?.id;
+
+    const reports = await db.select().from(locationDataTable).where(eq(locationDataTable.id, locationId))
+    if (reports.length == 0) {
+      throw new Response(`Invalid location id ${locationId}`, {
+        status: 400,
+      });
+    }
+
+    if (reports.length > 1) {
+      throw new Response(`
+          Expected 1 restaurant corresponding to id=${locationId}. Somehow got 2.
+        `, { status: 500 }) // this should be unreachable
+    }
+
+    const locationName = reports[0]?.name ?? "Unnamed"
+    createReport(
+      {
+        locationName,
+        locationId,
+        message,
+      }
+    ).catch(console.error)
+
+    await db.insert(reportsTable).values({
+      locationId,
+      message,
+      userId,
+    })
+
+    return {}
   },
   {
     body: t.Object({
-      locationName: t.String(),
       locationId: t.String(),
-      message: t.String({ maxLength: 300, minLength: 1 }),
+      message: t.String({ minLength: 1, maxLength: 512 }),
     }),
-  },
+    detail: {
+      description:
+        "Endpoint for reporting errors in information",
+    },
+  }
 );
-async function runBackgroundJobForErrorReport({
+
+async function createReport({
   locationName,
   locationId,
   message,
@@ -87,4 +127,5 @@ async function runBackgroundJobForErrorReport({
     `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${received.join(", ")}`,
     env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
   );
+
 }
