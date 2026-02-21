@@ -84,9 +84,14 @@ miscEndpoints.post(
         locationName: reports[0]?.name ?? "Unnamed",
         locationId: location_id,
         message: message,
-        userId: userId,
       }
     ).catch(console.error)
+
+    await db.insert(reportsTable).values({
+      locationId: location_id,
+      message: message,
+      userId: userId,
+    })
   },
   {
     body: t.Object({
@@ -104,12 +109,10 @@ async function createReport({
   locationName,
   locationId,
   message,
-  userId,
 }: {
   locationName: string;
   locationId: string;
   message: string;
-  userId: number | undefined;
 }) {
   const received = await sendEmail(
     env.ALERT_EMAIL_SEND,
@@ -122,9 +125,4 @@ async function createReport({
     env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
   );
 
-  await db.insert(reportsTable).values({
-    locationId: locationId,
-    message: message,
-    userId: userId,
-  })
 }
