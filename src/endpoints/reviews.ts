@@ -40,7 +40,7 @@ reviewEndpoints
           buckets: t.Array(t.Number(), {
             example: [0, 1, 0, 4, 12, 4],
             description:
-              "Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}",
+              "Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]",
           }),
         }),
         tagData: t.Array(

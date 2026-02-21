@@ -7,6 +7,7 @@ import {
   initializeTags,
   updateTagReview,
 } from "db/reviews";
+import { QueryUtils } from "db/dbQueryUtils";
 import { dbTest } from "./dbstub";
 import { createUserSession, DBUser, fetchUserSession } from "db/auth";
 import { addLocationDataToDb } from "db/updateLocation";
@@ -379,5 +380,50 @@ describe("location review tests", () => {
       expect(allReviewsForLocation1).toHaveLength(0);
       expect(allReviewsForLocation2).toHaveLength(0);
     }
+  );
+
+  reviewTest.concurrent(
+    "ratingsAvg and ratingsCount test",
+    async ({ ctx: { db, locationId1, locationId2, user1, user2 } }) => {
+      const DB = new QueryUtils(db);
+      const [avgs, counts] = await DB.getRatingsAvgsAndCounts();
+      expect(avgs[locationId1]).toBeUndefined();
+      expect(counts[locationId1]).toBeUndefined();
+
+      await addStarReview(db, {
+        locationId: locationId1,
+        userId: user1.id,
+        rating: 3,
+      });
+      await addStarReview(db, {
+        locationId: locationId1,
+        userId: user2.id,
+        rating: 5,
+      });
+      let [avgs2, counts2] = await DB.getRatingsAvgsAndCounts();
+      expect(avgs2[locationId1]).toBe(4);
+      expect(counts2[locationId1]).toBe(2);
+
+      await addStarReview(db, {
+        locationId: locationId1,
+        userId: user1.id,
+        rating: 4,
+      });
+      [avgs2, counts2] = await DB.getRatingsAvgsAndCounts();
+      expect(avgs2[locationId1]).toBe(4.5);
+      expect(counts2[locationId1]).toBe(2);
+
+      await deleteStarReview(db, { locationId: locationId1, userId: user1.id });
+      [avgs2, counts2] = await DB.getRatingsAvgsAndCounts();
+      expect(avgs2[locationId1]).toBe(5);
+      expect(counts2[locationId1]).toBe(1);
+
+      await deleteStarReview(db, { locationId: locationId1, userId: user2.id });
+      [avgs2, counts2] = await DB.getRatingsAvgsAndCounts();
+      expect(avgs2[locationId1]).toBeUndefined();
+      expect(counts2[locationId1]).toBeUndefined();
+      expect(avgs2[locationId2]).toBeUndefined();
+      expect(counts2[locationId2]).toBeUndefined();
+    },
   );
 });
