@@ -1,5 +1,6 @@
 import Elysia, { status, t } from "elysia";
 import { fetchUserDetails } from "./auth";
+import { eq } from "drizzle-orm"
 import {
   addStarReview,
   deleteStarReview,
@@ -9,6 +10,7 @@ import {
   updateTagReview,
 } from "db/reviews";
 import { db } from "db/db";
+import { reportsTable } from "db/schema";
 
 export const reviewEndpoints = new Elysia();
 reviewEndpoints
@@ -40,7 +42,7 @@ reviewEndpoints
           buckets: t.Array(t.Number(), {
             example: [0, 1, 0, 4, 12, 4],
             description:
-              "Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}",
+              "Count of ratings of star rating [{.5},{1,1.5},{2,2.5},{3,3.5},{4,4.5},{5}]",
           }),
         }),
         tagData: t.Array(
@@ -126,5 +128,24 @@ reviewEndpoints
           updatedAt: t.Number(),
         })
       ),
+    }
+  )
+  .get(
+    "/v2/locations/:locationId/reports",
+    async ({ params: { locationId } }) => {
+      const reports = await db.select().from(reportsTable).where(eq(reportsTable.locationId, locationId))
+
+      return reports
+    },
+    {
+      response: t.Array(
+        t.Object({
+          id: t.Number(),
+          userId: t.Nullable(t.Number()),
+          createdAt: t.Date(),
+          locationId: t.String(),
+          message: t.String()
+        })
+      )
     }
   );

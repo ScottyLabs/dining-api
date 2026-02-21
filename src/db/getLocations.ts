@@ -22,6 +22,7 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
   const { idToPointOverrides, idToWeeklyOverrides } = await DB.getTimeOverrides(
     timeSearchCutoff.toSQLDate(),
   );
+  const [ratingsAvgs, ratingsCounts] = await DB.getRatingsAvgsAndCounts();
 
   // apply overrides, merge all time intervals, and add specials
   const finalLocationData = Object.entries(locationIdToData).map(
@@ -43,6 +44,8 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
         //       time.end
         //     ).toLocaleString()}`
         // ),
+        ratingsAvg: ratingsAvgs[id] ?? null,
+        ratingsCount: ratingsCounts[id] ?? 0,
         todaysSoups: specials[id]?.soups ?? [],
         todaysSpecials: specials[id]?.specials ?? [],
       };

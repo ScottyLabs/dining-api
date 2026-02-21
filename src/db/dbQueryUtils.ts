@@ -1,9 +1,11 @@
+import { avg, count, sql } from "drizzle-orm";
 import {
   externalIdToInternalIdTable,
   emailTable,
   locationDataTable,
   overwritesTable,
   specialsTable,
+  starReviewTable,
   timeOverwritesTable,
   timesTable,
   weeklyTimeOverwritesTable,
@@ -181,6 +183,33 @@ export class QueryUtils {
       };
     }, {});
     return { idToPointOverrides, idToWeeklyOverrides };
+  }
+
+  async getRatingsAvgsAndCounts(): Promise<
+    [Record<string, number>, Record<string, number>]
+  > {
+    const ratings = await this.db
+      .select({
+        starRating:
+          // since all ratings are from 0 to 5, the whole part of the average cannot
+          // exceeds one. also we make the decimal digits longer for other consumers
+          sql`cast(${avg(starReviewTable.starRating)} as decimal(4,3))`.mapWith(
+            Number,
+          ),
+        count: count(starReviewTable.id).mapWith(Number),
+        locationId: starReviewTable.locationId,
+      })
+      .from(starReviewTable)
+      .groupBy(starReviewTable.locationId);
+
+    const ratingsAvgs = Object.fromEntries(
+      ratings.map((e) => [e.locationId, e.starRating]),
+    );
+    const ratingsCounts = Object.fromEntries(
+      ratings.map((e) => [e.locationId, e.count]),
+    );
+
+    return [ratingsAvgs, ratingsCounts];
   }
 
   async getEmails(): Promise<{ name: string; email: string }[]> {

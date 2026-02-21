@@ -21,7 +21,7 @@ const envSchema = z.object({
     .transform((x) => x === "true")
     .default(false),
   ENV: z.enum(["dev", "staging", "prod"]),
-  SESSION_COOKIE_SIGNING_SECRET: z.string(),
+  SESSION_COOKIE_SIGNING_SECRET: z.string().default("lemon melon cookie"),
   HARDCODE_SESSION_FOR_DEV_TESTING: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
