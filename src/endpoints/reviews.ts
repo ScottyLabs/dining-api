@@ -133,9 +133,8 @@ reviewEndpoints
   .get(
     "/v2/locations/:locationId/reports",
     async ({ params: { locationId } }) => {
-
       const reports = await db.select().from(reportsTable).where(eq(reportsTable.locationId, locationId))
-      console.log("lol", await db.select().from(reportsTable))
+
       return reports
     },
     {
