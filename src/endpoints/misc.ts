@@ -93,6 +93,8 @@ miscEndpoints.post(
       message,
       userId,
     })
+
+    return {}
   },
   {
     body: t.Object({
