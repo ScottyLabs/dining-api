@@ -71,6 +71,13 @@
       "when": 1769646373776,
       "tag": "0009_cooing_snowbird",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1771716042342,
+      "tag": "0010_shallow_doctor_strange",
+      "breakpoints": true
     }
   ]
 }
