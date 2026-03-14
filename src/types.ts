@@ -33,6 +33,7 @@ export interface IGrubhubData {
 export interface IGrubhubAuthResponse {
   session_handle: {
     access_token: string;
+    refresh_token: string;
   };
 }
 

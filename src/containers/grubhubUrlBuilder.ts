@@ -8,7 +8,7 @@ export default class GrubhubUrlBuilder {
   private readonly AUTH_URL = "https://api-gtm.grubhub.com/auth/refresh";
   private readonly API_URL = "https://api-gtm.grubhub.com/topics-gateway/v1/topic/content?applicationId=ios&location=POINT(-79.93882752%2040.44434738)&locationMode=PICKUP&position=1&operationId=ab529cdc-4546-4a51-8b08-5738c175445c&pageSource=CAMPUS&topicSource=campus/search&topicId=dd1de4dc-6a7e-4bb4-bf02-2d37f2c66217&applicationVersion=2025.40&timezoneOffset=-14400000&parameter=locationMode:PICKUP&parameter=radius:5.0&dinerLocation=POINT(-79.93882752%2040.44434738)&geohash=dppnhfwm6kcc";
   
-  private readonly REFRESH_TOKEN = "0d15d62e-8b88-4a64-8b5b-42ccf789c295";
+  private REFRESH_TOKEN = "e209dd9f-fbfc-442d-8f86-63b13db152cd";
   private readonly CLIENT_ID = "ghiphone_Vkuxbs6t0f4SZjTOW42Y52z1itJ7Li0Tw3FEcboT";
 
 
@@ -17,19 +17,14 @@ export default class GrubhubUrlBuilder {
   public async build(): Promise<Record<string, string>> {
     const accessToken = await this.refreshToken();
     const restaurantData = await this.fetchRestaurantData(accessToken);
+    //console.log(restaurantData);
     const deepLinks = this.parseAndBuildLinks(restaurantData);
-
-    console.log("--- GRUBHUB DEEPLINKS ---");
-    console.table(deepLinks);
-
-    // 
 
     const conceptToDeepLinks: Record<string, string> = {};
     Object.entries(grubhubLinkIds).map(([concept_id, rest_id]) => {
       conceptToDeepLinks[concept_id] = deepLinks[rest_id];
     });
 
-    console.log("--- GRUBHUB DEEPLINKS ---");
     console.table(conceptToDeepLinks);
 
     return conceptToDeepLinks;
@@ -56,6 +51,8 @@ export default class GrubhubUrlBuilder {
         throw Error("Access token not found in refresh response");
     }
 
+    this.REFRESH_TOKEN = data.session_handle.refresh_token;
+
     return data.session_handle.access_token;
   }
 
@@ -70,8 +67,14 @@ export default class GrubhubUrlBuilder {
     if (!response.ok) {
       throw Error(`Failed to fetch restaurant data: ${response.statusText}`);
     }
+
+    const data = await response.json();
+
+    // 2. Log the stored data (JSON.stringify makes it easier to read)
+    console.log("DEBUG DATA:", JSON.stringify(data, null, 2));
     
-    return await response.json() as IGrubhubData;
+    // 3. Return the stored data
+    return data as IGrubhubData;
   }
 
   private parseAndBuildLinks(apiData: IGrubhubData): Record<string, string> {
