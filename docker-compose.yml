@@ -1,0 +1,37 @@
+name: dining-api
+
+services:
+  postgres:
+    image: postgres:17.5
+    container_name: dining-api-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: donotuseinproduction
+      POSTGRES_DB: dining_api
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - ${VOL_SRC}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  server:
+    build: 
+      dockerfile: Dockerfile
+    container_name: dining-api-server
+    ports:
+      - "5010:5010"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://postgres:donotuseinproduction@dining-api-db:5432/dining_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  postgres_dev_data:

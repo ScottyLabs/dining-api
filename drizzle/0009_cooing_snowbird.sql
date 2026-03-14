@@ -1,0 +1,2 @@
+DROP INDEX "location_weekday";--> statement-breakpoint
+ALTER TABLE "weekly_time_overwrites_table" ADD CONSTRAINT "weekly_time_overwrites_table_location_id_weekday_pk" PRIMARY KEY("location_id","weekday");

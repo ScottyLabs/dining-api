@@ -2,7 +2,9 @@ import { MonthOfTheYear } from "types";
 import ParsedTimeBase from "./parsedTimeBase";
 
 export interface IParsedTimeDate {
+  /** 1-12 */
   month: MonthOfTheYear;
+  /* 1-31 */
   date: number;
 }
 
@@ -17,8 +19,8 @@ export default class ParsedTimeForDate extends ParsedTimeBase {
     if (tokens.length < 2) {
       throw new Error(`Invalid date: ${this.input}`);
     }
-    const month = convertMonthStringToEnum(tokens[0]);
-    const date = parseInt(tokens[1]);
+    const month = convertMonthStringToEnum(tokens[0]!);
+    const date = parseInt(tokens[1]!);
 
     if (!Number.isInteger(date)) {
       throw new Error(`Invalid date: ${this.input}`);
@@ -36,6 +38,11 @@ export default class ParsedTimeForDate extends ParsedTimeBase {
   }
 }
 
+/**
+ * Throws error when failed
+ * @param monthStr
+ * @returns
+ */
 export function convertMonthStringToEnum(monthStr: string): MonthOfTheYear {
   const normalizedMonth = monthStr.trim().toLowerCase();
   switch (normalizedMonth) {
