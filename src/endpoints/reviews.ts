@@ -1,6 +1,6 @@
 import Elysia, { status, t } from "elysia";
 import { fetchUserDetails } from "./auth";
-import { eq } from "drizzle-orm"
+import { eq, and, gt} from "drizzle-orm"
 import {
   addStarReview,
   deleteStarReview,
@@ -133,7 +133,14 @@ reviewEndpoints
   .get(
     "/v2/locations/:locationId/reports",
     async ({ params: { locationId } }) => {
-      const reports = await db.select().from(reportsTable).where(eq(reportsTable.locationId, locationId))
+      const MILLIS_IN_DAY = 60 * 60 * 24 * 1000;
+
+      const reports = await db.select().from(reportsTable).where(
+        and(
+          gt(reportsTable.createdAt, new Date(Date.now() - MILLIS_IN_DAY)),
+          eq(reportsTable.locationId, locationId)
+        )
+      )
 
       return reports
     },
