@@ -36,6 +36,8 @@ export const LocationSchema = t.Object({
 
   id: t.String(),
   conceptId: t.Nullable(t.String()),
+  images: t.Array(t.String()),
+  menuItemsString: t.Nullable(t.String()),
 });
 
 export const LocationsSchema = t.Array(LocationSchema);
