@@ -48,8 +48,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2
       nodemailer:
-        specifier: ^8.0.1
-        version: 8.0.1
+        specifier: ^8.0.4
+        version: 8.0.4
       openid-client:
         specifier: ^6.8.1
         version: 6.8.1
@@ -661,8 +661,8 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@borewit/text-codec@0.1.1':
-    resolution: {integrity: sha512-5L/uBxmjaCIX5h8Z+uu+kA9BQLkc/Wl06UGR5ajNRxu+/XjonB5i8JpgFMrPj3LXTCPA0pv8yxUvbUi+QthGGA==}
+  '@borewit/text-codec@0.2.2':
+    resolution: {integrity: sha512-DDaRehssg1aNrH4+2hnj1B7vnUGEjU6OIlyRdkMd0aUdIUvKXrJfXsy8LVtXAy7DRvYVluWbMspsRhz2lcW0mQ==}
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
@@ -1241,6 +1241,9 @@ packages:
 
   '@types/node@24.10.4':
     resolution: {integrity: sha512-vnDVpYPMzs4wunl27jHrfmwojOGKya0xyM3sH+UE5iv5uPS6vX7UIoh6m+vQc5LGBq52HBKPIn/zcSZVzeDEZg==}
+
+  '@types/node@24.12.0':
+    resolution: {integrity: sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==}
 
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
@@ -1969,6 +1972,7 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   globrex@0.1.2:
@@ -2201,8 +2205,8 @@ packages:
   node-releases@2.0.21:
     resolution: {integrity: sha512-5b0pgg78U3hwXkCM8Z9b2FJdPZlr9Psr9V2gQPESdGHqbntyFJKFW4r5TeWGFzafGY3hzs1JC62VEQMbl1JFkw==}
 
-  nodemailer@8.0.1:
-    resolution: {integrity: sha512-5kcldIXmaEjZcHR6F28IKGSgpmZHaF1IXLWFTG+Xh3S+Cce4MiakLtWY+PlBU69fLbRa8HlaGIrC/QolUpHkhg==}
+  nodemailer@8.0.4:
+    resolution: {integrity: sha512-k+jf6N8PfQJ0Fe8ZhJlgqU5qJU44Lpvp2yvidH3vp1lPnVQMgi4yEEMPXg5eJS1gFIJTVq1NHBk7Ia9ARdSBdQ==}
     engines: {node: '>=6.0.0'}
 
   normalize-path@3.0.0:
@@ -2557,8 +2561,8 @@ packages:
     resolution: {integrity: sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==}
     engines: {node: '>=12'}
 
-  strtok3@10.3.4:
-    resolution: {integrity: sha512-KIy5nylvC5le1OdaaoCJ07L+8iQzJHGH6pWDuzS+d07Cu7n1MZ2x26P8ZKIWfbK02+XIL8Mp4RkWeqdUCrDMfg==}
+  strtok3@10.3.5:
+    resolution: {integrity: sha512-ki4hZQfh5rX0QDLLkOCj+h+CVNkqmp/CMf8v8kZpkNVK6jGQooMytqzLZYUVYIZcFZ6yDB70EfD8POcFXiF5oA==}
     engines: {node: '>=18'}
 
   supports-color@7.2.0:
@@ -2610,8 +2614,8 @@ packages:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
 
-  token-types@6.1.1:
-    resolution: {integrity: sha512-kh9LVIWH5CnL63Ipf0jhlBIy0UsrMj/NJDfpsy1SqOXlLKEVyXXYrnFxFT1yOOYVGBSApeVnjPw/sBz5BfEjAQ==}
+  token-types@6.1.2:
+    resolution: {integrity: sha512-dRXchy+C0IgK8WPC6xvCHFRIWYUbqqdEIKPaKo/AcTUNzwLTK6AH7RjdLWsEZcAN/TBdtfUw3PYEgPr5VPr6ww==}
     engines: {node: '>=14.16'}
 
   tsconfck@3.1.6:
@@ -3533,7 +3537,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@borewit/text-codec@0.1.1': {}
+  '@borewit/text-codec@0.2.2': {}
 
   '@drizzle-team/brocli@0.10.2': {}
 
@@ -3880,7 +3884,7 @@ snapshots:
     dependencies:
       debug: 4.4.3
       fflate: 0.8.2
-      token-types: 6.1.1
+      token-types: 6.1.2
     transitivePeerDependencies:
       - supports-color
 
@@ -3945,6 +3949,11 @@ snapshots:
   '@types/node@24.10.4':
     dependencies:
       undici-types: 7.16.0
+
+  '@types/node@24.12.0':
+    dependencies:
+      undici-types: 7.16.0
+    optional: true
 
   '@types/node@24.5.2':
     dependencies:
@@ -4243,7 +4252,7 @@ snapshots:
 
   bun-types@1.2.22(@types/react@19.1.13):
     dependencies:
-      '@types/node': 24.10.4
+      '@types/node': 24.12.0
       '@types/react': 19.1.13
     optional: true
 
@@ -4636,8 +4645,8 @@ snapshots:
   file-type@21.0.0:
     dependencies:
       '@tokenizer/inflate': 0.2.7
-      strtok3: 10.3.4
-      token-types: 6.1.1
+      strtok3: 10.3.5
+      token-types: 6.1.2
       uint8array-extras: 1.5.0
     transitivePeerDependencies:
       - supports-color
@@ -4901,7 +4910,7 @@ snapshots:
 
   node-releases@2.0.21: {}
 
-  nodemailer@8.0.1: {}
+  nodemailer@8.0.4: {}
 
   normalize-path@3.0.0: {}
 
@@ -5314,7 +5323,7 @@ snapshots:
     dependencies:
       ansi-regex: 6.2.2
 
-  strtok3@10.3.4:
+  strtok3@10.3.5:
     dependencies:
       '@tokenizer/token': 0.3.0
 
@@ -5404,9 +5413,9 @@ snapshots:
 
   toidentifier@1.0.1: {}
 
-  token-types@6.1.1:
+  token-types@6.1.2:
     dependencies:
-      '@borewit/text-codec': 0.1.1
+      '@borewit/text-codec': 0.2.2
       '@tokenizer/token': 0.3.0
       ieee754: 1.2.1
 
