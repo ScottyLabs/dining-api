@@ -30,6 +30,7 @@ export const LocationSchema = t.Object({
   description: t.String(),
   url: t.String(),
   menu: t.Nullable(t.String()),
+  grubhubUrl: t.Nullable(t.String()),
   coordinateLat: t.Nullable(t.Number()),
   coordinateLng: t.Nullable(t.Number()),
   acceptsOnlineOrders: t.Boolean(),

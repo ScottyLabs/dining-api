@@ -78,6 +78,13 @@
       "when": 1771716042342,
       "tag": "0010_shallow_doctor_strange",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1774733036668,
+      "tag": "0011_fancy_stryfe",
+      "breakpoints": true
     }
   ]
 }

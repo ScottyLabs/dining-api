@@ -5,6 +5,7 @@ import GrubhubUrlBuilder from "containers/grubhubUrlBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
 import { ILocation, ISpecial } from "types";
 import { notifySlack } from "utils/slack";
+import { DBType } from "db/db";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -20,8 +21,8 @@ export default class DiningParser {
 
   grubhubUrlBuilder: GrubhubUrlBuilder;
 
-  constructor() {
-    this.grubhubUrlBuilder = new GrubhubUrlBuilder();
+  constructor(db: DBType) {
+    this.grubhubUrlBuilder = new GrubhubUrlBuilder(db);
   }
 
   async process(): Promise<ILocation[]> {

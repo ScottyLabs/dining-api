@@ -10,7 +10,7 @@ export const expectedLocationData: ILocation[] = [
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!  For nutritional information about Au Bon Pain's menu items, please click here <a>https://www.aubonpain.com/nutrition</a> To place an Au Bon Pain catering order, please contact 1-800-765-4227 or visit http://aubonpain.com/cateringFor on-campus assistance, call 412-621-1934.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/113",
     location: "Cohon Center, Second floor",
-    grubhubUrl: "https://www.grubhub.com/restaurant/au-bon-pain-5000-forbes-ave.-pittsburgh/-5954818",
+    grubhubUrl: undefined,
     menu: "https://web.archive.org/web/20230806004812/https://apps.studentaffairs.cmu.edu/dining/dashboard_images/Production/menus/113/abp-menu6.pdf",
     coordinates: {
       lat: 40.44,

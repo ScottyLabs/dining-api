@@ -11,7 +11,7 @@ export interface ILocation {
   shortDescription: string | undefined;
   description: string;
   url: string;
-  grubhubUrl?: string;
+  grubhubUrl: string | undefined;
   menu: string | undefined;
   location: string;
   coordinates: ICoordinate | undefined;

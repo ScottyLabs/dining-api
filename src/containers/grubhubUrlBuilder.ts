@@ -1,5 +1,11 @@
 import { IGrubhubAuthResponse, IGrubhubData } from "types";
 import grubhubLinkIds from "./grubhubLinkIds";
+import { DBType } from "db/db";
+import { configTable } from "db/schema";
+import { eq } from "drizzle-orm";
+
+const GRUBHUB_REFRESH_TOKEN_KEY = "grubhub_refresh_token";
+const DEFAULT_REFRESH_TOKEN = "e209dd9f-fbfc-442d-8f86-63b13db152cd";
 
 /**
  * For building the Grubhub deep links.
@@ -8,11 +14,12 @@ export default class GrubhubUrlBuilder {
   private readonly AUTH_URL = "https://api-gtm.grubhub.com/auth/refresh";
   private readonly API_URL = "https://api-gtm.grubhub.com/topics-gateway/v1/topic/content?applicationId=ios&location=POINT(-79.93882752%2040.44434738)&locationMode=PICKUP&position=1&operationId=ab529cdc-4546-4a51-8b08-5738c175445c&pageSource=CAMPUS&topicSource=campus/search&topicId=dd1de4dc-6a7e-4bb4-bf02-2d37f2c66217&applicationVersion=2025.40&timezoneOffset=-14400000&parameter=locationMode:PICKUP&parameter=radius:5.0&dinerLocation=POINT(-79.93882752%2040.44434738)&geohash=dppnhfwm6kcc";
   
-  private REFRESH_TOKEN = "e209dd9f-fbfc-442d-8f86-63b13db152cd";
   private readonly CLIENT_ID = "ghiphone_Vkuxbs6t0f4SZjTOW42Y52z1itJ7Li0Tw3FEcboT";
+  private db: DBType;
 
-
-  constructor() {}
+  constructor(db: DBType) {
+    this.db = db;
+  }
 
   public async build(): Promise<Record<string, string>> {
     const accessToken = await this.refreshToken();
@@ -22,7 +29,10 @@ export default class GrubhubUrlBuilder {
 
     const conceptToDeepLinks: Record<string, string> = {};
     Object.entries(grubhubLinkIds).map(([concept_id, rest_id]) => {
-      conceptToDeepLinks[concept_id] = deepLinks[rest_id];
+      const link = deepLinks[rest_id];
+      if (link !== undefined) {
+        conceptToDeepLinks[concept_id] = link;
+      }
     });
 
     console.table(conceptToDeepLinks);
@@ -30,9 +40,36 @@ export default class GrubhubUrlBuilder {
     return conceptToDeepLinks;
   }
 
+  private async getRefreshToken(): Promise<string> {
+    const result = await this.db
+      .select()
+      .from(configTable)
+      .where(eq(configTable.key, GRUBHUB_REFRESH_TOKEN_KEY));
+
+    if (result.length > 0) {
+      return result[0]!.value;
+    }
+
+    // Seed the default token into the DB on first use
+    await this.setRefreshToken(DEFAULT_REFRESH_TOKEN);
+    return DEFAULT_REFRESH_TOKEN;
+  }
+
+  private async setRefreshToken(token: string): Promise<void> {
+    await this.db
+      .insert(configTable)
+      .values({ key: GRUBHUB_REFRESH_TOKEN_KEY, value: token })
+      .onConflictDoUpdate({
+        target: configTable.key,
+        set: { value: token },
+      });
+  }
+
   private async refreshToken(): Promise<string> {
+    const currentRefreshToken = await this.getRefreshToken();
+
     const payload = {
-      refresh_token: this.REFRESH_TOKEN,
+      refresh_token: currentRefreshToken,
       client_id: this.CLIENT_ID
     };
 
@@ -51,7 +88,7 @@ export default class GrubhubUrlBuilder {
         throw Error("Access token not found in refresh response");
     }
 
-    this.REFRESH_TOKEN = data.session_handle.refresh_token;
+    await this.setRefreshToken(data.session_handle.refresh_token);
 
     return data.session_handle.access_token;
   }
