@@ -36,6 +36,7 @@
     "axios": "^1.10.0",
     "cheerio": "1.0.0-rc.12",
     "cookie-signature": "^1.2.2",
+    "csv-parse": "^6.2.0",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.4",
     "elysia": "1.4.19",
