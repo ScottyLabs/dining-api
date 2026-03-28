@@ -10,6 +10,7 @@ export const expectedLocationData: ILocation[] = [
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!  For nutritional information about Au Bon Pain's menu items, please click here <a>https://www.aubonpain.com/nutrition</a> To place an Au Bon Pain catering order, please contact 1-800-765-4227 or visit http://aubonpain.com/cateringFor on-campus assistance, call 412-621-1934.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/113",
     location: "Cohon Center, Second floor",
+    grubhubUrl: undefined,
     menu: "https://web.archive.org/web/20230806004812/https://apps.studentaffairs.cmu.edu/dining/dashboard_images/Production/menus/113/abp-menu6.pdf",
     coordinates: {
       lat: 40.44,
@@ -82,6 +83,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/184",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -106,6 +108,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/95",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -129,6 +132,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/134",
+    grubhubUrl: "https://www.grubhub.com/restaurant/e.a.t.-(evenings-at-tepper)---rohr-commons-4765-forbes-avenue-pittsburgh/-9070241",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -152,6 +156,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/178",
+    grubhubUrl: "https://www.grubhub.com/restaurant/the-edge-5125-margaret-morrison-st-pittsburgh/-7831768",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -176,6 +181,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/88",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -200,6 +206,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/103",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -224,6 +231,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "The Exchange offers custom deli sandwiches, soups, hot entrées, fresh baked goods, fruit, yogurt parfaits, snack and energy bars, and other grab-and-go items. The designated coffee bar includes hot brewed La Prima coffee, specialty and organic teas, cold beverages, and bottled juices.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/92",
+    grubhubUrl: "https://www.grubhub.com/restaurant/the-exchange-4980-margaret-morrison-st-pittsburgh/-5980830",
     location: "Posner Hall, 1st Floor",
     menu: "https://web.archive.org/web/20240721001349/https://apps.studentaffairs.cmu.edu/dining/dashboard_images/Production/menus/92/menu-exchange-2024-25-v2.pdf",
     coordinates: {
@@ -298,6 +306,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/126",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -322,6 +331,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/173",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -346,6 +356,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/91",
+    grubhubUrl: "https://www.grubhub.com/restaurant/el-gallo-de-oro---meal-block-5032-forbes-avenue-pittsburgh/-6013802",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -370,6 +381,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/139",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -393,6 +405,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "Authentic Chinese cuisine, featuring sauces made with bone broth, choose your base of noodles or rice and build your own meal with General Tso’s chicken, stir fry tofu, seasonal vegetables and pork ribs in black bean sauce. Braised fish, spring rolls, pork dumplings, red bean rice cakes are available daily. Enjoy fruit smoothies and build-your-own milk or fruit boba tea, with bubble toppings like tapioca, rainbow jelly, lychee jelly and popping boba.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/110",
+    grubhubUrl: "https://www.grubhub.com/restaurant/hunan-express-5000-forbes-ave-pittsburgh/-6448259",
     location: "Newell-Simon Atrium",
     menu: "https://web.archive.org/web/20240901003526/https://apps.studentaffairs.cmu.edu/dining/dashboard_images/Production/menus/110/Fall Menus 2024 (25).pdf",
     coordinates: {
@@ -460,6 +473,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/115",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -484,6 +498,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/136",
+    grubhubUrl: "https://www.grubhub.com/restaurant/millie's-coffee-'n'-creamery-4765-forbes-avenue-pittsburgh/-8950322",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -508,6 +523,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/127",
+    grubhubUrl: "https://www.grubhub.com/restaurant/nourish-(allergen-friendly-kitchen)-5032-forbes-avenue-pittsburgh/-5980773",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -532,6 +548,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/94",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -556,6 +573,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/186",
+    grubhubUrl: "https://www.grubhub.com/restaurant/redhawk-coffee-4805-frew-st.-pittsburgh/-11345145",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -580,6 +598,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/174",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -603,6 +622,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "Schatz Dining Room is piloting all-you-care-to-eat lunchtime service for all community members, including undergraduate students.Schatz Dining Room offers campus's only all-you-care-to-eat residential dining room. Schatz serves breakfast, lunch and dinner, Monday - Friday, and brunch and dinner on the weekends. Breakfast and brunch offerings include cereal, fruit, egg dishes, breakfast meats, hot griddled items like pancakes and french toast, make-your-own waffles, and an avoiding gluten breakfast station and avoiding gluten options for lunch and dinner. Lunch and dinner include five stations serving a rotating menu of hot entrees, vegan and vegetarian options, soup and salad, made-to-order sandwiches, beverages and desserts. To make a reservation, please email schatzreservations@andrew.cmu.edu",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/108",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -761,6 +781,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/180",
+    grubhubUrl: "https://www.grubhub.com/restaurant/scotty's-market-5000-forbes-ave,-pittsburgh/-15379708",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -785,6 +806,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/190",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -809,6 +831,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/188",
+    grubhubUrl: "https://www.grubhub.com/restaurant/stack'd-underground-morewood-gardens-pittsburgh/-12461575",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -833,6 +856,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/148",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -856,6 +880,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/82",
+    grubhubUrl: "https://www.grubhub.com/restaurant/tahini-5125-margaret-morrison-st.-pittsburgh/-6012140",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -881,6 +906,7 @@ export const expectedLocationData: ILocation[] = [
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/168",
     location: "Posner Hall, 1st Floor",
     menu: "https://web.archive.org/web/20240721001349/https://apps.studentaffairs.cmu.edu/dining/dashboard_images/Production/menus/92/menu-exchange-2024-25-v2.pdf",
+    grubhubUrl: "https://www.grubhub.com/restaurant/tartan-express-5000-forbes-ave-pittsburgh/-24807638",
     coordinates: {
       lat: 401.441354,
       lng: -791.942125,
@@ -938,6 +964,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/114",
+    grubhubUrl: "https://www.grubhub.com/restaurant/taste-of-india-5125-margaret-morrison-st.-pittsburgh/-6012713",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -962,6 +989,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/185",
+    grubhubUrl: "https://www.grubhub.com/restaurant/tepper-taqueria-4765-forbes-ave-pittsburgh/-6479803",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -986,6 +1014,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/138",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -1009,6 +1038,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/98",
+    grubhubUrl: undefined,
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -1033,6 +1063,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/155",
+    grubhubUrl: "https://www.grubhub.com/restaurant/wild-blue-sushi-346-hamerschlag-dr-pittsburgh/-6010765",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {
@@ -1057,6 +1088,7 @@ export const expectedLocationData: ILocation[] = [
     description:
       "At Au Bon Pain café bakery, each signature recipe is uniquely crafted. You can enjoy delicious hot or iced coffee and teas, espresso drinks, a variety of cold beverages, soup, a customized made-to-order breakfast or lunch sandwich or salad, or you can grab a pre-made salad, sandwich, wrap, yogurt parfait, fresh fruit or snack. There is always something new to try ... healthy choices, comfort food, indulgent treats … try them all!\n                                            \n                                        \n                                            Nutritional information can be found at aubonpain.com/nutrition\n                                            .\n                                        \n                                            \n                                        \n                                            To place a catering order online, visit catering.aubonpain.com\n                                            . To pay with a department or organization’s oracle string, please email your order to  abpcmu@grcafes.com\n                                            . For on-campus assistance, call 412-268-1054.",
     url: "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Concept/84",
+    grubhubUrl: "https://www.grubhub.com/restaurant/new-york-bagel-bar-at-zebra-lounge-cfa-pittsburgh/-6013780",
     location: "Cohon Center, Second floor",
     menu: undefined,
     coordinates: {

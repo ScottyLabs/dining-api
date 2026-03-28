@@ -16,6 +16,13 @@ import {
 import { DateTime } from "luxon";
 
 vi.mock("axios");
+vi.mock("containers/grubhubUrlBuilder", () => ({
+  default: class {
+    async build() {
+      return {};
+    }
+  },
+}));
 
 test("the whole thing", async () => {
   mockAxiosGETMethodWithFilePaths({
@@ -32,7 +39,7 @@ test("the whole thing", async () => {
       day: 5,
     }) as DateTime<true>,
   });
-  const parser = new DiningParser();
+  const parser = new DiningParser(null as any);
   const parsedLocationData = await parser.process();
 
   expect(parsedLocationData).toStrictEqual(expectedLocationData);
@@ -52,7 +59,7 @@ test("the whole thing, with per-page errors", async () => {
       day: 5,
     }) as DateTime<true>,
   });
-  const parser = new DiningParser();
+  const parser = new DiningParser(null as any);
   const parsedLocationData = await parser.process();
   expect(parsedLocationData).toStrictEqual(expectedLocationData2);
 });
@@ -71,7 +78,7 @@ test("specials for The Exchange", async () => {
       day: 5,
     }) as DateTime<true>,
   });
-  const parser = new DiningParser();
+  const parser = new DiningParser(null as any);
   expect((await parser.process()).map((data) => data.todaysSpecials)).toEqual(
     expect.arrayContaining([
       [
@@ -103,7 +110,7 @@ test(
         day: 5,
       }) as DateTime<true>,
     });
-    const parser = new DiningParser();
+    const parser = new DiningParser(null as any);
 
     await expect(async () => {
       await parser.process();

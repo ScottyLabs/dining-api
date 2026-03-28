@@ -21,6 +21,7 @@ export default class LocationBuilder {
   private name: string | undefined;
   private shortDescription: string | undefined;
   private description: string | undefined;
+  private grubhubUrl: string | undefined;
   private url: string | undefined;
   private location: string | undefined;
   private menu: string | undefined;
@@ -41,6 +42,12 @@ export default class LocationBuilder {
     this.shortDescription = load(card)("div.description").text().trim();
   }
 
+
+  setGrubhubUrl(grubhubUrls: Record<string, string>) {
+    if (this.conceptId && grubhubUrls[this.conceptId] !== undefined) {
+      this.grubhubUrl = grubhubUrls[this.conceptId];
+    }
+  }
   setSoup(soupList: Record<string, ISpecial[]>) {
     if (
       this.conceptId !== undefined &&
@@ -127,6 +134,7 @@ export default class LocationBuilder {
       shortDescription: this.shortDescription,
       description: this.description,
       url: this.url,
+      grubhubUrl: this.grubhubUrl,
       location: this.location,
       menu: this.menu,
       coordinates: this.coordinates,

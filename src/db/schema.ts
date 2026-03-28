@@ -44,6 +44,7 @@ export const locationDataTable = pgTable("location_data", {
   menu: text("menu"),
   /** The human-readable version of the location */
   location: text("location").notNull(),
+  grubhubUrl: text("grubhub_url"),
   coordinateLat: decimal("coordinate_lat", { mode: "number", scale: 30 }),
   coordinateLng: decimal("coordinate_lng", { mode: "number", scale: 30 }),
   acceptsOnlineOrders: boolean("accepts_online_orders").notNull(),
@@ -78,6 +79,7 @@ export const overwritesTable = pgTable("overwrites_table", {
   url: text("url"),
   menu: text("menu"),
   location: text("location"),
+  grubhubUrl: text("grubhub_url"),
   coordinateLat: decimal("coordinate_lat", { mode: "number", scale: 30 }),
   coordinateLng: decimal("coordinate_lng", { mode: "number", scale: 30 }),
   acceptsOnlineOrders: boolean("accepts_online_orders"),
@@ -250,3 +252,8 @@ export const reportsTable = pgTable(
       message: text("message").notNull(),
   }
 )
+
+export const configTable = pgTable("config", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});

@@ -37,6 +37,7 @@ export async function addLocationDataToDb(db: DBType, location: ILocation) {
     url: location.url,
     menu: location.menu,
     location: location.location,
+    grubhubUrl: location.grubhubUrl,
     coordinateLat: location.coordinates?.lat,
     coordinateLng: location.coordinates?.lng,
     acceptsOnlineOrders: location.acceptsOnlineOrders,

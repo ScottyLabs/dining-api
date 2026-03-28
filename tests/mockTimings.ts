@@ -27,7 +27,7 @@ export async function queryParserAndAssertTimingsCorrect(
   times: [number, number, number, number, number][],
   rootDay: DateTime = DateTime.fromObject({ year: 2024, month: 9, day: 9 }) // is the default for most of the tests
 ) {
-  const result = await new DiningParser().process();
+  const result = await new DiningParser(null as any).process();
   expect(result.length).toBe(1);
   expect(result[0]!.times.sort(_sort)).toStrictEqual(
     times
