@@ -7,11 +7,25 @@ import { notifySlack } from "utils/slack";
 import { LocationsSchema } from "./schemas";
 import { env } from "env";
 import { eq } from "drizzle-orm"
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
 import { locationDataTable, reportsTable } from "db/schema";
 import { fetchUserDetails } from "./auth";
 
 import { sendEmail } from "utils/email";
+
+const menuImagesDir = path.resolve(process.cwd(), "public", "menu_images");
+
+function toAbsoluteImageUrl(requestUrl: string, imageValue: string) {
+  if (/^https?:\/\//i.test(imageValue)) return imageValue;
+  const normalizedPath = imageValue
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  return new URL(`/menu_images/${normalizedPath}`, requestUrl).toString();
+}
 
 export const miscEndpoints = new Elysia();
 miscEndpoints.get(
@@ -23,7 +37,15 @@ miscEndpoints.get(
 );
 miscEndpoints.get(
   "/v2/locations",
-  async () => await getAllLocationsFromDB(db, DateTime.now()),
+  async ({ request }) => {
+    const locations = await getAllLocationsFromDB(db, DateTime.now());
+    return locations.map((location) => ({
+      ...location,
+      images: location.images.map((image) =>
+        toAbsoluteImageUrl(request.url, image),
+      ),
+    }));
+  },
   {
     response: LocationsSchema,
     detail: {
@@ -32,6 +54,22 @@ miscEndpoints.get(
     },
   },
 );
+miscEndpoints.get("/menu_images/:filename", async ({ params: { filename } }) => {
+  const normalizedFilename = filename.replace(/^\/+/, "");
+  const filePath = path.resolve(menuImagesDir, normalizedFilename);
+  if (!filePath.startsWith(menuImagesDir)) {
+    throw new Response("Invalid filename", { status: 400 });
+  }
+
+  try {
+    const file = await readFile(filePath);
+    return new Response(file, {
+      headers: { "Content-Type": "image/png" },
+    });
+  } catch {
+    throw new Response("Not found", { status: 404 });
+  }
+});
 miscEndpoints.get("/emails", async () => await new QueryUtils(db).getEmails(), {
   response: t.Array(
     t.Object({

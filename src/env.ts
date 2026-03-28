@@ -13,6 +13,7 @@ const envSchema = z.object({
   IN_TEST_MODE: z.stringbool().default(false),
   SLACK_MESSAGE_PREFIX: z.string().default("local-dev"),
   DATABASE_URL: z.string(),
+  MENU_IMAGE_BASE_URL: z.string().optional(),
   OIDC_SERVER: z.string().transform((x) => new URL(x)),
   OIDC_CLIENT_ID: z.string(),
   OIDC_CLIENT_SECRET: z.string(),
