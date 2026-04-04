@@ -11,6 +11,8 @@ import {
 } from "db/reviews";
 import { db } from "db/db";
 import { reportsTable } from "db/schema";
+import { QueryUtils } from "db/dbQueryUtils";
+import { DateTime } from "luxon";
 
 export const reviewEndpoints = new Elysia();
 reviewEndpoints
@@ -133,16 +135,11 @@ reviewEndpoints
   .get(
     "/v2/locations/:locationId/reports",
     async ({ params: { locationId } }) => {
-      const MILLIS_IN_DAY = 60 * 60 * 24 * 1000;
+      let yesterday = DateTime.now().minus({days: 1})
 
-      const reports = await db.select().from(reportsTable).where(
-        and(
-          gt(reportsTable.createdAt, new Date(Date.now() - MILLIS_IN_DAY)),
-          eq(reportsTable.locationId, locationId)
-        )
-      )
+      let ret = await (new QueryUtils(db)).getReportsAfter(yesterday.toJSDate(), locationId)
 
-      return reports
+      return ret;
     },
     {
       response: t.Array(

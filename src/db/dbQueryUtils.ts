@@ -1,4 +1,4 @@
-import { avg, count, sql } from "drizzle-orm";
+import { avg, count, gt, sql } from "drizzle-orm";
 import {
   externalIdToInternalIdTable,
   emailTable,
@@ -9,6 +9,7 @@ import {
   timeOverwritesTable,
   timesTable,
   weeklyTimeOverwritesTable,
+  reportsTable,
 } from "./schema";
 
 import { DBType } from "./db";
@@ -29,6 +30,17 @@ export class QueryUtils {
   db: DBType;
   constructor(db: DBType) {
     this.db = db;
+  }
+
+  async getReportsAfter(start_time: Date, for_location_id?: string) {
+      const reports = await this.db.select().from(reportsTable).where(
+          and(
+            gt(reportsTable.createdAt, start_time),
+            for_location_id ? eq(reportsTable.locationId, for_location_id) : undefined
+          )
+      )
+
+      return reports;
   }
 
   async getSpecials(todayAsSQLString: string) {
