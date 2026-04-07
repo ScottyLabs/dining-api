@@ -17,14 +17,31 @@ import { sendEmail } from "utils/email";
 
 const menuImagesDir = path.resolve(process.cwd(), "public", "menu_images");
 
+function withTrailingSlash(value: string) {
+  return value.endsWith("/") ? value : `${value}/`;
+}
+
+function normalizeImagePath(imageValue: string) {
+  const trimmedValue = imageValue.trim().replace(/^\/+/, "");
+  return trimmedValue.startsWith("menu_images/")
+    ? trimmedValue
+    : `menu_images/${trimmedValue}`;
+}
+
 function toAbsoluteImageUrl(requestUrl: string, imageValue: string) {
   if (/^https?:\/\//i.test(imageValue)) return imageValue;
-  const normalizedPath = imageValue
+  const normalizedPath = normalizeImagePath(imageValue)
     .split("/")
     .filter(Boolean)
     .map((segment) => encodeURIComponent(segment))
     .join("/");
-  return new URL(`/menu_images/${normalizedPath}`, requestUrl).toString();
+  const baseUrl = env.MENU_IMAGE_BASE_URL?.trim();
+
+  if (baseUrl) {
+    return new URL(normalizedPath, withTrailingSlash(baseUrl)).toString();
+  }
+
+  return new URL(normalizedPath, withTrailingSlash(new URL(requestUrl).origin)).toString();
 }
 
 export const miscEndpoints = new Elysia();
@@ -63,8 +80,15 @@ miscEndpoints.get("/menu_images/:filename", async ({ params: { filename } }) => 
 
   try {
     const file = await readFile(filePath);
+    const extension = path.extname(normalizedFilename).toLowerCase();
+    const contentType =
+      extension === ".jpg" || extension === ".jpeg"
+        ? "image/jpeg"
+        : extension === ".webp"
+          ? "image/webp"
+          : "image/png";
     return new Response(file, {
-      headers: { "Content-Type": "image/png" },
+      headers: { "Content-Type": contentType },
     });
   } catch {
     throw new Response("Not found", { status: 404 });
