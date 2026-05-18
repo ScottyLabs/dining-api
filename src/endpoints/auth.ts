@@ -24,7 +24,7 @@ authEndpoints.get(
       redirect_uri: `${curOrigin.origin}/code-exchange`,
       scope: "openid email profile",
       // prompt: "select_account", // force account picker
-      hd: "andrew.cmu.edu", // idk if this excludes cmu.edu emails...
+      hd: "cmu.edu", // idk if this excludes cmu.edu emails...
     });
     return new Response(null, {
       status: 303,
