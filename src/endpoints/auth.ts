@@ -23,8 +23,8 @@ authEndpoints.get(
     const redirectURL = client.buildAuthorizationUrl(OIDCConfig, {
       redirect_uri: `${curOrigin.origin}/code-exchange`,
       scope: "openid email profile",
-      prompt: "select_account", // force account picker
-      hd: "cmu.edu",
+      // prompt: "select_account", // force account picker
+      hd: "andrew.cmu.edu", // idk if this excludes cmu.edu emails...
     });
     return new Response(null, {
       status: 303,
