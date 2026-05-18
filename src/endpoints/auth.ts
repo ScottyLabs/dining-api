@@ -10,7 +10,7 @@ import cookieSigner from "cookie-signature";
 const OIDCConfig = await client.discovery(
   env.OIDC_SERVER,
   env.OIDC_CLIENT_ID,
-  env.OIDC_CLIENT_SECRET
+  env.OIDC_CLIENT_SECRET,
 );
 export const authEndpoints = new Elysia();
 authEndpoints.get(
@@ -24,6 +24,7 @@ authEndpoints.get(
       redirect_uri: `${curOrigin.origin}/code-exchange`,
       scope: "openid email profile",
       prompt: "select_account", // force account picker
+      hd: "cmu.edu",
     });
     return new Response(null, {
       status: 303,
@@ -35,7 +36,7 @@ authEndpoints.get(
   {
     query: t.Object({ redirectURL: t.Nullable(t.String()) }),
     detail: { hide: true },
-  }
+  },
 );
 authEndpoints.get(
   "/logout",
@@ -54,7 +55,7 @@ authEndpoints.get(
   {
     query: t.Object({ redirectURL: t.Nullable(t.String()) }),
     detail: { hide: true },
-  }
+  },
 );
 authEndpoints.get(
   "/code-exchange",
@@ -68,8 +69,8 @@ authEndpoints.get(
         console.error(e);
         notifySlack(
           `<!channel> OIDC code exchange failed with error ${e} ${JSON.stringify(
-            e.cause
-          )} CODE: ${e.code}`
+            e.cause,
+          )} CODE: ${e.code}`,
         );
         return undefined;
       });
@@ -86,7 +87,7 @@ authEndpoints.get(
       if (sessionId !== undefined) {
         cookie["session_id"]!.value = cookieSigner.sign(
           sessionId,
-          env.SESSION_COOKIE_SIGNING_SECRET
+          env.SESSION_COOKIE_SIGNING_SECRET,
         );
         cookie["session_id"]!.httpOnly = true;
         cookie["session_id"]!.secure = true;
@@ -108,7 +109,7 @@ authEndpoints.get(
       },
     });
   },
-  { query: t.Object({ code: t.String() }), detail: { hide: true } }
+  { query: t.Object({ code: t.String() }), detail: { hide: true } },
 );
 export async function fetchUserDetails(sessionId?: string) {
   if (env.HARDCODE_SESSION_FOR_DEV_TESTING)
@@ -116,7 +117,7 @@ export async function fetchUserDetails(sessionId?: string) {
   if (sessionId === undefined) return null;
   const unsignedSessionId = cookieSigner.unsign(
     sessionId,
-    env.SESSION_COOKIE_SIGNING_SECRET
+    env.SESSION_COOKIE_SIGNING_SECRET,
   );
   if (!unsignedSessionId) return null;
   return await fetchUserSession(db, unsignedSessionId);
@@ -153,12 +154,12 @@ authEndpoints.get(
           firstName: t.Nullable(t.String()),
           lastName: t.Nullable(t.String()),
           pictureUrl: t.Nullable(t.String()),
-        })
+        }),
       ),
     }),
     detail: {
       description:
         "If you have an active login session with cmueats, this will return your user info. (this is NOT intended to work cross-site)",
     },
-  }
+  },
 );
