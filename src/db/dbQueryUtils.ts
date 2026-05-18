@@ -17,6 +17,7 @@ import { notifySlack } from "utils/slack";
 import { and, eq, gte } from "drizzle-orm";
 import { parseTimeSlots } from "containers/timeBuilder";
 import { ITimeSlot } from "containers/time/parsedTime";
+import { DateTime } from "luxon";
 
 type RequiredProperty<T> = { [P in keyof T]: NonNullable<T[P]> };
 
@@ -32,15 +33,20 @@ export class QueryUtils {
     this.db = db;
   }
 
-  async getReportsAfter(startTime: Date, forLocationId?: string) {
-      const reports = await this.db.select().from(reportsTable).where(
-          and(
-            gt(reportsTable.createdAt, startTime),
-            forLocationId ? eq(reportsTable.locationId, forLocationId) : undefined
-          )
-      )
+  async getReportsAfter(startTime: DateTime, locationId?: string) {
+    const reports = await this.db
+      .select()
+      .from(reportsTable)
+      .where(
+        and(
+          gt(reportsTable.createdAt, startTime.toJSDate()),
+          locationId !== undefined
+            ? eq(reportsTable.locationId, locationId)
+            : undefined,
+        ),
+      );
 
-      return reports;
+    return reports;
   }
 
   async getSpecials(todayAsSQLString: string) {

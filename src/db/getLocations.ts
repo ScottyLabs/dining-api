@@ -7,35 +7,31 @@ import { DBType } from "./db";
 /**
  *
  * @param db
- * @param today this parameter is necessary so we can get today's specials and the open hours for the next 7 days, rather than returning everything we've stored in the db
+ * @param now this parameter is necessary so we can get today's specials and the open hours for the next 7 days, rather than returning everything we've stored in the db
  * @returns
  */
-export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
-  const timeSearchCutoff = today.minus({ days: 1 }); // 1 days worth of data before today
+export async function getAllLocationsFromDB(db: DBType, now: DateTime<true>) {
+  const timeSearchCutoff = now.minus({ days: 1 }); // 1 days worth of data before today
 
   const DB = new QueryUtils(db);
   const locationIdToData = await DB.getLocationIdToDataMap(
     timeSearchCutoff.toSQLDate(),
   );
-  const specials = await DB.getSpecials(today.toSQLDate());
+  const specials = await DB.getSpecials(now.toSQLDate());
   const generalOverrides = await DB.getGeneralOverrides();
   const { idToPointOverrides, idToWeeklyOverrides } = await DB.getTimeOverrides(
     timeSearchCutoff.toSQLDate(),
   );
   const [ratingsAvgs, ratingsCounts] = await DB.getRatingsAvgsAndCounts();
 
-  const reports = await DB.getReportsAfter(timeSearchCutoff.toJSDate(), undefined);
+  const reports = await DB.getReportsAfter(timeSearchCutoff, undefined);
 
-  let reportCounts = reports.reduce<{
-    [locationId: string]: number
-  }>(
-    (acc, currentloc) => {
-      let amt = acc[currentloc.locationId] ?? 0;
-      acc[currentloc.locationId] = amt + 1;
-      return acc
-    },
-    {}
-  )
+  const reportCounts = reports.reduce<{
+    [locationId: string]: number;
+  }>((acc, currentloc) => {
+    acc[currentloc.locationId] = (acc[currentloc.locationId] ?? 0) + 1;
+    return acc;
+  }, {});
 
   // apply overrides, merge all time intervals, and add specials
   const finalLocationData = Object.entries(locationIdToData).map(
@@ -61,7 +57,7 @@ export async function getAllLocationsFromDB(db: DBType, today: DateTime<true>) {
         ratingsCount: ratingsCounts[id] ?? 0,
         todaysSoups: specials[id]?.soups ?? [],
         todaysSpecials: specials[id]?.specials ?? [],
-        reportCount: reportCounts[id] ?? 0
+        reportCount: reportCounts[id] ?? 0,
       };
     },
   );

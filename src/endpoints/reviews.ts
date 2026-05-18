@@ -1,6 +1,5 @@
 import Elysia, { status, t } from "elysia";
 import { fetchUserDetails } from "./auth";
-import { eq, and, gt} from "drizzle-orm"
 import {
   addStarReview,
   deleteStarReview,
@@ -10,7 +9,6 @@ import {
   updateTagReview,
 } from "db/reviews";
 import { db } from "db/db";
-import { reportsTable } from "db/schema";
 import { QueryUtils } from "db/dbQueryUtils";
 import { DateTime } from "luxon";
 
@@ -59,12 +57,12 @@ reviewEndpoints
                 text: t.Nullable(t.String()),
                 createdAt: t.Number(),
                 updatedAt: t.Number(),
-              })
+              }),
             ),
-          })
+          }),
         ),
       }),
-    }
+    },
   )
   .put(
     "/v2/locations/:locationId/reviews/stars/me",
@@ -77,7 +75,7 @@ reviewEndpoints
       body: t.Object({
         stars: t.Number({ minimum: 0.5, maximum: 5, multipleOf: 0.5 }),
       }),
-    }
+    },
   )
   .delete(
     "/v2/locations/:locationId/reviews/stars/me",
@@ -85,7 +83,7 @@ reviewEndpoints
       if (user === null) throw status("Unauthorized");
       await deleteStarReview(db, { locationId, userId: user.id });
       return new Response("{}", { status: 200 });
-    }
+    },
   )
   .put(
     "/v2/locations/:locationId/reviews/tags/:tagId/me",
@@ -109,7 +107,7 @@ reviewEndpoints
         voteUp: t.Nullable(t.Boolean()),
         text: t.Nullable(t.String({ maxLength: 1000 })),
       }),
-    }
+    },
   )
   .get(
     "/v2/locations/:locationId/reviews/tags",
@@ -128,18 +126,16 @@ reviewEndpoints
           vote: t.Boolean(),
           createdAt: t.Number(),
           updatedAt: t.Number(),
-        })
+        }),
       ),
-    }
+    },
   )
   .get(
     "/v2/locations/:locationId/reports",
     async ({ params: { locationId } }) => {
-      let yesterday = DateTime.now().minus({days: 1})
+      const yesterday = DateTime.now().minus({ days: 1 });
 
-      let ret = await (new QueryUtils(db)).getReportsAfter(yesterday.toJSDate(), locationId)
-
-      return ret;
+      return await new QueryUtils(db).getReportsAfter(yesterday, locationId);
     },
     {
       response: t.Array(
@@ -148,8 +144,8 @@ reviewEndpoints
           userId: t.Nullable(t.Number()),
           createdAt: t.Date(),
           locationId: t.String(),
-          message: t.String()
-        })
-      )
-    }
+          message: t.String(),
+        }),
+      ),
+    },
   );
