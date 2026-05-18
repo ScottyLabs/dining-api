@@ -48,6 +48,7 @@ const locationOut = {
   todaysSoups: [],
   todaysSpecials: [],
   conceptId: "1",
+  reportCount: 0,
 };
 
 describe("general location insertion tests", () => {

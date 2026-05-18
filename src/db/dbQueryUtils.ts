@@ -1,4 +1,4 @@
-import { avg, count, sql } from "drizzle-orm";
+import { avg, count, gt, sql } from "drizzle-orm";
 import {
   externalIdToInternalIdTable,
   emailTable,
@@ -9,6 +9,7 @@ import {
   timeOverwritesTable,
   timesTable,
   weeklyTimeOverwritesTable,
+  reportsTable,
 } from "./schema";
 
 import { DBType } from "./db";
@@ -16,6 +17,7 @@ import { notifySlack } from "utils/slack";
 import { and, eq, gte } from "drizzle-orm";
 import { parseTimeSlots } from "containers/timeBuilder";
 import { ITimeSlot } from "containers/time/parsedTime";
+import { DateTime } from "luxon";
 
 type RequiredProperty<T> = { [P in keyof T]: NonNullable<T[P]> };
 
@@ -29,6 +31,22 @@ export class QueryUtils {
   db: DBType;
   constructor(db: DBType) {
     this.db = db;
+  }
+
+  async getReportsAfter(startTime: DateTime, locationId?: string) {
+    const reports = await this.db
+      .select()
+      .from(reportsTable)
+      .where(
+        and(
+          gt(reportsTable.createdAt, startTime.toJSDate()),
+          locationId !== undefined
+            ? eq(reportsTable.locationId, locationId)
+            : undefined,
+        ),
+      );
+
+    return reports;
   }
 
   async getSpecials(todayAsSQLString: string) {
