@@ -32,11 +32,11 @@ export class QueryUtils {
     this.db = db;
   }
 
-  async getReportsAfter(start_time: Date, for_location_id?: string) {
+  async getReportsAfter(startTime: Date, forLocationId?: string) {
       const reports = await this.db.select().from(reportsTable).where(
           and(
-            gt(reportsTable.createdAt, start_time),
-            for_location_id ? eq(reportsTable.locationId, for_location_id) : undefined
+            gt(reportsTable.createdAt, startTime),
+            forLocationId ? eq(reportsTable.locationId, forLocationId) : undefined
           )
       )
 
