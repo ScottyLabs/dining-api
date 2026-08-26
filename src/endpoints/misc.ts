@@ -85,16 +85,16 @@ miscEndpoints.post(
     }
 
     const locationName = reports[0]?.name ?? "Unnamed";
-    createReport({
+
+    const emailedUsers = await _sendEmail({
       locationName,
-      locationId,
       message,
-    }).catch((error) => {
-      notifySlack(
-        `<!channel> ${error} FAILED TO SEND REPORT!`,
-        env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
-      );
     });
+
+    await notifySlack(
+      `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${emailedUsers.length ? emailedUsers.join(", ") : "NO EMAILS"}`,
+      env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
+    );
 
     await db.insert(reportsTable).values({
       locationId,
@@ -115,13 +115,11 @@ miscEndpoints.post(
   },
 );
 
-async function createReport({
+async function _sendEmail({
   locationName,
-  locationId,
   message,
 }: {
   locationName: string;
-  locationId: string;
   message: string;
 }) {
   const received = await sendEmail(
@@ -129,9 +127,13 @@ async function createReport({
     env.ALERT_EMAIL_CC,
     `[CMU Eats] Report for ${locationName}`,
     `${message}\n\nBest,\nCMU Eats automated report system`,
-  );
-  await notifySlack(
-    `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${received.join(", ")}`,
-    env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
-  );
+  ).catch(async (error) => {
+    await notifySlack(
+      `<!channel> ${error} FAILED TO SEND EMAIL!`,
+      env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
+    );
+
+    return [];
+  });
+  return received;
 }
