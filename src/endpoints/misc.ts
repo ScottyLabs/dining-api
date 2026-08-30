@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 import { notifySlack } from "utils/slack";
 import { LocationsSchema } from "./schemas";
 import { env } from "env";
-import { eq } from "drizzle-orm"
+import { eq } from "drizzle-orm";
 
 import { locationDataTable, reportsTable } from "db/schema";
 import { fetchUserDetails } from "./auth";
@@ -63,10 +63,12 @@ miscEndpoints.post(
   async ({ cookie, body: { locationId, message } }) => {
     const session = cookie["session_id"]!.value as string | undefined;
     const userDetails = await fetchUserDetails(session);
-
     const userId = userDetails?.id;
 
-    const reports = await db.select().from(locationDataTable).where(eq(locationDataTable.id, locationId))
+    const reports = await db
+      .select()
+      .from(locationDataTable)
+      .where(eq(locationDataTable.id, locationId));
     if (reports.length == 0) {
       throw new Response(`Invalid location id ${locationId}`, {
         status: 400,
@@ -74,27 +76,33 @@ miscEndpoints.post(
     }
 
     if (reports.length > 1) {
-      throw new Response(`
+      throw new Response(
+        `
           Expected 1 restaurant corresponding to id=${locationId}. Somehow got 2.
-        `, { status: 500 }) // this should be unreachable
+        `,
+        { status: 500 },
+      ); // this should be unreachable
     }
 
-    const locationName = reports[0]?.name ?? "Unnamed"
-    createReport(
-      {
-        locationName,
-        locationId,
-        message,
-      }
-    ).catch(console.error)
+    const locationName = reports[0]?.name ?? "Unnamed";
+
+    const emailedUsers = await _sendEmail({
+      locationName,
+      message,
+    });
+
+    await notifySlack(
+      `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${emailedUsers.length ? emailedUsers.join(", ") : "NO EMAILS"}`,
+      env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
+    );
 
     await db.insert(reportsTable).values({
       locationId,
       message,
       userId,
-    })
+    });
 
-    return {}
+    return {};
   },
   {
     body: t.Object({
@@ -102,19 +110,16 @@ miscEndpoints.post(
       message: t.String({ minLength: 1, maxLength: 512 }),
     }),
     detail: {
-      description:
-        "Endpoint for reporting errors in information",
+      description: "Endpoint for reporting errors in information",
     },
-  }
+  },
 );
 
-async function createReport({
+async function _sendEmail({
   locationName,
-  locationId,
   message,
 }: {
   locationName: string;
-  locationId: string;
   message: string;
 }) {
   const received = await sendEmail(
@@ -122,10 +127,13 @@ async function createReport({
     env.ALERT_EMAIL_CC,
     `[CMU Eats] Report for ${locationName}`,
     `${message}\n\nBest,\nCMU Eats automated report system`,
-  );
-  await notifySlack(
-    `Report for ${locationName} (\`${locationId}\`): ${message} \nEmailed: ${received.join(", ")}`,
-    env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
-  );
+  ).catch(async (error) => {
+    await notifySlack(
+      `<!channel> ${error} FAILED TO SEND EMAIL!`,
+      env.SLACK_MAIN_CHANNEL_WEBHOOK_URL,
+    );
 
+    return [];
+  });
+  return received;
 }

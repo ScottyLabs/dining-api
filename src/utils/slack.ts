@@ -12,7 +12,7 @@ async function wait(ms: number) {
  */
 export async function notifySlack(
   message: string,
-  slackUrl: string = env.SLACK_BACKEND_WEBHOOK_URL
+  slackUrl: string = env.SLACK_BACKEND_WEBHOOK_URL,
 ) {
   if (env.IN_TEST_MODE) {
     console.log("would've notified slack with message", message);
@@ -27,15 +27,15 @@ export async function notifySlack(
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
   } catch (error) {
     console.error(
       `Error sending Slack message "${message.replaceAll(
         "\n",
-        "[newline]"
+        "[newline]",
       )}" to Slack:`,
-      String(error)
+      String(error),
     );
     if (error instanceof AxiosError) {
       if (error.status === 429) {
