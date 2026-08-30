@@ -11,6 +11,7 @@ export interface ILocation {
   shortDescription: string | undefined;
   description: string;
   url: string;
+  grubhubUrl: string | undefined;
   menu: string | undefined;
   location: string;
   coordinates: ICoordinate | undefined;
@@ -22,6 +23,30 @@ export interface ILocation {
   todaysSpecials: ISpecial[] | undefined;
   todaysSoups: ISpecial[] | undefined;
 }
+export interface IGrubhubData {
+  object: {
+    data: {
+      content: {
+        entity: {
+          name: string;
+          address: {
+            street_address: string;
+            address_locality: string;
+          };
+          restaurant_id: string;
+        };
+      }[];
+    };
+  };
+}
+
+export interface IGrubhubAuthResponse {
+  session_handle: {
+    access_token: string;
+    refresh_token: string;
+  };
+}
+
 export interface ISpecial {
   title: string;
   description: string;
@@ -42,6 +67,10 @@ export interface ICoordinate {
 
 export interface ILocationCoordinateOverwrites {
   [conceptId: string]: ICoordinate;
+}
+
+export interface IGrubhubLinkIds {
+  [conceptId: string]: string;
 }
 
 export enum MonthOfTheYear {

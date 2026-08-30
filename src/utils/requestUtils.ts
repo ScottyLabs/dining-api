@@ -13,14 +13,14 @@ const wait = (ms: number) => {
  */
 export async function getHTMLResponse(url: URL, retriesLeft = 4) {
   try {
-    if (!env.IN_TEST_MODE) console.log(`Scraping ${url}`);
+    // if (!env.IN_TEST_MODE) console.log(`Scraping ${url}`);
     const response = await axios.get(url.toString());
-    if (!env.IN_TEST_MODE)
-      console.log({
-        message: `Scraped ${url}`,
-        html: response.data,
-        url: url.toString(),
-      });
+    // if (!env.IN_TEST_MODE)
+    //   console.log({
+    //     message: `Scraped ${url}`,
+    //     html: response.data,
+    //     url: url.toString(),
+    //   });
 
     const attemptedParsedDate = DateTime.fromRFC2822(
       response.headers.date

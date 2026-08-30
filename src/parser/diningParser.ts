@@ -1,9 +1,11 @@
 import { getHTMLResponse } from "../utils/requestUtils";
 import { load } from "cheerio";
 import LocationBuilder from "../containers/locationBuilder";
+import GrubhubUrlBuilder from "containers/grubhubUrlBuilder";
 import { retrieveSpecials } from "../containers/specials/specialsBuilder";
 import { ILocation, ISpecial } from "types";
 import { notifySlack } from "utils/slack";
+import { DBType } from "db/db";
 
 /**
  * Retrieves the HTML from the CMU Dining website and parses the information
@@ -17,11 +19,18 @@ export default class DiningParser {
   static readonly DINING_SOUPS_URL =
     "https://apps.studentaffairs.cmu.edu/dining/conceptinfo/Soups";
 
+  grubhubUrlBuilder: GrubhubUrlBuilder;
+
+  constructor(db: DBType) {
+    this.grubhubUrlBuilder = new GrubhubUrlBuilder(db);
+  }
+
   async process(): Promise<ILocation[]> {
     const locationBuilders =
       await this.initializeLocationBuildersFromMainPage();
 
     const [specials, soups] = await this.fetchSpecials();
+    const grubhubUrls = await this.grubhubUrlBuilder.build();
 
     for (const builder of locationBuilders) {
       await builder
@@ -35,6 +44,7 @@ export default class DiningParser {
         );
       builder.setSoup(soups);
       builder.setSpecials(specials);
+      builder.setGrubhubUrl(grubhubUrls);
     }
 
     return locationBuilders

@@ -12,7 +12,7 @@ let cachedLocations: ILocation[] = [];
 export async function refreshDB(db: DBType): Promise<void> {
   const now = new Date();
   console.log(`Reloading Dining API: ${now}`);
-  const parser = new DiningParser();
+  const parser = new DiningParser(db);
   const locationMerger = new ScrapeResultMerger();
 
   for (let i = 0; i < env.NUMBER_OF_SCRAPES; i++) {
