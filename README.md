@@ -1,6 +1,11 @@
 # Dining API
 
-This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API. Access the API [here](https://dining.apis.scottylabs.org/).
+Visit the api [here](http://api.cmueats.com/).
+Visit the staging api [here](http://api.staging.cmueats.com/).
+
+Welcome! We're excited to have you join CMU Eats! (alternatively spelled cmueats). Documentation can be found on our [Notion page](https://app.notion.com/p/wiki-scottylabs/CMU-Eats-27496192554c80faa3fdce530494bb77). All communication will happen on the ScottyLabs Slack under the cmueats channel.
+
+This Dining API scrapes location data from the CMU dining sites and distributes it as a RESTful API.
 
 To build and deploy the service, you'll need [pnpm](https://pnpm.io/),
 which you should install beforehand.
