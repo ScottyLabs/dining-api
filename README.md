@@ -1,7 +1,7 @@
 # Dining API
 
-Visit the api [here](http://api.cmueats.com/).
-Visit the staging api [here](http://api.staging.cmueats.com/).
+Visit the api [here](https://api.cmueats.com/).
+Visit the staging api [here](https://api.staging.cmueats.com/).
 
 Welcome! We're excited to have you join CMU Eats! (alternatively spelled cmueats). Documentation can be found on our [Notion page](https://app.notion.com/p/wiki-scottylabs/CMU-Eats-27496192554c80faa3fdce530494bb77). All communication will happen on the ScottyLabs Slack under the cmueats channel.
 
